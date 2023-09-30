@@ -32,10 +32,10 @@ Hi there! 👋 I'm Fabrizio. Thanks for your visit!
 
 Currently a Data Scientist based in Hamburg (Germany), working on ~real-time fraud detection with neural networks and large datasets at one of the largest [e-commerce platforms in Germany](https://www.otto.de/).
 
-I finished my PhD in 2021 at the [Institute of Computational Neuroscience](https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html) in Hamburg - see [research](https://fabridamicelli.github.io/research/) for details.
-During that time I also created a couple of open source [Python packages](https://fabridamicelli.github.io/code/) that I still maintain.
+I finished my PhD in 2021 at the [Institute of Computational Neuroscience](https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html) in Hamburg - see [research](https://fabridamicelli.github.io/research.html) for details.
+During that time I also created a couple of open source [Python packages](https://fabridamicelli.github.io/code.html/) that I still maintain.
 
-I enjoy 📝 [technical writing](https://fabridamicelli.github.io/posts/) and once in while make a 🎥 [video](https://www.youtube.com/@fabridamicelli) covering Python/ML/Data Science topics.
+I enjoy 📝 [technical writing](https://fabridamicelli.github.io/posts.html) and once in while make a 🎥 [video](https://www.youtube.com/@fabridamicelli) covering Python/ML/Data Science topics.
 
 I like music a lot, Python, reading, simple ideas behind complex phenomena and data-driven solutions.
 I prefer strong intuitions and simple words to unnecessary sophistication and fancy jargon.

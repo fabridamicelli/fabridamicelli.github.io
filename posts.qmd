@@ -6,7 +6,8 @@ listing:
     - "date desc"
     - "title asc"
   type: default
-  categories: true
+  categories: false
+  fields: [date, title, description, image]
   feed: true
   sort-ui: false
   filter-ui: false

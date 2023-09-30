@@ -12,9 +12,10 @@ listing:
   sort-ui: false
   filter-ui: false
   image-align: right
-  image-height: 9em
+  image-height: 3em
   image-placeholder: /images/preview-placeholder.png
   date-format: YYYY-MM-DD
+  grid-item-align: center
 page-layout: full
 title-block-banner: true
 ---

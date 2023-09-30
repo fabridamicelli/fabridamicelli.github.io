@@ -4,7 +4,7 @@
     "href": "code.html",
     "title": "Code",
     "section": "",
-    "text": "I created and maintain the following Python packages:\nechoes: A scikit-learn compatible package for Machine Learning with Echo State Networks\n[x] A high level API for machine learning with Echo State Networks (ESN)\n[x] scikit-learn compatible implementation, powered by numba for speed.\n[x] pip install echoes\n \nkuramoto: Classical model to study synchronization phenomena\n- [x] Python implementation of the Kuramoto model on graphs.\n- [x] pip install kuramoto\n\nser: Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs\n- [x] Powered by numba for speed.\n- [x] pip install ser\n\n\n\n\nCheck out my GitHub Profile"
+    "text": "I created and maintain the following Python packages:\nechoes: A scikit-learn compatible package for Machine Learning with Echo State Networks\n☑️ A high level API for machine learning with Echo State Networks (ESN)\n☑️ scikit-learn compatible implementation, powered by numba for speed.\n☑️ pip install echoes\n \nkuramoto: Classical model to study synchronization phenomena\n☑️ Python implementation of the Kuramoto model on graphs.\n☑️ pip install kuramoto\n\nser: Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs\n☑️ Powered by numba for speed.\n☑️ pip install ser\n\n\n\n\nCheck out my GitHub Profile"
   },
   {
     "objectID": "posts/2021-09-18-starmap.html",

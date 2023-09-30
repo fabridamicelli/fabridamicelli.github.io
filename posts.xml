@@ -10,7 +10,7 @@
 <atom:link href="https://fabridamicelli.github.io/posts.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Tue, 12 Sep 2023 22:00:00 GMT</lastBuildDate>
+<lastBuildDate>Wed, 13 Sep 2023 00:00:00 GMT</lastBuildDate>
 <item>
   <title>PyTorch DataLoader: collate_fn explained by example</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -621,7 +621,7 @@ font-style: inherit;">break</span></span></code></pre></div>
   <category>data</category>
   <category>neural-nets</category>
   <guid>https://fabridamicelli.github.io/posts/2023-09-13-pytorch-dataloader-collate.html</guid>
-  <pubDate>Tue, 12 Sep 2023 22:00:00 GMT</pubDate>
+  <pubDate>Wed, 13 Sep 2023 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>seaborn and tensors: A match not quite made in heaven</title>
@@ -964,7 +964,7 @@ font-style: inherit;"># This is the state as of today with </span></span>
   <category>tensor</category>
   <category>visualization</category>
   <guid>https://fabridamicelli.github.io/posts/2022-08-04-seaborn-tensors.html</guid>
-  <pubDate>Wed, 03 Aug 2022 22:00:00 GMT</pubDate>
+  <pubDate>Thu, 04 Aug 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>from collections import ChainMap</title>
@@ -1099,7 +1099,7 @@ font-style: inherit;">*</span>dicts)[key]</span></code></pre></div>
   <category>ChainMap</category>
   <category>python-standard-library</category>
   <guid>https://fabridamicelli.github.io/posts/2022-01-29-chainmap.html</guid>
-  <pubDate>Fri, 28 Jan 2022 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 29 Jan 2022 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Linear Regression: Don’t forget your bias</title>
@@ -1355,7 +1355,7 @@ font-style: inherit;">False</span>).fit(x, y)</span>
   <category>statsmodels</category>
   <category>linear-regression</category>
   <guid>https://fabridamicelli.github.io/posts/2021-10-16-lr_add_constant.html</guid>
-  <pubDate>Fri, 15 Oct 2021 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 16 Oct 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Merging Python dictionaries: A functional take</title>
@@ -1858,7 +1858,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
   <category>functional-programming</category>
   <category>python-standard-library</category>
   <guid>https://fabridamicelli.github.io/posts/2021-10-10-merge_dicts.html</guid>
-  <pubDate>Sat, 09 Oct 2021 22:00:00 GMT</pubDate>
+  <pubDate>Sun, 10 Oct 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>What is starmap? star</title>
@@ -2204,7 +2204,7 @@ font-style: inherit;">list</span>(results)</span></code></pre></div>
   <category>functional-programming</category>
   <category>python-standard-library</category>
   <guid>https://fabridamicelli.github.io/posts/2021-09-18-starmap.html</guid>
-  <pubDate>Fri, 17 Sep 2021 22:00:00 GMT</pubDate>
+  <pubDate>Sat, 18 Sep 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Achtung: Watch out, German csv readers!</title>
@@ -2520,7 +2520,7 @@ font-style: inherit;">"German"</span>]</span></code></pre></div>
   <category>pandas</category>
   <category>text</category>
   <guid>https://fabridamicelli.github.io/posts/2020-05-20-achtung-german-csv-reader.html</guid>
-  <pubDate>Tue, 19 May 2020 22:00:00 GMT</pubDate>
+  <pubDate>Wed, 20 May 2020 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Explicit is better than implicit</title>
@@ -2655,7 +2655,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
   <category>python</category>
   <category>numpy</category>
   <guid>https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html</guid>
-  <pubDate>Sat, 09 May 2020 22:00:00 GMT</pubDate>
+  <pubDate>Sun, 10 May 2020 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Does your embedding make sense?</title>
@@ -3170,7 +3170,7 @@ font-style: inherit;">"your_filename"</span></span>
   <category>dataviz</category>
   <category>dimensionality-reduction</category>
   <guid>https://fabridamicelli.github.io/posts/2019-12-12-interactive-embedding.html</guid>
-  <pubDate>Wed, 11 Dec 2019 23:00:00 GMT</pubDate>
+  <pubDate>Thu, 12 Dec 2019 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Divide and conquer</title>
@@ -4090,7 +4090,7 @@ Tip
   <category>scikit-learn</category>
   <category>scientific-computing</category>
   <guid>https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html</guid>
-  <pubDate>Fri, 29 Nov 2019 23:00:00 GMT</pubDate>
+  <pubDate>Sat, 30 Nov 2019 00:00:00 GMT</pubDate>
 </item>
 </channel>
 </rss>

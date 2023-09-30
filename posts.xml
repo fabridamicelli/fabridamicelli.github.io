@@ -12,7 +12,7 @@
 <generator>quarto-1.3.450</generator>
 <lastBuildDate>Wed, 13 Sep 2023 00:00:00 GMT</lastBuildDate>
 <item>
-  <title>PyTorch DataLoader: collate_fn explained by example</title>
+  <title>PyTorch DataLoader: Understand and implement a custom collate function</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
   <link>https://fabridamicelli.github.io/posts/2023-09-13-pytorch-dataloader-collate.html</link>
   <description><![CDATA[ 
@@ -21,7 +21,7 @@
 
 <p>This post contains the code behind this video explanation:</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/JDy58DtZC_g" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<div class="cell" data-tags="[]" data-execution_count="2">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
@@ -56,7 +56,7 @@ font-style: inherit;">import</span> pad_sequence</span></code></pre></div>
 </div>
 <p>Imagine a supervised learning scenario of a classification task with sequential data as features and a binary target.</p>
 <p>Let’s simulate a toy dataset and take a look at it:</p>
-<div class="cell" data-tags="[]" data-execution_count="3">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="kw" style="color: #003B4F;
@@ -196,7 +196,7 @@ font-style: inherit;">self</span>.ys[idx],</span>
 <span id="cb2-19">        }</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">dset <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CustomDataset()</span>
@@ -218,7 +218,7 @@ font-style: inherit;">print</span>(item)</span></code></pre></div>
 {'x': [25, 26, 27, 28, 29], 'y': 1}</code></pre>
 </div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">dloader <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> DataLoader(dset, batch_size<span class="op" style="color: #5E5E5E;
@@ -231,7 +231,7 @@ font-style: inherit;">=</span><span class="va" style="color: #111111;
 background-color: null;
 font-style: inherit;">False</span>)</span></code></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> batch <span class="kw" style="color: #003B4F;
@@ -247,7 +247,7 @@ font-style: inherit;">print</span>(batch)</span></code></pre></div>
 <section id="a-first-solution-attempt" class="level2">
 <h2 class="anchored" data-anchor-id="a-first-solution-attempt">A first solution attempt</h2>
 <p>We can refactor our dataset and make it generate items with <code>x</code> sequences that all have the same length (a parameter <code>max_len</code> that we define beforehand).</p>
-<div class="cell" data-tags="[]" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">class</span> CustomDatasetFixLen(torch.utils.data.Dataset):</span>
@@ -414,7 +414,7 @@ background-color: null;
 font-style: inherit;">self</span>.ys[idx],</span>
 <span id="cb8-23">        }</span></code></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">dset <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CustomDatasetFixLen(max_len<span class="op" style="color: #5E5E5E;
@@ -423,7 +423,7 @@ font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>)</span></code></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> item <span class="kw" style="color: #003B4F;
@@ -446,7 +446,7 @@ font-style: inherit;">print</span>(item)</span></code></pre></div>
 <section id="there-must-be-a-better-way" class="level2">
 <h2 class="anchored" data-anchor-id="there-must-be-a-better-way">There must be a better way</h2>
 <p>Let’s implement our own collate function, i.e.&nbsp;the logic to put items together, that will allow us to the padding on a per batch basis (thus we call it <code>dynamic_length_collate</code>)</p>
-<div class="cell" data-tags="[]" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> dynamic_length_collate(batch):</span>
@@ -510,7 +510,7 @@ background-color: null;
 font-style: inherit;">in</span> batch])</span>
 <span id="cb12-10">    }</span></code></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">dset <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> CustomDataset()  <span class="co" style="color: #5E5E5E;
@@ -531,7 +531,7 @@ font-style: inherit;">False</span>,</span>
 background-color: null;
 font-style: inherit;">=</span>dynamic_length_collate)</span></code></pre></div>
 </div>
-<div class="cell" data-tags="[]" data-execution_count="12">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> batch <span class="kw" style="color: #003B4F;
@@ -551,7 +551,7 @@ font-style: inherit;">print</span>(batch)</span></code></pre></div>
 </div>
 <p>That works!</p>
 <p>For the sake of completeness, let’s use our dataloader with the custom collate function and actually feed the data into a (toy) neural network.</p>
-<div class="cell" data-tags="[]" data-execution_count="13">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># A very toy example of a neural network</span></span>
@@ -634,7 +634,7 @@ font-style: inherit;">break</span></span></code></pre></div>
 <p><a href="https://seaborn.pydata.org/">seaborn</a> makes our life easy when it comes to slicing and plotting data in Python.<br>
 That awesome buffet of well balanced aesthetic and practical functionalities of its ergonomic API comes with a few caveats to consider though.<br>
 Here’s one of them when trying to plot data including PyTorch tensors.</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
@@ -665,7 +665,7 @@ font-style: inherit;">"talk"</span>)</span></code></pre></div>
 </details>
 </div>
 <p>Let’s create 2 simple <code>numpy</code> arrays simulating the values of two variables, <code>x</code> and <code>y</code>.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">x <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.arange(<span class="dv" style="color: #AD0000;
@@ -709,13 +709,13 @@ background-color: null;
 font-style: inherit;">5</span>], y[:<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display">
 <pre><code>(array([-1.41,  3.97,  3.2 ,  4.63,  2.99]),
  array([-0.58,  1.07, -0.13,  0.79,  3.84]))</code></pre>
 </div>
 </div>
 <p>We can plot them using seaborn scatterplot:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">sns.scatterplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>x, y<span class="op" style="color: #5E5E5E;
@@ -728,7 +728,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 </div>
 <p>We can achieve the same using lists:</p>
-<div class="cell" data-execution_count="44">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">x_li <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> x.tolist()</span>
@@ -740,13 +740,13 @@ background-color: null;
 font-style: inherit;">5</span>], y_li[:<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div class="cell-output cell-output-display">
 <pre><code>([3.93, 1.6400000000000001, 2.91, 2.75, 0.3900000000000001],
  [-1.08, 0.91, 4.970000000000001, 3.64, 8.129999999999999])</code></pre>
 </div>
 </div>
 <p>Again, we can plot them using <code>seaborn</code> scatterplot:</p>
-<div class="cell" data-execution_count="45">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">sns.scatterplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>x_li, y<span class="op" style="color: #5E5E5E;
@@ -759,7 +759,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 </div>
 <p>Observe that the lists are made up of python <code>float</code>s while the <code>numpy</code> arrays contain <code>numpy.float64</code>:</p>
-<div class="cell" data-execution_count="46">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">type</span>(x[<span class="dv" style="color: #AD0000;
@@ -769,13 +769,13 @@ background-color: null;
 font-style: inherit;">type</span>(x_li[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>])</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div class="cell-output cell-output-display">
 <pre><code>(numpy.float64, float)</code></pre>
 </div>
 </div>
 <p>So far so good.</p>
 <p>Now what happens if the individual elements are pytorch zero-dimensional tensors (i.e.&nbsp;scalars) like these:</p>
-<div class="cell" data-execution_count="47">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">x_pt <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [tensor(o) <span class="cf" style="color: #003B4F;
@@ -796,7 +796,7 @@ background-color: null;
 font-style: inherit;">5</span>], y_pt[:<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="47">
+<div class="cell-output cell-output-display">
 <pre><code>([tensor(3.9300, dtype=torch.float64),
   tensor(1.6400, dtype=torch.float64),
   tensor(2.9100, dtype=torch.float64),
@@ -810,41 +810,41 @@ font-style: inherit;">5</span>]</span></code></pre></div>
 </div>
 </div>
 <p>At first glance it looks like it should be all kind of the same. Indeed some comparisons still work the way we (I?) expect. For example, the element-wise equality:</p>
-<div class="cell" data-execution_count="62">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">x <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> x_li</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="62">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="63">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">x <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> x_pt</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="63">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="64">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">(x <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> x_pt).<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">all</span>()</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="64">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="65">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">x_pt <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> x</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="65">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
@@ -852,17 +852,17 @@ font-style: inherit;">==</span> x</span></code></pre></div>
 </div>
 <p>This happens thanks to the fact that numpy under the hood first casts the objects and then compares them.<br>
 When comparing the python list directly to the tensor we have this:</p>
-<div class="cell" data-execution_count="67">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">x_li <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">==</span> x_pt</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="67">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>That is not quite what I expect (i.e.&nbsp;element-wise comparison), but it is still aligned with our believe that these array-like structures (list, array, tensor) are made of equivalent scalar elements.</p>
 <p>So let’s plot the tensors, like we did with the lists and the arrays:</p>
-<div class="cell" data-execution_count="68">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">sns.scatterplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>x_pt, y<span class="op" style="color: #5E5E5E;
@@ -877,7 +877,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 <p>Ups, that doesn’t look good – the y-axis is flipped!</p>
 <p>After going a bit down the rabbit hole of <code>seaborn</code> and <code>pandas</code> error traces, we see that under the hood <code>seaborn</code> infers the data type of the values and –surprise!– pytorch tensors seem to be interpreted as categorical.<br>
 That can be more explicitely seen if we try to plot the data with the <code>pointplot</code> function instead:</p>
-<div class="cell" data-execution_count="69">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">sns.pointplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>x_pt, y<span class="op" style="color: #5E5E5E;
@@ -894,7 +894,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 <h2 class="anchored" data-anchor-id="lets-fix-it">Let’s fix it</h2>
 <p>A couple of options to fix our plots.<br>
 We can flip the y-axis:</p>
-<div class="cell" data-execution_count="56">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">ax <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> sns.scatterplot(x<span class="op" style="color: #5E5E5E;
@@ -908,7 +908,7 @@ font-style: inherit;">=</span>y_pt)</span>
 </div>
 </div>
 <p>We can cast the data, for example to a numpy array:</p>
-<div class="cell" data-execution_count="70">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">sns.scatterplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>np.array(x_pt), y<span class="op" style="color: #5E5E5E;
@@ -921,7 +921,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 </div>
 <p>Or to a tensor:</p>
-<div class="cell" data-execution_count="71">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1">sns.scatterplot(x<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>tensor(x_pt), y<span class="op" style="color: #5E5E5E;
@@ -935,12 +935,12 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 <section id="note" class="level4">
 <h4 class="anchored" data-anchor-id="note">Note:</h4>
-<div class="cell" data-execution_count="73">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># This is the state as of today with </span></span>
 <span id="cb28-2">sns.__version__</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="73">
+<div class="cell-output cell-output-display">
 <pre><code>'0.11.2'</code></pre>
 </div>
 </div>
@@ -976,7 +976,7 @@ font-style: inherit;"># This is the state as of today with </span></span>
 
 <p>The built-in collections module is a handy bag of tools to be aware of. Here we explore collections.ChainMap, an elegant solution to efficiently carry out a look up over more than one dictionary.</p>
 <div class="quarto-video ratio ratio-16x9"><iframe data-external="1" src="https://www.youtube.com/embed/3voMK5jNC54" title="" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen=""></iframe></div>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Here's the gist of it, watch the video for more details.</span></span>
@@ -1046,7 +1046,7 @@ font-style: inherit;">=</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"f"</span></span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="cf" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">for</span> d <span class="kw" style="color: #003B4F;
@@ -1074,7 +1074,7 @@ font-style: inherit;">break</span></span></code></pre></div>
 <pre><code>10</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> collections <span class="im" style="color: #00769E;
@@ -1084,7 +1084,7 @@ font-style: inherit;">import</span> ChainMap</span>
 <span id="cb4-3">ChainMap(<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">*</span>dicts)[key]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <pre><code>10</code></pre>
 </div>
 </div>
@@ -1158,7 +1158,7 @@ Here’s an analogy: Imagine we are trying to predict beer consumption (liters p
 <section id="experiment-with-synthetic-data" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-with-synthetic-data">Experiment with synthetic data</h2>
 <p>Let’s create a synthetic ground truth dataset so that we can see these models in action on a concrete example.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> sklearn.datasets <span class="im" style="color: #00769E;
@@ -1186,7 +1186,7 @@ background-color: null;
 font-style: inherit;">20</span>)</span></code></pre></div>
 </div>
 <p>As the parameter <code>bias</code> shows, the data will have this intrinsic bias. So we know it’s there. Now we will fit a model with and another without bias and observe their behaviour.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> sklearn.linear_model <span class="im" style="color: #00769E;
@@ -1207,7 +1207,7 @@ background-color: null;
 font-style: inherit;">False</span>).fit(x, y)</span></code></pre></div>
 </div>
 <p>Let’s check how well these models fit the training data by plotting predictions coming from both of them:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> plot_models_fit(x, y, model_with_bias, model_without_bias):</span>
@@ -1247,14 +1247,14 @@ background-color: null;
 font-style: inherit;">"Independent variable"</span>)</span>
 <span id="cb5-8">    plt.legend()</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">plot_models_fit(x, y, model_with_bias, model_without_bias)</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="https://fabridamicelli.github.io/posts/2021-10-16-lr_add_constant_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>As we see, the two models produce different outcomes. The one without bias “forces” the line to pass through the origin. The slope may be similar because of ordinary least squares minimizes the vertical (square) distance from the line to the data points, but that really depends on the data at hand, as we can see in the following example with different ground truth data:</p>
-<div class="cell" data-execution_count="69">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">x, y <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> make_regression(n_samples<span class="op" style="color: #5E5E5E;
@@ -1294,7 +1294,7 @@ font-style: inherit;">False</span>).fit(x, y)</span>
 </div>
 </div>
 <p>Finally, what if the data indeed does not have such a bias? Let’s try it:</p>
-<div class="cell" data-execution_count="70">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">x, y <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> make_regression(n_samples<span class="op" style="color: #5E5E5E;
@@ -1368,7 +1368,7 @@ font-style: inherit;">False</span>).fit(x, y)</span>
 <section id="merging-dictionaries" class="level3">
 <h3 class="anchored" data-anchor-id="merging-dictionaries">Merging dictionaries</h3>
 <p>Say we have these two dictionaries that we would like to merge:</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">d1 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
@@ -1397,7 +1397,7 @@ background-color: null;
 font-style: inherit;">4</span>}</span></code></pre></div>
 </div>
 <p>A kind of cannonical way to do it would be this:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">d3 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {}</span>
@@ -1416,7 +1416,7 @@ background-color: null;
 font-style: inherit;">=</span> v</span>
 <span id="cb2-5"></span>
 <span id="cb2-6">d3</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 3, 'd': 4}</code></pre>
 </div>
 </div>
@@ -1434,7 +1434,7 @@ Warning
 </div>
 </div>
 <p>That works. But it’s arguably not so nice. Here’s an alternative:</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">d3 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {k: v <span class="cf" style="color: #003B4F;
@@ -1448,13 +1448,13 @@ background-color: null;
 font-style: inherit;">in</span> d.items()}</span>
 <span id="cb4-2"></span>
 <span id="cb4-3">d3</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 3, 'd': 4}</code></pre>
 </div>
 </div>
 <p>That’s compact and kind of nice because of the dictionary comprehension. But, as Michael Kennedy puts it in <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0">this video</a>, it’s a bit of a “too clever” alternative, that might be not so easy to read.</p>
 <p>What many people consider to be a “more pythonic” way is the following:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">d3 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {<span class="op" style="color: #5E5E5E;
@@ -1463,7 +1463,7 @@ font-style: inherit;">**</span>d1, <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>d2}</span>
 <span id="cb6-2">d3</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 3, 'd': 4}</code></pre>
 </div>
 </div>
@@ -1482,7 +1482,7 @@ Warning
 </div>
 <p>Beautiful.</p>
 <p>That’s where most tutorials on merging dictionaries in Python end. Let’s go beyond that. What if we have more dictionaries to merge, say, three:</p>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">d1 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
@@ -1536,7 +1536,7 @@ font-style: inherit;">**</span>d2, <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span>d3}</span>
 <span id="cb8-7">d4</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 3, 'd': 4, 'f': 6, 'g': 9}</code></pre>
 </div>
 </div>
@@ -1548,7 +1548,7 @@ font-style: inherit;">**</span>d3}</span>
 <h3 class="anchored" data-anchor-id="detour-what-is-reduce">Detour: What is <code>reduce</code></h3>
 <p>If you’re alredy familiar with this concept, jumpt to the next subsection.</p>
 <p>You can check the details for yourself if you’re not yet familiar with the concept, eg <a href="https://realpython.com/python-reduce-function/">this nice Real Python’s tutorial</a>. In essence <code>reduce</code> is a higher order function that will recursively apply a combining operation to the elements of an iterable. That’s mouthful, let’s look at a couple of quick examples:</p>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> functools <span class="im" style="color: #00769E;
@@ -1564,7 +1564,7 @@ font-style: inherit;">import</span> add, <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">pow</span></span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="20">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">add??</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <div class="ansi-escaped-output">
@@ -1575,7 +1575,7 @@ font-style: inherit;">pow</span></span></code></pre></div>
 </div>
 </div>
 </div>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">pow</span>??</span></code></pre></div>
@@ -1589,7 +1589,7 @@ font-style: inherit;">pow</span>??</span></code></pre></div>
 </div>
 </div>
 <p>Both <code>add</code> and <code>pow</code> take two arguments and return one, so they “reduce” (or “fold”) the two inputs into one.</p>
-<div class="cell" data-execution_count="22">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">reduce</span>(add, (<span class="dv" style="color: #AD0000;
@@ -1601,11 +1601,11 @@ background-color: null;
 font-style: inherit;">3</span>,<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4</span>))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="22">
+<div class="cell-output cell-output-display">
 <pre><code>10</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="23">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">1</span><span class="op" style="color: #5E5E5E;
@@ -1621,11 +1621,11 @@ background-color: null;
 font-style: inherit;">+</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">4</span></span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display">
 <pre><code>10</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="24">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">reduce</span>(<span class="bu" style="color: null;
@@ -1639,11 +1639,11 @@ background-color: null;
 font-style: inherit;">4</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">5</span>))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="24">
+<div class="cell-output cell-output-display">
 <pre><code>1152921504606846976</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="25">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">((<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span> <span class="op" style="color: #5E5E5E;
@@ -1661,7 +1661,7 @@ background-color: null;
 font-style: inherit;">5</span>   <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># notice the succesive (recursive) nature of the operation</span></span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="25">
+<div class="cell-output cell-output-display">
 <pre><code>1152921504606846976</code></pre>
 </div>
 </div>
@@ -1669,7 +1669,7 @@ font-style: inherit;"># notice the succesive (recursive) nature of the operation
 <section id="back-to-dictionaries" class="level3">
 <h3 class="anchored" data-anchor-id="back-to-dictionaries">Back to dictionaries</h3>
 <p>Let’s apply that to dictionary merging:</p>
-<div class="cell" data-execution_count="26">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> merge(d1, d2):</span>
@@ -1685,7 +1685,7 @@ background-color: null;
 font-style: inherit;">**</span>d2}</span></code></pre></div>
 </div>
 <p>So far nothing new. But notice that we now have an operation that <em>takes two arguments and returns one</em>, in other words a “reducing” or “folding” operation, so we can now use that!</p>
-<div class="cell" data-execution_count="27">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">d1 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> {<span class="st" style="color: #20794D;
@@ -1728,27 +1728,27 @@ font-style: inherit;">"g"</span>: <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">9</span>}</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="28">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">reduce</span>(merge, (d1, d2, d3))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="28">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 4, 'd': 4, 'f': 6, 'g': 9}</code></pre>
 </div>
 </div>
 <p>Even some nice non-trivial properties come for free, eg it does the right thing when passing only one argument:</p>
-<div class="cell" data-execution_count="29">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">reduce</span>(merge, (d1,))   <span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># notice that d1 it has to be in an iterable</span></span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="29">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 1, 'b': 2}</code></pre>
 </div>
 </div>
 <p>I think that is nice. But it can get nicer, because we can put all that together and by exploiting the arbitrary positional arguments (aka <code>*args</code>) we make it more general:</p>
-<div class="cell" data-execution_count="30">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> merge_dicts(<span class="op" style="color: #5E5E5E;
@@ -1767,21 +1767,21 @@ background-color: null;
 font-style: inherit;">**</span>d2},  dicts)</span></code></pre></div>
 </div>
 <p>Now we can use the very same function to merge as many dictionaries as we’d like, just passing them as positional arguments:</p>
-<div class="cell" data-execution_count="31">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1">merge_dicts(d1)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="31">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 1, 'b': 2}</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="32">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">merge_dicts(d1, d2)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="32">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 3, 'd': 4}</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="33">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1">merge_dicts(d1, d2, d3, d1)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 1, 'b': 2, 'c': 4, 'd': 4, 'f': 6, 'g': 9}</code></pre>
 </div>
 </div>
@@ -1792,7 +1792,7 @@ font-style: inherit;">**</span>d2},  dicts)</span></code></pre></div>
 <p><strong>Edit:</strong></p>
 <p>If you are using Python &gt;= 3.9, there are a couple of better alternatives:<br>
 The first, more compact:</p>
-<div class="cell" data-execution_count="40">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> operator</span>
@@ -1810,14 +1810,14 @@ font-style: inherit;">reduce</span>(operator.<span class="fu" style="color: #475
 background-color: null;
 font-style: inherit;">__or__</span>, dicts)</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="41">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1">merge_dicts_or(d1,d2,d3)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="41">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 4, 'd': 4, 'f': 6, 'g': 9}</code></pre>
 </div>
 </div>
 <p>The second, more readable:</p>
-<div class="cell" data-execution_count="42">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> merge_dicts(<span class="op" style="color: #5E5E5E;
@@ -1838,14 +1838,18 @@ font-style: inherit;">|=</span> d</span>
 background-color: null;
 font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="43">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb38" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1">merge_dicts_or(d1,d2,d3)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="43">
+<div class="cell-output cell-output-display">
 <pre><code>{'a': 2, 'b': 2, 'c': 4, 'd': 4, 'f': 6, 'g': 9}</code></pre>
 </div>
 </div>
-<p>Both were pointed out by Anthony Sottile in this tweet - thanks!: &gt; twitter: https://twitter.com/codewithanthony/status/1447598310466981888?s=20</p>
-<p>References: - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a> - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a> - <a href="https://realpython.com/python-reduce-function/">Real Python’s article on reduce</a></p>
+<p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
+<p></p>
+<p>References:<br>
+- <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
+- <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
+- <a href="https://realpython.com/python-reduce-function/">Real Python’s article on reduce</a></p>
 <hr>
 <p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
 
@@ -1869,7 +1873,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 
 
 <p>Let’s look at a common pattern in Python code:</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1">numbers <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -1878,15 +1882,15 @@ font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10</span>)</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(numbers)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 2, 3, 4, 5, 6, 7, 8, 9]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> square(x):</span>
@@ -1898,7 +1902,7 @@ font-style: inherit;">**</span><span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span></span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> []</span>
@@ -1909,14 +1913,14 @@ background-color: null;
 font-style: inherit;">in</span> numbers:</span>
 <span id="cb5-3">    results.append(square(n))</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre>
 </div>
 </div>
 <p>That’s fine. But Pythonistas often prefer list comprehensions like this:</p>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [square(n) <span class="cf" style="color: #003B4F;
@@ -1926,23 +1930,23 @@ background-color: null;
 font-style: inherit;">in</span> numbers]</span>
 <span id="cb8-2"></span>
 <span id="cb8-3">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre>
 </div>
 </div>
 <p>Equivalently, we can do that with the built in <code>map</code> function:</p>
-<div class="cell" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">map</span>(square, numbers))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 4, 9, 16, 25, 36, 49, 64, 81]</code></pre>
 </div>
 </div>
 <p>Nice. But sometimes we want to do something less trivial:</p>
-<div class="cell" data-execution_count="8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
@@ -1970,14 +1974,14 @@ background-color: null;
 font-style: inherit;">in</span> numbers</span>
 <span id="cb12-4">]</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 2, 9, 4, 25, 6, 49, 8, 81]</code></pre>
 </div>
 </div>
 <p>Compact and nice, but the cognitive load starts growing. Arguably not what we want. We’d rather have a little function:</p>
-<div class="cell" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> square_if_odd(x):</span>
@@ -2003,7 +2007,7 @@ font-style: inherit;">2</span></span>
 background-color: null;
 font-style: inherit;">return</span> x</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [square_if_odd(n) <span class="cf" style="color: #003B4F;
@@ -2013,12 +2017,12 @@ background-color: null;
 font-style: inherit;">in</span> numbers]</span>
 <span id="cb16-2"></span>
 <span id="cb16-3">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="11">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 2, 9, 4, 25, 6, 49, 8, 81]</code></pre>
 </div>
 </div>
 <p>Equivalently:</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -2028,13 +2032,13 @@ background-color: null;
 font-style: inherit;">map</span>(square_if_odd, numbers))</span>
 <span id="cb18-2"></span>
 <span id="cb18-3">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="12">
+<div class="cell-output cell-output-display">
 <pre><code>[0, 1, 2, 9, 4, 25, 6, 49, 8, 81]</code></pre>
 </div>
 </div>
 <p>Reading a <code>for</code> loop triggers this voice inside our heads that kind of spells the operation. Sometimes that works great. But often times I find the <code>map</code> operation to reduce that cognitive load and to improve readability.</p>
 <p>Let’s go one step further to see what I mean:</p>
-<div class="cell" data-execution_count="13">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">numbers2 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -2054,18 +2058,18 @@ font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">20</span>)</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="14">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(numbers2), <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(numbers3)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="14">
+<div class="cell-output cell-output-display">
 <pre><code>([5, 6, 7, 8, 9, 10, 11, 12, 13, 14], [10, 11, 12, 13, 14, 15, 16, 17, 18, 19])</code></pre>
 </div>
 </div>
 <p>Say we want to do something combining inputs like this:</p>
-<div class="cell" data-execution_count="15">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="kw" style="color: #003B4F;
 background-color: null;
 font-style: inherit;">def</span> add_and_exp(a,b,c):</span>
@@ -2077,7 +2081,7 @@ font-style: inherit;">+</span> b) <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">**</span> c</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="16">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [add_and_exp(a, b, c) <span class="cf" style="color: #003B4F;
@@ -2088,9 +2092,9 @@ font-style: inherit;">in</span> <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(numbers, numbers2, numbers3)]</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="17">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">results</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="17">
+<div class="cell-output cell-output-display">
 <pre><code>[9765625,
  1977326743,
  282429536481,
@@ -2117,7 +2121,7 @@ Warning
 </div>
 </div>
 <p>This is the equivalent using <code>map</code> that <strong>we would like</strong> to have.</p>
-<div class="cell" data-execution_count="18">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -2128,7 +2132,7 @@ font-style: inherit;">zip</span>(numbers, numbers2, numbers3))</span></code></pr
 </div>
 <p>Cleaner rigth? :)</p>
 <p>Now, <code>map</code> is lazy so nothing will happen until we evaluate it:</p>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(results)</span></code></pre></div>
@@ -2138,13 +2142,13 @@ font-style: inherit;">list</span>(results)</span></code></pre></div>
 </div>
 <p>Upps!</p>
 <p><code>zip</code> is giving us tuples that look like this <code>(a, b, c)</code>, where <code>a</code>, <code>b</code>, <code>c</code> come from <code>numbers</code>, <code>numbers2</code>, <code>numbers3</code>, respectively.</p>
-<div class="cell" data-execution_count="20">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(<span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(numbers, numbers2, numbers3))</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display">
 <pre><code>[(0, 5, 10),
  (1, 6, 11),
  (2, 7, 12),
@@ -2158,25 +2162,25 @@ font-style: inherit;">zip</span>(numbers, numbers2, numbers3))</span></code></pr
 </div>
 </div>
 <p>But our function takes 3 arguments. So we would like to <strong>unpack</strong> each tuple before passing it to <code>add_and_exp</code>. We <em>could</em> modify the function to handle that. But we don’t have to, because <code>starmap</code> does exactly that for us:</p>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> itertools <span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> starmap</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="22">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1">results <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> starmap(add_and_exp, <span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">zip</span>(numbers, numbers2, numbers3))</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="23">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">list</span>(results)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="23">
+<div class="cell-output cell-output-display">
 <pre><code>[9765625,
  1977326743,
  282429536481,
@@ -2216,7 +2220,7 @@ font-style: inherit;">list</span>(results)</span></code></pre></div>
 
 <p>TL;DR: <code>pandas.read_csv</code> considers the word “null” as a NaN, which also means “zero” in German. The arguments <code>na_values</code> and <code>keep_default_na</code> offer a solution.</p>
 <p>It’s Friday an you set out to build a <em>very sophisticated</em> numbers translator in several languages:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> pandas <span class="im" style="color: #00769E;
@@ -2266,7 +2270,7 @@ font-style: inherit;">=</span> numbers.index.rename(<span class="st" style="colo
 background-color: null;
 font-style: inherit;">"Number"</span>)</span>
 <span id="cb1-9">numbers</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2317,25 +2321,25 @@ font-style: inherit;">"Number"</span>)</span>
 </div>
 </div>
 <p>If you want to know how to say 3 in Spanish, you do:</p>
-<div class="cell" data-execution_count="61">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">numbers.loc[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">3</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"Spanish"</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="61">
+<div class="cell-output cell-output-display">
 <pre><code>'tres'</code></pre>
 </div>
 </div>
 <p>Nice. You save the <em>super advanced</em> translator for later use and go off for a relaxed weekend.</p>
-<div class="cell" data-execution_count="63">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">numbers.to_csv(<span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"numbers"</span>)</span></code></pre></div>
 </div>
 <p>Back to work on Monday, your German friend drops by your office and you want to proudly show what you’ve created. <br> So you load your “translator” and go like: <br> – Ask me how to say any number! <br> – OK. Let’s start easy: how do you say zero in German?</p>
 <p>“That I can do”, you think and type:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Load the awesome translator</span></span>
@@ -2356,7 +2360,7 @@ background-color: null;
 font-style: inherit;">0</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"German"</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display">
 <pre><code>nan</code></pre>
 </div>
 </div>
@@ -2388,7 +2392,7 @@ background-color: null;
 font-style: inherit;">"""</span></span></code></pre></div>
 <p>There it is: “null” is in the list!</p>
 <p><strong>Solution:</strong> <br> We need to do two things: - Pass other values without “null” (and “NULL” if you’re not sure everything is lowercase). - Tell pandas not to keep the defaults (otherwise it will use both the defaults and the passed values).</p>
-<div class="cell" data-execution_count="70">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">na_values <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> [</span>
@@ -2448,7 +2452,7 @@ font-style: inherit;">False</span></span>
 <span id="cb8-11">)</span>
 <span id="cb8-12">                            </span>
 <span id="cb8-13">numbers_loaded</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="70">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -2499,13 +2503,13 @@ font-style: inherit;">False</span></span>
 </div>
 </div>
 <p>Now we can ask:</p>
-<div class="cell" data-execution_count="73">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">numbers_loaded.loc[<span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">0</span>, <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">"German"</span>]</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="73">
+<div class="cell-output cell-output-display">
 <pre><code>'null'</code></pre>
 </div>
 </div>
@@ -2532,7 +2536,7 @@ font-style: inherit;">"German"</span>]</span></code></pre></div>
 
 <p>TL; DR: Only use the form <code>array *= something</code> if you’re 100% sure you are doing the right thing, otherwise, just go for <code>array = array * something</code>.</p>
 <p>Let’s see why. <br> We define two functions that to the eyes of many (including past me) do just the same.</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
@@ -2564,7 +2568,7 @@ background-color: null;
 font-style: inherit;">return</span> array</span></code></pre></div>
 </div>
 <p>Let’s see them in action</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">a <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.arange(<span class="fl" style="color: #AD0000;
@@ -2578,38 +2582,38 @@ font-style: inherit;">=</span> np.arange(<span class="fl" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">10.</span>)</span></code></pre></div>
 </div>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">a</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="3">
+<div class="cell-output cell-output-display">
 <pre><code>array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">b</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="4">
+<div class="cell-output cell-output-display">
 <pre><code>array([0., 1., 2., 3., 4., 5., 6., 7., 8., 9.])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">multiply(a, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="5">
+<div class="cell-output cell-output-display">
 <pre><code>array([ 0.,  2.,  4.,  6.,  8., 10., 12., 14., 16., 18.])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">multiply(a, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="6">
+<div class="cell-output cell-output-display">
 <pre><code>array([ 0.,  4.,  8., 12., 16., 20., 24., 28., 32., 36.])</code></pre>
 </div>
 </div>
 <p>Hey, wait! What’s going on?</p>
-<div class="cell" data-execution_count="7">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">a</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="7">
+<div class="cell-output cell-output-display">
 <pre><code>array([ 0.,  4.,  8., 12., 16., 20., 24., 28., 32., 36.])</code></pre>
 </div>
 </div>
@@ -2627,19 +2631,19 @@ Warning
 </div>
 </div>
 <p>Let’s see what the other version of our function does.</p>
-<div class="cell" data-execution_count="8">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">multiply2(b, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="8">
+<div class="cell-output cell-output-display">
 <pre><code>array([ 0.,  2.,  4.,  6.,  8., 10., 12., 14., 16., 18.])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">multiply2(b, <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">2</span>)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
+<div class="cell-output cell-output-display">
 <pre><code>array([ 0.,  2.,  4.,  6.,  8., 10., 12., 14., 16., 18.])</code></pre>
 </div>
 </div>
@@ -2667,9 +2671,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<blockquote class="blockquote">
-<p>twitter: https://twitter.com/fabridamicelli/status/1205136026987089920?s=20</p>
-</blockquote>
+<p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>
@@ -2679,7 +2681,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 <p>Let’s say you have your projected data in 2D, for example, after tSNE. First things first: you might want to check if the projection that your method just spit out makes any sense at all. But, why, what can go wrong? Well, a lot. For instance, your dimensionality reduction method might be using an inappropiate metric. In other words, the algorithm could be using a notion of distance between points in the multidimensional space which does not capture some fundamental aspect of the funky space that those data points live in. Thus, further operations we do with/to our data might be strongly misleading. That is not what we want. To keep it concrete, just take a look at these nice examples from the <a href="https://umap-learn.readthedocs.io/en/latest/parameters.html#metric">documentation of the UMAP library</a>, where the effect of using different metrics is clearly depicted.</p>
 <p>Some libraries, like UMAP, also allow you to <a href="https://umap-learn.readthedocs.io/en/latest/document_embedding.html">document your embedding</a> or <a href="https://umap-learn.readthedocs.io/en/latest/plotting.html">plot interactive figures</a>. But you might have a tougher luck this time around and just get a cloud of unintelligible points scattered when you plot the 2D-projected data. In that case, you might find it useful to interact with it by looking at the labels of your data. The labels can be anything, like <em>a priori</em> known categories the result of your favourite clustering method.</p>
 <p>That’s what you came for :) So without further ado, on to the code.</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
@@ -3038,7 +3040,7 @@ background-color: null;
 font-style: inherit;">return</span> chart</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <details open="">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="co" style="color: #5E5E5E;
@@ -3141,7 +3143,7 @@ background-color: null;
 font-style: inherit;">"your_filename"</span></span>
 <span id="cb2-25">)</span></code></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display">
 <p><img src="https://fabridamicelli.github.io/posts/2019-12-12-interactive-embedding_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
 </div>
 </div>
@@ -3187,7 +3189,7 @@ font-style: inherit;">"your_filename"</span></span>
 <p>The intuition behind the computation we want to achieve is depicted in the following plot:</p>
 <p><img src="https://fabridamicelli.github.io/images/divide-and-conquer/vector-distances.png" width="1200" height="1200"></p>
 <p><em>Two vectors in 2D space represented as points. The blue line shows the <em>euclidean</em> distance between the vectors. The <img src="https://latex.codecogs.com/png.latex?%5Ccos(%5Calpha)"> is the <em>cosine</em> distance.</em></p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="co" style="color: #5E5E5E;
@@ -3257,7 +3259,7 @@ font-style: inherit;">"whitegrid"</span>)</span></code></pre></div>
 </div>
 <p>For the sake of presentation and simplicity, we are just going to create and use a bunch of random vectors. And that bunch is going to be relatively large (to compute on a not-so-large laptop).</p>
 <p>Let’s first get an idea of how many values need to compute if we take say 50 thousand vectors, which is not unrealistic at all (e.g., that could be taking all nouns of a word embedding):</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -3289,7 +3291,7 @@ font-style: inherit;">2</span>))</span></code></pre></div>
 <section id="the-default-solution" class="level2">
 <h2 class="anchored" data-anchor-id="the-default-solution">The default solution</h2>
 <p>The most straight forward to do this is with scipy/sklearn pairwise distances functions as follows (we are going to time it to get an idea of how the problem scales).</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>time</span>
@@ -3323,7 +3325,7 @@ Wall time: 286 ms</code></pre>
 </div>
 </div>
 <p>So far, so good. But what happens if we want to compute it for more vectors?</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>time</span>
@@ -3353,7 +3355,7 @@ Wall time: 1.99 s</code></pre>
 <section id="closer-look-at-the-scaling" class="level3">
 <h3 class="anchored" data-anchor-id="closer-look-at-the-scaling">Closer look at the scaling</h3>
 <p>Let’s examine the computational complexity we mentioned above with some quick numerical experiments.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
@@ -3430,7 +3432,7 @@ background-color: null;
 font-style: inherit;">0.7</span>)</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">n_vectors_vals <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.arange(<span class="dv" style="color: #AD0000;
@@ -3447,7 +3449,7 @@ font-style: inherit;">=</span> evaluate_scaling(cosine_distances, n_vectors_vals
 <pre><code>100%|██████████| 39/39 [00:49&lt;00:00,  1.27s/it]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">plot_scaling(n_vectors_vals, times)</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
@@ -3455,7 +3457,7 @@ font-style: inherit;">=</span> evaluate_scaling(cosine_distances, n_vectors_vals
 </div>
 <p>We can use what we know about the complexity (<img src="https://latex.codecogs.com/png.latex?O(n%5E2)">) to fit a curve. In other words, we are going to fit a quadratic function that predicts the time it takes to compute all the pairwise distances as a function of the number of vectors. After that, we can use that function to extrapolate and estimate the performance for a much larger number of vectors.</p>
 <p><img src="https://fabridamicelli.github.io/images/divide-and-conquer/xkcd-extrapolating.png"></p>
-<div class="cell" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># Fit a 2nd degree polynomial and get the polynomial evaluator</span></span>
@@ -3490,7 +3492,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 <p>The fit looks approximately correct. Remember, we don’t need to get a perfectly accurate estimate. We rather want to know if we should grab a coffee while the computation runs, let it compute overnight or if it is unfeasible with our hardware.</p>
 <p>Now we extrapolate for more vectors:</p>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">n_vectors_large <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.arange(<span class="dv" style="color: #AD0000;
@@ -3504,7 +3506,7 @@ font-style: inherit;">50000</span>)</span>
 </div>
 </div>
 <p>Well that doesn’t sound too bad: it should take around 40 seconds to compute the distances for 50 thousand vectors. <br> Let’s give it a try:</p>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -3529,7 +3531,7 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <section id="solution-first-attempt" class="level2">
 <h2 class="anchored" data-anchor-id="solution-first-attempt">Solution: first attempt</h2>
 <p>Iterate and compute the values one by one instead of computing it with the <code>cosine_distances</code> function. <br> Spoiler: Bad idea. <br> Let’s see:</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="kw" style="color: #003B4F;
@@ -3567,7 +3569,7 @@ background-color: null;
 font-style: inherit;">return</span> distances</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="13">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -3583,7 +3585,7 @@ background-color: null;
 font-style: inherit;">=</span> cosine_distances_iter(all_vectors)</span></code></pre></div>
 </div>
 <p>As the distance matrix is symmetric, we don’t repeat the computation and thus here we just show the upper triangle.<br> Each entry <img src="https://latex.codecogs.com/png.latex?D_%7Bij%7D"> of the distance matrix corresponds to the cosine distance between the vectors <img src="https://latex.codecogs.com/png.latex?i"> and <img src="https://latex.codecogs.com/png.latex?j">.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="kw" style="color: #003B4F;
@@ -3630,14 +3632,14 @@ font-style: inherit;">"Distance Matrix"</span>)</span>
 <span id="cb18-12">    plt.show()</span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="15">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">plot_distances_heatmap(distances)</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Now, how does it scale? We can do the same curve fitting as above and project for a larger number of vectors.</p>
-<div class="cell" data-execution_count="16">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">n_vectors_vals <span class="op" style="color: #5E5E5E;
@@ -3690,7 +3692,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 </div>
 <p>And the extrapolation looks like this:</p>
-<div class="cell" data-execution_count="17">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1">n_vectors_large <span class="op" style="color: #5E5E5E;
@@ -3713,7 +3715,7 @@ font-style: inherit;">100</span>)</span>
 <section id="same-giants-same-shoulders-scikit-learn-to-the-rescue" class="level2">
 <h2 class="anchored" data-anchor-id="same-giants-same-shoulders-scikit-learn-to-the-rescue">Same giants, same shoulders: <strong>scikit-learn</strong> to the rescue</h2>
 <p>A much better alternative was to look into the scikit-learn library. <br> It turns out there is a function <code>pairwise_distances_chunked</code>, which does exactly what we want. As the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise_distances_chunked.html">documentation</a> explains, this function creates a Python <em>generator</em> that will build up a distance matrix <em>chunk by chunk</em>, thus computing the distances as lazily and returning the intermediate results. The following example will be hopefully useful:</p>
-<div class="cell" data-execution_count="18">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -3742,7 +3744,7 @@ background-color: null;
 font-style: inherit;">=</span> np.zeros((n_vectors, n_vectors))</span></code></pre></div>
 </div>
 <p>Instead of computing and storing <em>all</em> the results, we construct the generator first:</p>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1">chunk_generator <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> pairwise_distances_chunked(all_vectors, metric<span class="op" style="color: #5E5E5E;
@@ -3753,12 +3755,12 @@ font-style: inherit;">"cosine"</span>)</span>
 <span id="cb24-2"><span class="bu" style="color: null;
 background-color: null;
 font-style: inherit;">type</span>(chunk_generator)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display">
 <pre><code>generator</code></pre>
 </div>
 </div>
 <p>Now we can call the next method and so generate the first chunk of results. <br> Like with any other Python generator, we can repeat that call until the generator is exhausted.</p>
-<div class="cell" data-execution_count="20">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">chunk1 <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="bu" style="color: null;
@@ -3811,7 +3813,7 @@ Total size along first dimension : 20000</code></pre>
 </div>
 </div>
 <p>As we observe on the shape of the generated results, the rendered chunk is a <em>vertical slice</em> of the complete distance matrix. <br> We can visualize it (yellow corresponds to the computed values):</p>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><span class="co" style="color: #5E5E5E;
@@ -3933,7 +3935,7 @@ Note
 <h3 class="anchored" data-anchor-id="back-to-50k">Back to 50K</h3>
 <p>So far so good. But our original problem was substantially larger than the example above, namely 50 (not 20) thousand vectors, which we already saw translates into many more computations. <br></p>
 <p>Now we are going to test the chunked approach with more vectors – that’s what you came for :)</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -3963,7 +3965,7 @@ font-style: inherit;">"cosine"</span>)</span></code></pre></div>
 background-color: null;
 font-style: inherit;">=</span> np.vstack(chunk_generator)</span></code></pre></div>
 <p>which is very nice, but will stop working with numpy 1.16, thus we need another container</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="co" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;"># This might take a lot of RAM, so depending on your hardware you might just skip the concatenation</span></span>
@@ -3985,7 +3987,7 @@ font-style: inherit;">"distances shape: "</span>, distances.shape)</span></code>
 </div>
 <p><strong>Voilà!</strong> <br> We just computed the pairwise cosine distance for the <em>50 thousand</em> vectors! If your matrix distance is too big such that cannot be concatenated into one array, then you can simply do whatever you need to with the individual chunks and save the intermediate results.</p>
 <p>For the sake of completeness, let’s evaluate the scaling of that function:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><span class="kw" style="color: #003B4F;
@@ -4007,7 +4009,7 @@ background-color: null;
 font-style: inherit;">in</span> chunk_generator])  </span></code></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1">n_vectors_vals <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> np.arange(<span class="dv" style="color: #AD0000;
@@ -4032,7 +4034,7 @@ font-style: inherit;">=</span> evaluate_scaling(cosine_distance_chunks, n_vector
 </section>
 <section id="sanity-check-compare-to-pure-sklearn-function" class="level3">
 <h3 class="anchored" data-anchor-id="sanity-check-compare-to-pure-sklearn-function">Sanity check: compare to pure sklearn function</h3>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb36" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1">n_vectors <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="dv" style="color: #AD0000;
@@ -4057,7 +4059,7 @@ background-color: null;
 font-style: inherit;">=</span> cosine_distance_chunks(all_vectors)</span>
 <span id="cb36-7"></span>
 <span id="cb36-8">np.allclose(distances_skl, distances_chunk)</span></code></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>

@@ -139,12 +139,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://fabridamicelli.github.io/blog" rel="" target="">
- <span class="menu-text">Blog</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../posts.html" rel="" target="">
- <span class="menu-text">(WIP: Quarto migration) Fabrizio’s Blog</span></a>
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../code.html" rel="" target="">
@@ -238,7 +234,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p><a href="https://seaborn.pydata.org/">seaborn</a> makes our life easy when it comes to slicing and plotting data in Python.<br>
 That awesome buffet of well balanced aesthetic and practical functionalities of its ergonomic API comes with a few caveats to consider though.<br>
 Here’s one of them when trying to plot data including PyTorch tensors.</p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
@@ -249,54 +245,54 @@ Here’s one of them when trying to plot data including PyTorch tensors.</p>
 </details>
 </div>
 <p>Let’s create 2 simple <code>numpy</code> arrays simulating the values of two variables, <code>x</code> and <code>y</code>.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">=</span> np.arange(<span class="dv">20</span>) <span class="op">+</span> np.random.normal(scale<span class="op">=</span><span class="fl">1.7</span>, size<span class="op">=</span><span class="dv">20</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>y <span class="op">=</span> np.arange(<span class="dv">20</span>) <span class="op">+</span> np.random.normal(scale<span class="op">=</span><span class="fl">1.7</span>, size<span class="op">=</span><span class="dv">20</span>).<span class="bu">round</span>(<span class="dv">2</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>x[:<span class="dv">5</span>], y[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="2">
+<div class="cell-output cell-output-display">
 <pre><code>(array([-1.41,  3.97,  3.2 ,  4.63,  2.99]),
  array([-0.58,  1.07, -0.13,  0.79,  3.84]))</code></pre>
 </div>
 </div>
 <p>We can plot them using seaborn scatterplot:</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>x, y<span class="op">=</span>y)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-08-04-seaborn-tensors_files/figure-html/cell-4-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>We can achieve the same using lists:</p>
-<div class="cell" data-execution_count="44">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>x_li <span class="op">=</span> x.tolist()</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>y_li <span class="op">=</span> y.tolist()</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>x_li[:<span class="dv">5</span>], y_li[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="44">
+<div class="cell-output cell-output-display">
 <pre><code>([3.93, 1.6400000000000001, 2.91, 2.75, 0.3900000000000001],
  [-1.08, 0.91, 4.970000000000001, 3.64, 8.129999999999999])</code></pre>
 </div>
 </div>
 <p>Again, we can plot them using <code>seaborn</code> scatterplot:</p>
-<div class="cell" data-execution_count="45">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>x_li, y<span class="op">=</span>y_li)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-08-04-seaborn-tensors_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Observe that the lists are made up of python <code>float</code>s while the <code>numpy</code> arrays contain <code>numpy.float64</code>:</p>
-<div class="cell" data-execution_count="46">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(x[<span class="dv">0</span>]), <span class="bu">type</span>(x_li[<span class="dv">0</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="46">
+<div class="cell-output cell-output-display">
 <pre><code>(numpy.float64, float)</code></pre>
 </div>
 </div>
 <p>So far so good.</p>
 <p>Now what happens if the individual elements are pytorch zero-dimensional tensors (i.e.&nbsp;scalars) like these:</p>
-<div class="cell" data-execution_count="47">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>x_pt <span class="op">=</span> [tensor(o) <span class="cf">for</span> o <span class="kw">in</span> x] </span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>y_pt <span class="op">=</span> [tensor(o) <span class="cf">for</span> o <span class="kw">in</span> y] </span>
 <span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>x_pt[:<span class="dv">5</span>], y_pt[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="47">
+<div class="cell-output cell-output-display">
 <pre><code>([tensor(3.9300, dtype=torch.float64),
   tensor(1.6400, dtype=torch.float64),
   tensor(2.9100, dtype=torch.float64),
@@ -310,31 +306,31 @@ Here’s one of them when trying to plot data including PyTorch tensors.</p>
 </div>
 </div>
 <p>At first glance it looks like it should be all kind of the same. Indeed some comparisons still work the way we (I?) expect. For example, the element-wise equality:</p>
-<div class="cell" data-execution_count="62">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">==</span> x_li</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="62">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="63">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>x <span class="op">==</span> x_pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="63">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="64">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>(x <span class="op">==</span> x_pt).<span class="bu">all</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="64">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="65">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>x_pt <span class="op">==</span> x</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="65">
+<div class="cell-output cell-output-display">
 <pre><code>array([ True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True,  True,  True,  True,  True,  True,  True,  True,
         True,  True])</code></pre>
@@ -342,15 +338,15 @@ Here’s one of them when trying to plot data including PyTorch tensors.</p>
 </div>
 <p>This happens thanks to the fact that numpy under the hood first casts the objects and then compares them.<br>
 When comparing the python list directly to the tensor we have this:</p>
-<div class="cell" data-execution_count="67">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>x_li <span class="op">==</span> x_pt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="67">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>
 <p>That is not quite what I expect (i.e.&nbsp;element-wise comparison), but it is still aligned with our believe that these array-like structures (list, array, tensor) are made of equivalent scalar elements.</p>
 <p>So let’s plot the tensors, like we did with the lists and the arrays:</p>
-<div class="cell" data-execution_count="68">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-08-04-seaborn-tensors_files/figure-html/cell-14-output-1.png" class="img-fluid"></p>
@@ -359,7 +355,7 @@ When comparing the python list directly to the tensor we have this:</p>
 <p>Ups, that doesn’t look good – the y-axis is flipped!</p>
 <p>After going a bit down the rabbit hole of <code>seaborn</code> and <code>pandas</code> error traces, we see that under the hood <code>seaborn</code> infers the data type of the values and –surprise!– pytorch tensors seem to be interpreted as categorical.<br>
 That can be more explicitely seen if we try to plot the data with the <code>pointplot</code> function instead:</p>
-<div class="cell" data-execution_count="69">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sns.pointplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
 <pre><code>TypeError: Neither the `x` nor `y` variable appears to be numeric.</code></pre>
@@ -370,7 +366,7 @@ That can be more explicitely seen if we try to plot the data with the <code>poin
 <h2 class="anchored" data-anchor-id="lets-fix-it">Let’s fix it</h2>
 <p>A couple of options to fix our plots.<br>
 We can flip the y-axis:</p>
-<div class="cell" data-execution_count="56">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.scatterplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)</span>
 <span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -378,14 +374,14 @@ We can flip the y-axis:</p>
 </div>
 </div>
 <p>We can cast the data, for example to a numpy array:</p>
-<div class="cell" data-execution_count="70">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>np.array(x_pt), y<span class="op">=</span>np.array(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-08-04-seaborn-tensors_files/figure-html/cell-17-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Or to a tensor:</p>
-<div class="cell" data-execution_count="71">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>tensor(x_pt), y<span class="op">=</span>tensor(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2022-08-04-seaborn-tensors_files/figure-html/cell-18-output-1.png" class="img-fluid"></p>
@@ -393,10 +389,10 @@ We can flip the y-axis:</p>
 </div>
 <section id="note" class="level4">
 <h4 class="anchored" data-anchor-id="note">Note:</h4>
-<div class="cell" data-execution_count="73">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the state as of today with </span></span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sns.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="73">
+<div class="cell-output cell-output-display">
 <pre><code>'0.11.2'</code></pre>
 </div>
 </div>
@@ -414,6 +410,8 @@ We can flip the y-axis:</p>
 </section>
 
 </main> <!-- /main -->
+<!-- plausible -->
+<script defer="" data-domain="fabridamicelli.github.io" src="https://plausible.io/js/script.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

@@ -141,12 +141,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://fabridamicelli.github.io/blog" rel="" target="">
- <span class="menu-text">Blog</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../posts.html" rel="" target="">
- <span class="menu-text">(WIP: Quarto migration) Fabrizio’s Blog</span></a>
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../code.html" rel="" target="">
@@ -287,20 +283,20 @@ Y_{beer-Germany} = X \beta_{sun} + \beta_{0-Germany} + \mu
 <section id="experiment-with-synthetic-data" class="level2">
 <h2 class="anchored" data-anchor-id="experiment-with-synthetic-data">Experiment with synthetic data</h2>
 <p>Let’s create a synthetic ground truth dataset so that we can see these models in action on a concrete example.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">200</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">50</span>, noise<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As the parameter <code>bias</code> shows, the data will have this intrinsic bias. So we know it’s there. Now we will fit a model with and another without bias and observe their behaviour.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>model_without_bias <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>).fit(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Let’s check how well these models fit the training data by plotting predictions coming from both of them:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_models_fit(x, y, model_with_bias, model_without_bias):</span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, y, <span class="st">'o'</span>, label<span class="op">=</span><span class="st">"data"</span>, alpha<span class="op">=</span><span class="fl">.5</span>)</span>
@@ -310,14 +306,14 @@ Y_{beer-Germany} = X \beta_{sun} + \beta_{0-Germany} + \mu
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"Independent variable"</span>)</span>
 <span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_models_fit(x, y, model_with_bias, model_without_bias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2021-10-16-lr_add_constant_files/figure-html/cell-6-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>As we see, the two models produce different outcomes. The one without bias “forces” the line to pass through the origin. The slope may be similar because of ordinary least squares minimizes the vertical (square) distance from the line to the data points, but that really depends on the data at hand, as we can see in the following example with different ground truth data:</p>
-<div class="cell" data-execution_count="69">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">100</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">300</span>, noise<span class="op">=</span><span class="dv">80</span>)</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
@@ -329,7 +325,7 @@ Y_{beer-Germany} = X \beta_{sun} + \beta_{0-Germany} + \mu
 </div>
 </div>
 <p>Finally, what if the data indeed does not have such a bias? Let’s try it:</p>
-<div class="cell" data-execution_count="70">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">100</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">0</span>, noise<span class="op">=</span><span class="dv">80</span>)</span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
@@ -357,6 +353,8 @@ Y_{beer-Germany} = X \beta_{sun} + \beta_{0-Germany} + \mu
 </section>
 
 </main> <!-- /main -->
+<!-- plausible -->
+<script defer="" data-domain="fabridamicelli.github.io" src="https://plausible.io/js/script.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

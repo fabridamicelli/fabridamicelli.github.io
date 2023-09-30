@@ -141,12 +141,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://fabridamicelli.github.io/blog" rel="" target="">
- <span class="menu-text">Blog</span></a>
-  </li>  
-  <li class="nav-item">
     <a class="nav-link" href="../posts.html" rel="" target="">
- <span class="menu-text">(WIP: Quarto migration) Fabrizio’s Blog</span></a>
+ <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="../code.html" rel="" target="">
@@ -242,7 +238,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>The intuition behind the computation we want to achieve is depicted in the following plot:</p>
 <p><img src="../images/divide-and-conquer/vector-distances.png" width="1200" height="1200"></p>
 <p><em>Two vectors in 2D space represented as points. The blue line shows the <em>euclidean</em> distance between the vectors. The <span class="math inline">\(\cos(\alpha)\)</span> is the <em>cosine</em> distance.</em></p>
-<div class="cell" data-execution_count="1">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Import everything we need</span></span>
@@ -262,7 +258,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 <p>For the sake of presentation and simplicity, we are just going to create and use a bunch of random vectors. And that bunch is going to be relatively large (to compute on a not-so-large laptop).</p>
 <p>Let’s first get an idea of how many values need to compute if we take say 50 thousand vectors, which is not unrealistic at all (e.g., that could be taking all nouns of a word embedding):</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">50_000</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Number of pairwise distances to be computed"</span>, <span class="bu">int</span>(n_vectors <span class="op">*</span> (n_vectors<span class="op">-</span><span class="dv">1</span>) <span class="op">/</span> <span class="dv">2</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -274,7 +270,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <section id="the-default-solution" class="level2">
 <h2 class="anchored" data-anchor-id="the-default-solution">The default solution</h2>
 <p>The most straight forward to do this is with scipy/sklearn pairwise distances functions as follows (we are going to time it to get an idea of how the problem scales).</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">5_000</span></span>
@@ -290,7 +286,7 @@ Wall time: 286 ms</code></pre>
 </div>
 </div>
 <p>So far, so good. But what happens if we want to compute it for more vectors?</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>time</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">15_000</span></span>
@@ -308,7 +304,7 @@ Wall time: 1.99 s</code></pre>
 <section id="closer-look-at-the-scaling" class="level3">
 <h3 class="anchored" data-anchor-id="closer-look-at-the-scaling">Closer look at the scaling</h3>
 <p>Let’s examine the computational complexity we mentioned above with some quick numerical experiments.</p>
-<div class="cell" data-execution_count="2">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> evaluate_scaling(func, n_vectors_vals, n_dimensions<span class="op">=</span><span class="dv">300</span>):</span>
@@ -329,14 +325,14 @@ Wall time: 1.99 s</code></pre>
 <span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    plt.grid(<span class="va">True</span>, linestyle<span class="op">=</span><span class="st">"--"</span>, alpha<span class="op">=</span><span class="fl">0.7</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>n_vectors_vals <span class="op">=</span> np.arange(<span class="dv">1000</span>, <span class="dv">20001</span>, <span class="dv">500</span>)</span>
 <span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> evaluate_scaling(cosine_distances, n_vectors_vals)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stderr">
 <pre><code>100%|██████████| 39/39 [00:49&lt;00:00,  1.27s/it]</code></pre>
 </div>
 </div>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>plot_scaling(n_vectors_vals, times)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2019-11-30-divide-and-conquer_files/figure-html/cell-8-output-1.png" class="img-fluid"></p>
@@ -344,7 +340,7 @@ Wall time: 1.99 s</code></pre>
 </div>
 <p>We can use what we know about the complexity (<span class="math inline">\(O(n^2)\)</span>) to fit a curve. In other words, we are going to fit a quadratic function that predicts the time it takes to compute all the pairwise distances as a function of the number of vectors. After that, we can use that function to extrapolate and estimate the performance for a much larger number of vectors.</p>
 <p><img src="../images/divide-and-conquer/xkcd-extrapolating.png"></p>
-<div class="cell" data-execution_count="10">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a 2nd degree polynomial and get the polynomial evaluator</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> np.polyfit(n_vectors_vals, times, <span class="dv">2</span>)  </span>
 <span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>poly <span class="op">=</span> np.poly1d(fit)</span>
@@ -359,7 +355,7 @@ Wall time: 1.99 s</code></pre>
 </div>
 <p>The fit looks approximately correct. Remember, we don’t need to get a perfectly accurate estimate. We rather want to know if we should grab a coffee while the computation runs, let it compute overnight or if it is unfeasible with our hardware.</p>
 <p>Now we extrapolate for more vectors:</p>
-<div class="cell" data-execution_count="11">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>n_vectors_large <span class="op">=</span> np.arange(<span class="dv">1000</span>, <span class="dv">50000</span>)</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>plot_scaling(n_vectors_large, poly(n_vectors_large))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
@@ -367,7 +363,7 @@ Wall time: 1.99 s</code></pre>
 </div>
 </div>
 <p>Well that doesn’t sound too bad: it should take around 40 seconds to compute the distances for 50 thousand vectors. <br> Let’s give it a try:</p>
-<div class="cell" data-execution_count="9">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">50_000</span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>all_vectors <span class="op">=</span> np.random.random(size<span class="op">=</span>(n_vectors, n_dimensions))</span>
@@ -382,7 +378,7 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <section id="solution-first-attempt" class="level2">
 <h2 class="anchored" data-anchor-id="solution-first-attempt">Solution: first attempt</h2>
 <p>Iterate and compute the values one by one instead of computing it with the <code>cosine_distances</code> function. <br> Spoiler: Bad idea. <br> Let’s see:</p>
-<div class="cell" data-execution_count="12">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine_distances_iter(all_vectors):</span>
@@ -394,13 +390,13 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> distances</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="13">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">100</span></span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>all_vectors <span class="op">=</span> np.random.random(size<span class="op">=</span>(n_vectors, n_dimensions))</span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> cosine_distances_iter(all_vectors)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>As the distance matrix is symmetric, we don’t repeat the computation and thus here we just show the upper triangle.<br> Each entry <span class="math inline">\(D_{ij}\)</span> of the distance matrix corresponds to the cosine distance between the vectors <span class="math inline">\(i\)</span> and <span class="math inline">\(j\)</span>.</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_distances_heatmap(distances):    </span>
@@ -417,14 +413,14 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>    plt.show()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="15">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>plot_distances_heatmap(distances)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <p><img src="2019-11-30-divide-and-conquer_files/figure-html/cell-15-output-1.png" class="img-fluid"></p>
 </div>
 </div>
 <p>Now, how does it scale? We can do the same curve fitting as above and project for a larger number of vectors.</p>
-<div class="cell" data-execution_count="16">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>n_vectors_vals <span class="op">=</span> np.arange(<span class="dv">100</span>, <span class="dv">1001</span>, <span class="dv">100</span>)</span>
@@ -447,7 +443,7 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 </div>
 </div>
 <p>And the extrapolation looks like this:</p>
-<div class="cell" data-execution_count="17">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>n_vectors_large <span class="op">=</span> np.arange(<span class="dv">100</span>, <span class="dv">50001</span>, <span class="dv">100</span>)</span>
@@ -462,7 +458,7 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <section id="same-giants-same-shoulders-scikit-learn-to-the-rescue" class="level2">
 <h2 class="anchored" data-anchor-id="same-giants-same-shoulders-scikit-learn-to-the-rescue">Same giants, same shoulders: <strong>scikit-learn</strong> to the rescue</h2>
 <p>A much better alternative was to look into the scikit-learn library. <br> It turns out there is a function <code>pairwise_distances_chunked</code>, which does exactly what we want. As the <a href="https://scikit-learn.org/stable/modules/generated/sklearn.metrics.pairwise_distances_chunked.html">documentation</a> explains, this function creates a Python <em>generator</em> that will build up a distance matrix <em>chunk by chunk</em>, thus computing the distances as lazily and returning the intermediate results. The following example will be hopefully useful:</p>
-<div class="cell" data-execution_count="18">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">20_000</span></span>
 <span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>n_dimensions <span class="op">=</span> <span class="dv">100</span> </span>
 <span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -473,15 +469,15 @@ kernel 4055ff16-c49b-4a76-9068-e899d001fb85 restarted</code></pre>
 <span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> np.zeros((n_vectors, n_vectors))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>Instead of computing and storing <em>all</em> the results, we construct the generator first:</p>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>chunk_generator <span class="op">=</span> pairwise_distances_chunked(all_vectors, metric<span class="op">=</span><span class="st">"cosine"</span>)</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="bu">type</span>(chunk_generator)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display">
 <pre><code>generator</code></pre>
 </div>
 </div>
 <p>Now we can call the next method and so generate the first chunk of results. <br> Like with any other Python generator, we can repeat that call until the generator is exhausted.</p>
-<div class="cell" data-execution_count="20">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>chunk1 <span class="op">=</span> <span class="bu">next</span>(chunk_generator)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Shape of chunk 1:"</span>, chunk1.shape)</span>
 <span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>chunk2 <span class="op">=</span> <span class="bu">next</span>(chunk_generator)</span>
@@ -498,7 +494,7 @@ Total size along first dimension : 20000</code></pre>
 </div>
 </div>
 <p>As we observe on the shape of the generated results, the rendered chunk is a <em>vertical slice</em> of the complete distance matrix. <br> We can visualize it (yellow corresponds to the computed values):</p>
-<div class="cell" data-execution_count="21">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># </span><span class="al">WARNING</span><span class="co">: running this cell might take quite a bit of memory</span></span>
@@ -542,7 +538,7 @@ Note
 <h3 class="anchored" data-anchor-id="back-to-50k">Back to 50K</h3>
 <p>So far so good. But our original problem was substantially larger than the example above, namely 50 (not 20) thousand vectors, which we already saw translates into many more computations. <br></p>
 <p>Now we are going to test the chunked approach with more vectors – that’s what you came for :)</p>
-<div class="cell" data-execution_count="3">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">50_000</span></span>
 <span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>n_dimensions <span class="op">=</span> <span class="dv">300</span> </span>
 <span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>all_vectors <span class="op">=</span> np.random.random(size<span class="op">=</span>(n_vectors, n_dimensions))</span>
@@ -552,7 +548,7 @@ Note
 <p>Assuming the final whole array fits in memory, we could collect all chunks and then concatenate them, like this:</p>
 <div class="sourceCode" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> np.vstack(chunk_generator)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>which is very nice, but will stop working with numpy 1.16, thus we need another container</p>
-<div class="cell" data-execution_count="4">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This might take a lot of RAM, so depending on your hardware you might just skip the concatenation</span></span>
 <span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>distances <span class="op">=</span> np.vstack([chunk <span class="cf">for</span> chunk <span class="kw">in</span> chunk_generator])</span>
 <span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"distances shape: "</span>, distances.shape)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -562,7 +558,7 @@ Note
 </div>
 <p><strong>Voilà!</strong> <br> We just computed the pairwise cosine distance for the <em>50 thousand</em> vectors! If your matrix distance is too big such that cannot be concatenated into one array, then you can simply do whatever you need to with the individual chunks and save the intermediate results.</p>
 <p>For the sake of completeness, let’s evaluate the scaling of that function:</p>
-<div class="cell" data-execution_count="5">
+<div class="cell">
 <details>
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> cosine_distance_chunks(all_vectors):</span>
@@ -570,7 +566,7 @@ Note
 <span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.vstack([chunk <span class="cf">for</span> chunk <span class="kw">in</span> chunk_generator])  </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell" data-execution_count="6">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>n_vectors_vals <span class="op">=</span> np.arange(<span class="dv">10_000</span>, <span class="dv">50_001</span>, <span class="dv">10_000</span>)</span>
 <span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> evaluate_scaling(cosine_distance_chunks, n_vectors_vals)</span>
 <span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a></span>
@@ -585,7 +581,7 @@ Note
 </section>
 <section id="sanity-check-compare-to-pure-sklearn-function" class="level3">
 <h3 class="anchored" data-anchor-id="sanity-check-compare-to-pure-sklearn-function">Sanity check: compare to pure sklearn function</h3>
-<div class="cell" data-execution_count="19">
+<div class="cell">
 <div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>n_vectors <span class="op">=</span> <span class="dv">30_000</span></span>
 <span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>n_dimensions <span class="op">=</span> <span class="dv">300</span> </span>
 <span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>all_vectors <span class="op">=</span> np.random.random(size<span class="op">=</span>(n_vectors, n_dimensions))</span>
@@ -594,7 +590,7 @@ Note
 <span id="cb36-6"><a href="#cb36-6" aria-hidden="true" tabindex="-1"></a>distances_chunk <span class="op">=</span> cosine_distance_chunks(all_vectors)</span>
 <span id="cb36-7"><a href="#cb36-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb36-8"><a href="#cb36-8" aria-hidden="true" tabindex="-1"></a>np.allclose(distances_skl, distances_chunk)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display">
 <pre><code>True</code></pre>
 </div>
 </div>
@@ -623,6 +619,8 @@ Tip
 </section>
 
 </main> <!-- /main -->
+<!-- plausible -->
+<script defer="" data-domain="fabridamicelli.github.io" src="https://plausible.io/js/script.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {

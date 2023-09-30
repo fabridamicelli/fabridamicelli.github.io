@@ -95,7 +95,7 @@
     "href": "index.html",
     "title": "Fabrizio Damicelli",
     "section": "",
-    "text": "Cut through the hype. One commit first. Then another. Intuitions. That’s the game about. Let them be solid. Don’t stop learning. Remain skeptical, especially of my code. Neural nets are cool. But software and communication skills take you a longer way. AGI is cool. After six. Before that, let’s leverage data and computing power to build a better world."
+    "text": "Cut through the hype one commit at a time. Intuitions. That’s the game about. Neural nets are useful.\nBut only together with software and communication skills. AGI is cool. After six.\nBefore that, let’s leverage data and computing power to build a better world.\n\n\nHi there! 👋 I’m Fabrizio. Thanks for your visit!\nCurrently a Data Scientist based in Hamburg (Germany), working on ~real-time fraud detection with neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nI finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg - see research for details. During that time I also created a couple of open source Python packages that I still maintain.\nI enjoy 📝 technical writing and once in while make a 🎥 video covering Python/ML/Data Science topics.\nI like music a lot, Python, reading, simple ideas behind complex phenomena and data-driven solutions. I prefer strong intuitions and simple words to unnecessary sophistication and fancy jargon."
   },
   {
     "objectID": "posts.html",
@@ -112,11 +112,53 @@
     "text": "Date\n\n\nTitle\n\n\n\n\n\n\n\n\nNo matching items"
   },
   {
+    "objectID": "links.html",
+    "href": "links.html",
+    "title": "Links",
+    "section": "",
+    "text": "Definitely incomplete, always growing list of cool, free learning/fun resources out there that will make you love the internet."
+  },
+  {
+    "objectID": "links.html#tutorials",
+    "href": "links.html#tutorials",
+    "title": "Links",
+    "section": "Tutorials",
+    "text": "Tutorials\n\ncalmcode: A goldmine for Python people – learn calmly bit by bit with hands-on tutorials.\nReal Python: Awesome in depth tutorials about all sorts of aspects of the language.\nScipy Lectures: Learn numerics, scientific and data oriented Python.\nNumba - Tell Those C++ Bullies to Get Lost - Forsyth & Barba - SciPy 2017\nReproducible workflow in Jupyter - Jake van der Plas\nAnatomy of Matplotlib - Root & Aizenman - SciPy 2018\nDocker: Nail down the basics with this tutorial from freeCodeCamp.\nSQL: Interactive book, aims to be “the best place on the internet for learning SQL” - you decide.\nGit: Go beyond typing commmands blindly - understand git’s data model.\nGit-Advanced: Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.\nfast.ai: A myriad of learning resources – ML, python, developer tools, etc.\nTransformers & Attention: A great explanation by V. Warmerdam at Rasa Whiteboard series.\nSetosa: visual explanations"
+  },
+  {
+    "objectID": "links.html#talks",
+    "href": "links.html#talks",
+    "title": "Links",
+    "section": "Talks",
+    "text": "Talks\n\nFacts and Myths about Python names and values - Ned Batchelder - PyCon 2015\nStatistics for Hackers - Jake van der Plas - PyCon 2016\nBuilt in Super Heroes - David Beazley - PyData 2016\nComputational Statistics - Allen Downey - SciPy 2017\nA Bluffer’s Guide to Dimension Reduction - Leland McInnes - PyData 2018\nUntitled12 - Vincent Warmerdam - PyData 2019\nGaussian Progress – Vincent Warmerdam - PyData 2019"
+  },
+  {
+    "objectID": "links.html#youtube-channels",
+    "href": "links.html#youtube-channels",
+    "title": "Links",
+    "section": "Youtube channels",
+    "text": "Youtube channels\n\n3brown1blue: One of the best teachers in the internet. Ever.\nCorey Schafer: Hands down one of the best Python resources out there.\nanthonywritescode: Mostly (not only) Python features, tools & idioms explained.\nReal Python\nLuis serrano: Machine learning algorithms and intuitions, in simple words.\nLuke Smith: Unix, vim, latex, markdown, free-software, etc.\nPython Engineer\nBen Lambert: Stats, ML, Bayesian stuff.\nStatsquest – Josh Starmer: Stats, machine learning, algorithms, bam!\nArxiv Insights: Machine learning papers explained and discussed."
+  },
+  {
+    "objectID": "links.html#blogs",
+    "href": "links.html#blogs",
+    "title": "Links",
+    "section": "Blogs",
+    "text": "Blogs\n\nVincent Warmerdam: Data, machine learning, algorithms – and nice drawings.\nMax Halford\nAdam Johnson: Mostly Python, tackling core aspects of the language.\nSquirrel, Not Squirrel: Amazing PCA explanation.\nMichael Nielsen\nMLU-EXPLAIN: Visual explanations of core machine learning concepts."
+  },
+  {
+    "objectID": "links.html#podcasts",
+    "href": "links.html#podcasts",
+    "title": "Links",
+    "section": "Podcasts",
+    "text": "Podcasts\n\nPython & co.\n\nPodcast.__init__\nTalk python to me\nPython Bytes\ndats’n’stats\nThe Real Python\nPython Podcast (in German)\n\n\n\nData, ML, Maths, etc.\n\nVanishing Gradients - Hugo Bowne-Anderson\nThe Gradient Podcast\nThe Robot Brains Podcast - Peter Abeel\nPractical AI\nAI in action\nMachine Learning Street Talks\nComplexity - Sta. Fe Institute\nThis week in machine learning\nUnderrated ML\nTalking Machines\nNumberphile\nData skeptic\nLinear Digressions\nGradient dissent: Weights and biases\nDataframed\nPartially derivative\n\n\n\nDiscussion, interviews, philosophy\n\nSean Carrol’s Mindscape\nThe knowledge project\nNot so standard deviations\nLex Fridman Podcast\nAdversarial Learning\nBrain inspired\nStephen Wolfram podcast\nChai Tea Data Science\nDeepMind Podcast\nTowards data science\nThe data exchange"
+  },
+  {
     "objectID": "research.html",
     "href": "research.html",
     "title": "Research",
     "section": "",
-    "text": "My PhD research was centered around two main topics:\n- By means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.\n- The cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.\nSelected publications:\n- Topological reinforcement as a principle of modularity emergence in brain networks. Damicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\n-Modular topology emerges from plasticity in a minimalistic excitable network model. Damicelli, Hilgetag, Hütt, Messé. Chaos, 2017.\n-Brain Connectivity meets Reservoir Computing. Damicelli, Hilgetag, A Goulas, 2021.\n-Bio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks. Goulas, Damicelli, Hilgetag, Neural Networks, 2021.\nCheck out Google Scholar for a complete list."
+    "text": "My PhD research was centered around two main topics:\n\nBy means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.\n\nThe cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.\n\nSelected publications:\n\nTopological reinforcement as a principle of modularity emergence in brain networks. Damicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\nModular topology emerges from plasticity in a minimalistic excitable network model. Damicelli, Hilgetag, Hütt, Messé. Chaos, 2017.\n\nBrain Connectivity meets Reservoir Computing. Damicelli, Hilgetag, A Goulas, 2021.\n\nBio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks. Goulas, Damicelli, Hilgetag, Neural Networks, 2021.\n\nCheck out Google Scholar for a complete list."
   },
   {
     "objectID": "posts/2022-08-04-seaborn-tensors.html",
@@ -200,6 +242,6 @@
     "href": "about.html",
     "title": "Fabrizio Damicelli",
     "section": "",
-    "text": "Hi there! 👋 I’m Fabrizio. Thanks for your visit!\nCurrently a Data Scientist based in Hamburg (Germany), working on ~real-time fraud detection with neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nI finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg - see research for details. During that time I also created a couple of open source Python packages that I still maintain.\nI enjoy 📝 technical writing and once in while make a 🎥 video covering Python/ML/Data Science topics.\nI like music a lot, Python, reading, simple ideas behind complex phenomena and data-driven solutions. I prefer strong intuitions and simple words to unnecessary sophistication and fancy jargon.\nGet in touch on twitter, LinkedIn or email (fabridamicelli at gmail)."
+    "text": "Hi there! 👋 I’m Fabrizio. Thanks for your visit!\nCurrently a Data Scientist based in Hamburg (Germany), working on ~real-time fraud detection with neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nI finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg - see research for details. During that time I also created a couple of open source Python packages that I still maintain.\nI enjoy 📝 technical writing and once in while make a 🎥 video covering Python/ML/Data Science topics.\nI like music a lot, Python, reading, simple ideas behind complex phenomena and data-driven solutions. I prefer strong intuitions and simple words to unnecessary sophistication and fancy jargon."
   }
 ]

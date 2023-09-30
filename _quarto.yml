@@ -12,11 +12,8 @@ website:
   navbar:
     left:
       - href: index.qmd
-        text: Home
-          # icon: house
-      - href: about.qmd
         text: About
-          # icon: person-fill
+          # icon: house
       - href: posts.qmd
         text: Blog
       - href: code.qmd
@@ -27,6 +24,8 @@ website:
           # icon: puzzle-fill
       - href: https://www.youtube.com/@fabridamicelli
         text: Videos
+      - href: links.qmd
+        text: Links
       - href: til.qmd
         text: TIL
 

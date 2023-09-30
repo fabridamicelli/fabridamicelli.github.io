@@ -17,10 +17,8 @@ website:
       - href: about.qmd
         text: About
           # icon: person-fill
-      - href: https://fabridamicelli.github.io/blog
-        text: Blog
-          # icon: journal-richtext
       - href: posts.qmd
+        text: Blog
       - href: code.qmd
         text: Code
           # icon: github

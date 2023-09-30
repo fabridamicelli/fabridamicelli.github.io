@@ -5,7 +5,7 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Fabrizio&#39;s Homepage</title>
+<title>Fabrizio Damicelli</title>
 <link>https://fabridamicelli.github.io/posts.html</link>
 <atom:link href="https://fabridamicelli.github.io/posts.xml" rel="self" type="application/rss+xml"/>
 <description></description>
@@ -1865,7 +1865,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
   <pubDate>Sun, 10 Oct 2021 00:00:00 GMT</pubDate>
 </item>
 <item>
-  <title>What is starmap? star</title>
+  <title>What is starmap?</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
   <link>https://fabridamicelli.github.io/posts/2021-09-18-starmap.html</link>
   <description><![CDATA[ 

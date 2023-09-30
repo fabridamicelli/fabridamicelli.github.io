@@ -5,11 +5,11 @@
       xmlns:dc="http://purl.org/dc/elements/1.1/" 
       version="2.0">
 <channel>
-<title>Fabrizio&#39;s Homepage</title>
+<title>Fabrizio Damicelli</title>
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.3.450</generator>
-<lastBuildDate>Sat, 30 Sep 2023 17:57:27 GMT</lastBuildDate>
+<lastBuildDate>Sat, 30 Sep 2023 18:10:02 GMT</lastBuildDate>
 </channel>
 </rss>

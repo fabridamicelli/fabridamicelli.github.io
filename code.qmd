@@ -1,0 +1,26 @@
+---
+title: "Code"
+---
+
+I created and maintain the following Python packages:
+
+[**echoes**:](https://github.com/fabridamicelli/echoes) A scikit-learn compatible package for Machine Learning with Echo State Networks  
+[x] A high level API for machine learning with [Echo State Networks (ESN)](http://www.scholarpedia.org/article/Echo_state_network)  
+[x] scikit-learn compatible implementation, powered by [numba](http://numba.pydata.org/) for speed.   
+[x] `pip install echoes`  
+<a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80"> <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16">  
+  
+[**kuramoto**:](https://github.com/fabridamicelli/kuramoto) Classical model to study synchronization phenomena  
+- [x] Python implementation of the [Kuramoto model](https://en.wikipedia.org/wiki/Kuramoto_model) on graphs.  
+- [x] `pip install kuramoto`  
+<a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80"><a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16">   
+  
+[**ser**:](https://github.com/fabridamicelli/ser) Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs  
+- [x] Powered by numba for speed.  
+- [x] `pip install ser`  
+<a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80"><a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16">  
+
+\
+\
+\
+[Check out my GitHub Profile](https://github.com/fabridamicelli)

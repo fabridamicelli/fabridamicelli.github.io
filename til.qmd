@@ -1,0 +1,21 @@
+---
+title: "Today I learnt"
+listing:
+  contents: til
+  feed: true
+  sort-ui: true
+  sort: 
+    - "date desc"
+    - "title desc"
+  type: table
+  image-height: 150px
+  image-placeholder: "/images/profile-pixels.png"
+  fields: [date, title]
+  categories: true
+  date-format: "YYYY-MM-DD"
+  page-size: 9
+toc: false
+toc-location: body
+page-layout: full
+title-block-banner: false
+---

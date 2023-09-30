@@ -1,0 +1,19 @@
+---
+title: "(WIP: Quarto migration) Fabrizio's Blog"
+listing:
+  contents: posts
+  sort:
+    - "date desc"
+    - "title asc"
+  type: default
+  categories: true
+  feed: true
+  sort-ui: false
+  filter-ui: false
+  image-align: right
+  image-height: 9em
+  # image-placeholder: /images/favicon.ico
+  date-format: YYYY-MM-DD
+page-layout: full
+title-block-banner: true
+---

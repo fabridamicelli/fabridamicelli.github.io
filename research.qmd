@@ -1,0 +1,16 @@
+---
+title: Research
+---
+
+My PhD research was centered around two main topics:  
+- By means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.  
+- The cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.
+
+
+Selected publications:  
+- [*Topological reinforcement as a principle of modularity emergence in brain networks*. **Damicelli**, Hilgetag, Hütt, Messé. Network Neuroscience, 2019](https://www.mitpressjournals.org/doi/full/10.1162/netn_a_00085).  
+-[*Modular topology emerges from plasticity in a minimalistic excitable network model*. **Damicelli**, Hilgetag, Hütt, Messé. Chaos, 2017](https://aip.scitation.org/doi/pdf/10.1063/1.4979561).  
+-[*Brain Connectivity meets Reservoir Computing*. **Damicelli**, Hilgetag, A Goulas, 2021](https://www.biorxiv.org/content/10.1101/2021.01.22.427750v1.abstract).  
+-[*Bio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks*. Goulas, **Damicelli**, Hilgetag, Neural Networks, 2021](https://doi.org/10.1016/j.neunet.2021.07.011).  
+
+Check out [Google Scholar](https://scholar.google.com/citations?user=Ktdpi1MAAAAJ&hl=de) for a complete list.

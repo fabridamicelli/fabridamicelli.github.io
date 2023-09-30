@@ -1,0 +1,28 @@
+---
+title: ""
+subtitle: ""
+about:
+  template: jolla
+  links:
+    - icon: github
+      text: GitHub
+      href: 'https://github.com/fabridamicelli'
+    - icon: twitter
+      text: Twitter
+      href: 'https://twitter.com/fabridamicelli'
+    - icon: linkedin
+      text: LinkedIn
+      href: 'https://linkedin.com/in/fabridamicelli'
+---
+
+
+<div align="right">
+ <i>Cut through the hype. One commit first. Then another.<br/>
+   Intuitions. That's the game about. Let them be solid.<br/>
+   Don't stop learning. Remain skeptical, especially of my code.<br/>
+   Neural nets are cool. But software and communication skills take you a longer way.<br/>
+   AGI is cool. After six.
+   Before that, let's leverage data and computing power to build a better world.</i>
+<div align="left">
+
+

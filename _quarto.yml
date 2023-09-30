@@ -1,0 +1,50 @@
+project:
+  type: website
+
+website:
+  title: "Fabrizio's Homepage"
+  #TODO: make it work image: /images/favicon-32x32.png
+  twitter-card: true
+  open-graph: true
+    # google-analytics: G-LRXD97FB1E
+  site-url: https://fabridamicelli.github.io
+  description: ""
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+          # icon: house
+      - href: about.qmd
+        text: About
+          # icon: person-fill
+      - href: https://fabridamicelli.github.io/blog
+        text: Blog
+          # icon: journal-richtext
+      - href: posts.qmd
+      - href: code.qmd
+        text: Code
+          # icon: github
+      - href: research.qmd
+        text: Research
+          # icon: puzzle-fill
+      - href: https://www.youtube.com/@fabridamicelli
+        text: Videos
+      - href: til.qmd
+        text: TIL
+
+    right:
+      - icon: github
+        href: https://github.com/fabridamicelli
+      - icon: twitter
+        href: https://twitter.com/fabridamicelli
+      - icon: linkedin
+        href: https://linkedin.com/in/fabridamicelli
+
+format:
+  html:
+    theme: cosmo
+    css: styles.css
+    toc: true
+
+
+

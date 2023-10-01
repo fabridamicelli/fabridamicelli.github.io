@@ -37,5 +37,3 @@ As an open source advocate, I have contributed to a few projects and also create
 Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, 📉 Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people's life better.
 
 I prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 [my blog](https://fabridamicelli.github.io/posts.html) and 🎥 [videos](https://www.youtube.com/@fabridamicelli) covering Python/ML/Data Science topics.
-
-I like music a lot, reading, simple ideas behind complex phenomena.

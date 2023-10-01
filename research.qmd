@@ -2,6 +2,8 @@
 title: Research
 ---
 
+I finished my PhD in 2021 at the [Institute of Computational Neuroscience](https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html) in Hamburg.
+
 My PhD research was centered around two main topics:  
 
   - By means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.  

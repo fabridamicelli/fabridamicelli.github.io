@@ -2,10 +2,10 @@
 title: "Links"
 ---
 
-Definitely incomplete, always growing list of cool, free learning/fun resources out there that will make you love the internet.
+Always growing list of cool, free learning/fun resources out there that will make you love the internet.
 
 ## Tutorials
-  - [calmcode](http://calmcode.io): A goldmine for Python people – learn calmly bit by bit with hands-on tutorials.
+  - [calmcode](http://calmcode.io): A goldmine – learn calmly bit by bit with hands-on tutorials.
   - [Real Python](https://realpython.com/): Awesome in depth tutorials about all sorts of aspects of the language.
   - [Scipy Lectures](http://scipy-lectures.org): Learn numerics, scientific and data oriented Python.
   - [Numba - Tell Those C++ Bullies to Get Lost - Forsyth & Barba - SciPy 2017](https://www.youtube.com/watch?v=SzBi3xdEF2Y&list=PLYx7XA2nY5Gf37zYZMw6OqGFRPjB1jCy6&index=7)
@@ -16,10 +16,12 @@ Definitely incomplete, always growing list of cool, free learning/fun resources 
   - [Git](https://missing.csail.mit.edu/2020/version-control/): Go beyond typing commmands blindly - understand git's data model.
   - [Git-Advanced](https://www.youtube.com/watch?v=qsTthZi23VE): Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.
   - [fast.ai](https://www.fast.ai/): A myriad of learning resources – ML, python, developer tools, etc.
-  - [Transformers & Attention](https://www.youtube.com/watch?v=yGTUuEx3GkA): A great explanation by V. Warmerdam at Rasa Whiteboard series.
   - [Setosa: visual explanations](https://setosa.io/)
+  - [Transformers & Attention](https://www.youtube.com/watch?v=yGTUuEx3GkA): A great explanation by V. Warmerdam at Rasa Whiteboard series.
+  - [The math behind Attention: Keys, Queries, and Values matrices](https://www.youtube.com/watch?v=UPtG_38Oq8o): Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano.
 
 ## Talks
+  - [Choose Boring Technology – Dan McKinley](https://boringtechnology.club/)
   - [Facts and Myths about Python names and values - Ned Batchelder - PyCon 2015](https://www.youtube.com/watch?v=_AEJHKGk9ns)
   - [Statistics for Hackers - Jake van der Plas - PyCon 2016](https://www.youtube.com/watch?v=Iq9DzN6mvYA)
   - [Built in Super Heroes - David Beazley - PyData 2016](https://www.youtube.com/watch?v=lyDLAutA88s)

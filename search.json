@@ -95,7 +95,7 @@
     "href": "index.html",
     "title": "Fabrizio Damicelli",
     "section": "",
-    "text": "Cut through the hype one commit at a time. Intuitions. That’s the game about. Neural nets are useful.\nBut only together with software and communication skills. AGI is cool. After six.\nBefore that, let’s leverage data and computing power to build a better world.\n\n\nHi there! 👋 I’m Fabrizio. Thanks for your visit!\nCurrently a Data Scientist based in Hamburg (Germany), working on ~real-time fraud detection with neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nI finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg - see research for details. During that time I also created a couple of open source Python packages that I still maintain.\nI enjoy 📝 technical writing and once in while make a 🎥 video covering Python/ML/Data Science topics.\nI like music a lot, Python, reading, simple ideas behind complex phenomena and data-driven solutions. I prefer strong intuitions and simple words to unnecessary sophistication and fancy jargon."
+    "text": "Cut through the hype one commit at a time. Intuitions. That’s the game about. Neural nets are useful.\nBut only together with software and communication skills. AGI is cool. After six.\nBefore that, let’s leverage data and computing power to build a better world.\n\n\nHi there! 👋 I’m Fabrizio.\n🎓 PhD in Computational Neuroscience, now a 💻 Data Scientist in Hamburg (DE). I work on fraud detection 🕵🏽 using neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nAs an open source advocate, I have contributed to a few projects and also created a couple Python packages that I still maintain 🤓. Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, 📉 Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people’s life better.\nI prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 my blog and 🎥 videos covering Python/ML/Data Science topics.\nI like music a lot, reading, simple ideas behind complex phenomena."
   },
   {
     "objectID": "posts.html",
@@ -116,21 +116,21 @@
     "href": "links.html",
     "title": "Links",
     "section": "",
-    "text": "Definitely incomplete, always growing list of cool, free learning/fun resources out there that will make you love the internet."
+    "text": "Always growing list of cool, free learning/fun resources out there that will make you love the internet."
   },
   {
     "objectID": "links.html#tutorials",
     "href": "links.html#tutorials",
     "title": "Links",
     "section": "Tutorials",
-    "text": "Tutorials\n\ncalmcode: A goldmine for Python people – learn calmly bit by bit with hands-on tutorials.\nReal Python: Awesome in depth tutorials about all sorts of aspects of the language.\nScipy Lectures: Learn numerics, scientific and data oriented Python.\nNumba - Tell Those C++ Bullies to Get Lost - Forsyth & Barba - SciPy 2017\nReproducible workflow in Jupyter - Jake van der Plas\nAnatomy of Matplotlib - Root & Aizenman - SciPy 2018\nDocker: Nail down the basics with this tutorial from freeCodeCamp.\nSQL: Interactive book, aims to be “the best place on the internet for learning SQL” - you decide.\nGit: Go beyond typing commmands blindly - understand git’s data model.\nGit-Advanced: Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.\nfast.ai: A myriad of learning resources – ML, python, developer tools, etc.\nTransformers & Attention: A great explanation by V. Warmerdam at Rasa Whiteboard series.\nSetosa: visual explanations"
+    "text": "Tutorials\n\ncalmcode: A goldmine – learn calmly bit by bit with hands-on tutorials.\nReal Python: Awesome in depth tutorials about all sorts of aspects of the language.\nScipy Lectures: Learn numerics, scientific and data oriented Python.\nNumba - Tell Those C++ Bullies to Get Lost - Forsyth & Barba - SciPy 2017\nReproducible workflow in Jupyter - Jake van der Plas\nAnatomy of Matplotlib - Root & Aizenman - SciPy 2018\nDocker: Nail down the basics with this tutorial from freeCodeCamp.\nSQL: Interactive book, aims to be “the best place on the internet for learning SQL” - you decide.\nGit: Go beyond typing commmands blindly - understand git’s data model.\nGit-Advanced: Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.\nfast.ai: A myriad of learning resources – ML, python, developer tools, etc.\nSetosa: visual explanations\nTransformers & Attention: A great explanation by V. Warmerdam at Rasa Whiteboard series.\nThe math behind Attention: Keys, Queries, and Values matrices: Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano."
   },
   {
     "objectID": "links.html#talks",
     "href": "links.html#talks",
     "title": "Links",
     "section": "Talks",
-    "text": "Talks\n\nFacts and Myths about Python names and values - Ned Batchelder - PyCon 2015\nStatistics for Hackers - Jake van der Plas - PyCon 2016\nBuilt in Super Heroes - David Beazley - PyData 2016\nComputational Statistics - Allen Downey - SciPy 2017\nA Bluffer’s Guide to Dimension Reduction - Leland McInnes - PyData 2018\nUntitled12 - Vincent Warmerdam - PyData 2019\nGaussian Progress – Vincent Warmerdam - PyData 2019"
+    "text": "Talks\n\nChoose Boring Technology – Dan McKinley\nFacts and Myths about Python names and values - Ned Batchelder - PyCon 2015\nStatistics for Hackers - Jake van der Plas - PyCon 2016\nBuilt in Super Heroes - David Beazley - PyData 2016\nComputational Statistics - Allen Downey - SciPy 2017\nA Bluffer’s Guide to Dimension Reduction - Leland McInnes - PyData 2018\nUntitled12 - Vincent Warmerdam - PyData 2019\nGaussian Progress – Vincent Warmerdam - PyData 2019"
   },
   {
     "objectID": "links.html#youtube-channels",
@@ -158,7 +158,7 @@
     "href": "research.html",
     "title": "Research",
     "section": "",
-    "text": "My PhD research was centered around two main topics:\n\nBy means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.\n\nThe cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.\n\nSelected publications:\n\nTopological reinforcement as a principle of modularity emergence in brain networks. Damicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\nModular topology emerges from plasticity in a minimalistic excitable network model. Damicelli, Hilgetag, Hütt, Messé. Chaos, 2017.\n\nBrain Connectivity meets Reservoir Computing. Damicelli, Hilgetag, A Goulas, 2021.\n\nBio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks. Goulas, Damicelli, Hilgetag, Neural Networks, 2021.\n\nCheck out Google Scholar for a complete list."
+    "text": "I finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg.\nMy PhD research was centered around two main topics:\n\nBy means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.\n\nThe cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.\n\nSelected publications:\n\nTopological reinforcement as a principle of modularity emergence in brain networks. Damicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\nModular topology emerges from plasticity in a minimalistic excitable network model. Damicelli, Hilgetag, Hütt, Messé. Chaos, 2017.\n\nBrain Connectivity meets Reservoir Computing. Damicelli, Hilgetag, A Goulas, 2021.\n\nBio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks. Goulas, Damicelli, Hilgetag, Neural Networks, 2021.\n\nCheck out Google Scholar for a complete list."
   },
   {
     "objectID": "posts/2022-08-04-seaborn-tensors.html",

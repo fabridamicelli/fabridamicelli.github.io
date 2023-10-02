@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fabrizio Damicelli - Code</title>
+<title>Fabrizio Damicelli - Open Source Contributions</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -63,11 +63,11 @@ ul.task-list li input[type="checkbox"] {
 
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Fabrizio Damicelli - Code">
+<meta property="og:title" content="Fabrizio Damicelli - Open Source Contributions">
 <meta property="og:description" content="">
 <meta property="og:image" content="https://pepy.tech/badge/echoes">
 <meta property="og:site-name" content="Fabrizio Damicelli">
-<meta name="twitter:title" content="Fabrizio Damicelli - Code">
+<meta name="twitter:title" content="Fabrizio Damicelli - Open Source Contributions">
 <meta name="twitter:description" content="">
 <meta name="twitter:image" content="https://pepy.tech/badge/echoes">
 <meta name="twitter:card" content="summary_large_image">
@@ -100,7 +100,7 @@ ul.task-list li input[type="checkbox"] {
   </li>  
   <li class="nav-item">
     <a class="nav-link active" href="./code.html" rel="" target="" aria-current="page">
- <span class="menu-text">Code</span></a>
+ <span class="menu-text">Open Source</span></a>
   </li>  
   <li class="nav-item">
     <a class="nav-link" href="./research.html" rel="" target="">
@@ -147,14 +147,31 @@ ul.task-list li input[type="checkbox"] {
 <!-- sidebar -->
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#python-packages" id="toc-python-packages" class="nav-link active" data-scroll-target="#python-packages">Python Packages</a>
+  <ul class="collapse">
+  <li><a href="#echoes" id="toc-echoes" class="nav-link" data-scroll-target="#echoes"><strong>echoes</strong></a></li>
+  <li><a href="#kuramoto" id="toc-kuramoto" class="nav-link" data-scroll-target="#kuramoto"><strong>kuramoto</strong></a></li>
+  <li><a href="#ser" id="toc-ser" class="nav-link" data-scroll-target="#ser"><strong>ser</strong></a></li>
+  </ul></li>
+  <li><a href="#other-contributions" id="toc-other-contributions" class="nav-link" data-scroll-target="#other-contributions">Other Contributions</a>
+  <ul class="collapse">
+  <li><a href="#torchserve" id="toc-torchserve" class="nav-link" data-scroll-target="#torchserve">TorchServe</a></li>
+  <li><a href="#torchserve-docker" id="toc-torchserve-docker" class="nav-link" data-scroll-target="#torchserve-docker">torchserve-docker</a></li>
+  <li><a href="#translations" id="toc-translations" class="nav-link" data-scroll-target="#translations">Translations</a></li>
+  </ul></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Code</h1>
+<h1 class="title">Open Source Contributions</h1>
 </div>
 
 
@@ -169,26 +186,71 @@ ul.task-list li input[type="checkbox"] {
 
 </header>
 
+<section id="python-packages" class="level2">
+<h2 class="anchored" data-anchor-id="python-packages">Python Packages</h2>
 <p>I created and maintain the following Python packages:</p>
-<p><a href="https://github.com/fabridamicelli/echoes"><strong>echoes</strong>:</a> A scikit-learn compatible package for Machine Learning with Echo State Networks<br>
-☑️ A high level API for machine learning with <a href="http://www.scholarpedia.org/article/Echo_state_network">Echo State Networks (ESN)</a><br>
-☑️ scikit-learn compatible implementation, powered by <a href="http://numba.pydata.org/">numba</a> for speed.<br>
-☑️ <code>pip install echoes</code><br>
-<a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80"> </a><a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16"></a></p><a href="https://pepy.tech/project/echoes">
-</a><p><a href="https://pepy.tech/project/echoes"></a><a href="https://github.com/fabridamicelli/kuramoto"><strong>kuramoto</strong>:</a> Classical model to study synchronization phenomena<br>
-☑️ Python implementation of the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> on graphs.<br>
-☑️ <code>pip install kuramoto</code><br>
-<a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80"></a><a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16"></a></p><a href="https://pepy.tech/project/kuramoto">
-</a><p><a href="https://pepy.tech/project/kuramoto"></a><a href="https://github.com/fabridamicelli/ser"><strong>ser</strong>:</a> Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs<br>
-☑️ Powered by numba for speed.<br>
-☑️ <code>pip install ser</code><br>
-<a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80"></a><a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16"></a></p><a href="https://pepy.tech/project/ser">
-</a><p><a href="https://pepy.tech/project/ser"><br>
-<br>
-<br>
-</a><a href="https://github.com/fabridamicelli">Check out my GitHub Profile</a></p>
+<section id="echoes" class="level3">
+<h3 class="anchored" data-anchor-id="echoes"><a href="https://github.com/fabridamicelli/echoes"><strong>echoes</strong></a></h3>
+<p>A scikit-learn compatible package for Machine Learning with Echo State Networks</p>
+<blockquote class="blockquote">
+<ul>
+<li>A high level API for machine learning with <a href="http://www.scholarpedia.org/article/Echo_state_network">Echo State Networks (ESN)</a></li>
+<li>scikit-learn compatible implementation, powered by <a href="http://numba.pydata.org/">numba</a> for speed.<br>
+</li>
+<li><code>pip install echoes</code><br>
+<a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80"> </a><a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16"> </a></li>
+</ul>
+</blockquote>
+</section>
+<section id="kuramoto" class="level3">
+<h3 class="anchored" data-anchor-id="kuramoto"><a href="https://github.com/fabridamicelli/kuramoto"><strong>kuramoto</strong></a></h3>
+<p>Classical model to study synchronization phenomena</p>
+<blockquote class="blockquote">
+<ul>
+<li>Python implementation of the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> on graphs.<br>
+</li>
+<li><code>pip install kuramoto</code><br>
+<a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80"> </a><a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16"> </a></li>
+</ul>
+</blockquote>
+</section>
+<section id="ser" class="level3">
+<h3 class="anchored" data-anchor-id="ser"><a href="https://github.com/fabridamicelli/ser"><strong>ser</strong></a></h3>
+<p>Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs</p>
+<blockquote class="blockquote">
+<ul>
+<li>Powered by numba for speed.<br>
+</li>
+<li><code>pip install ser</code><br>
+<a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80"> </a><a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16"> </a></li>
+</ul>
+</blockquote>
+</section>
+</section>
+<section id="other-contributions" class="level2">
+<h2 class="anchored" data-anchor-id="other-contributions">Other Contributions</h2>
+<section id="torchserve" class="level3">
+<h3 class="anchored" data-anchor-id="torchserve">TorchServe</h3>
+<p><a href="https://pytorch.org/serve">TorchServe</a> is a popular framework to deploy PyTorch-based neural networks. I have <a href="https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli">fixed bugs</a> in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.</p>
+</section>
+<section id="torchserve-docker" class="level3">
+<h3 class="anchored" data-anchor-id="torchserve-docker">torchserve-docker</h3>
+<p>I put together <a href="https://github.com/fabridamicelli/torchserve-docker">a simple GitHub-Action-based cron job</a> to build TorchServe images with specific Python version working out-of-the-box. The images are hosted on <a href="https://hub.docker.com/r/fabridamicelli/torchserve">Dockerhub</a>.</p>
+</section>
+<section id="translations" class="level3">
+<h3 class="anchored" data-anchor-id="translations">Translations</h3>
+<blockquote class="blockquote">
+<ul>
+<li>English → German of the <a href="https://github.com/huggingface/course/pulls?q=is%3Apr+author%3Afabridamicelli">HuggingFace Course</a></li>
+<li>English → Spanish of the <a href="https://github.com/python/python-docs-es/pulls?q=is%3Apr+author%3Afabridamicelli+">Python 3.9 Official Documentation</a></li>
+</ul>
+</blockquote>
+<hr>
+<p>For more details, check out my <a href="https://github.com/fabridamicelli">GitHub Profile</a>.</p>
 
 
+</section>
+</section>
 
 </main> <!-- /main -->
 <!-- plausible -->

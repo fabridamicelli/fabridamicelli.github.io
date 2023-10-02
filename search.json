@@ -2,9 +2,23 @@
   {
     "objectID": "code.html",
     "href": "code.html",
-    "title": "Code",
+    "title": "Open Source Contributions",
     "section": "",
-    "text": "I created and maintain the following Python packages:\nechoes: A scikit-learn compatible package for Machine Learning with Echo State Networks\n☑️ A high level API for machine learning with Echo State Networks (ESN)\n☑️ scikit-learn compatible implementation, powered by numba for speed.\n☑️ pip install echoes\n \nkuramoto: Classical model to study synchronization phenomena\n☑️ Python implementation of the Kuramoto model on graphs.\n☑️ pip install kuramoto\n\nser: Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs\n☑️ Powered by numba for speed.\n☑️ pip install ser\n\n\n\n\nCheck out my GitHub Profile"
+    "text": "I created and maintain the following Python packages:\n\n\nA scikit-learn compatible package for Machine Learning with Echo State Networks\n\n\nA high level API for machine learning with Echo State Networks (ESN)\nscikit-learn compatible implementation, powered by numba for speed.\n\npip install echoes\n  \n\n\n\n\n\nClassical model to study synchronization phenomena\n\n\nPython implementation of the Kuramoto model on graphs.\n\npip install kuramoto\n  \n\n\n\n\n\nSusceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs\n\n\nPowered by numba for speed.\n\npip install ser"
+  },
+  {
+    "objectID": "code.html#python-packages",
+    "href": "code.html#python-packages",
+    "title": "Open Source Contributions",
+    "section": "",
+    "text": "I created and maintain the following Python packages:\n\n\nA scikit-learn compatible package for Machine Learning with Echo State Networks\n\n\nA high level API for machine learning with Echo State Networks (ESN)\nscikit-learn compatible implementation, powered by numba for speed.\n\npip install echoes\n  \n\n\n\n\n\nClassical model to study synchronization phenomena\n\n\nPython implementation of the Kuramoto model on graphs.\n\npip install kuramoto\n  \n\n\n\n\n\nSusceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs\n\n\nPowered by numba for speed.\n\npip install ser"
+  },
+  {
+    "objectID": "code.html#other-contributions",
+    "href": "code.html#other-contributions",
+    "title": "Open Source Contributions",
+    "section": "Other Contributions",
+    "text": "Other Contributions\n\nTorchServe\nTorchServe is a popular framework to deploy PyTorch-based neural networks. I have fixed bugs in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.\n\n\ntorchserve-docker\nI put together a simple GitHub-Action-based cron job to build TorchServe images with specific Python version working out-of-the-box. The images are hosted on Dockerhub.\n\n\nTranslations\n\n\nEnglish → German of the HuggingFace Course\nEnglish → Spanish of the Python 3.9 Official Documentation\n\n\n\nFor more details, check out my GitHub Profile."
   },
   {
     "objectID": "posts/2022-01-29-chainmap.html",
@@ -88,7 +102,7 @@
     "href": "research.html",
     "title": "Research",
     "section": "",
-    "text": "I finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg.\nMy PhD research was centered around two main topics:\n\nBy means of computational analysis and modeling, trying to understand how the connectivity of brain networks emerge.\n\nThe cross-talk between biological and artificial neural networks, i.e., how real brain connectivity could be integrated into artificial neural networks.\n\nSelected publications:\n\nTopological reinforcement as a principle of modularity emergence in brain networks. Damicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\nModular topology emerges from plasticity in a minimalistic excitable network model. Damicelli, Hilgetag, Hütt, Messé. Chaos, 2017.\n\nBrain Connectivity meets Reservoir Computing. Damicelli, Hilgetag, A Goulas, 2021.\n\nBio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks. Goulas, Damicelli, Hilgetag, Neural Networks, 2021.\n\nCheck out Google Scholar for a complete list."
+    "text": "I finished my PhD in 2021 at the Institute of Computational Neuroscience in Hamburg.\nMy PhD research was centered around two main topics:\n\nModeling how connectivity patterns emerge in the brain from a graph theoretical, computational perspective.\nThe cross-talk between biological and artificial neural networks, i.e., brain inspired neural networks.\n\nSelected publications:\n\nBrain Connectivity meets Reservoir Computing\nDamicelli, Hilgetag, A Goulas. Plos Computational Biology, 2021.\nBio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks\nGoulas, Damicelli, Hilgetag. Neural Networks, 2021.\nTopological reinforcement as a principle of modularity emergence in brain networks\nDamicelli, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.\n\nCheck out Google Scholar for a complete list."
   },
   {
     "objectID": "links.html",
@@ -151,7 +165,7 @@
     "href": "index.html",
     "title": "Fabrizio Damicelli",
     "section": "",
-    "text": "Cut through the hype one commit at a time. Intuitions. That’s the game about. Neural nets are useful.\nBut only together with software and communication skills. AGI is cool. After six.\nBefore that, let’s leverage data and computing power to build a better world.\n\n\nHi there! 👋 I’m Fabrizio.\n🎓 PhD in Computational Neuroscience, now a 💻 Data Scientist in Hamburg (DE). I work on fraud detection 🕵🏽 using neural networks and large datasets at one of the largest e-commerce platforms in Germany.\nAs an open source advocate, I have contributed to a few projects and also created a couple Python packages that I still maintain 🤓. Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, 📉 Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people’s life better.\nI prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 my blog and 🎥 videos covering Python/ML/Data Science topics."
+    "text": "Cut through the hype one commit at a time. Intuitions. That’s the game about. Neural nets are useful.\nBut only together with software and communication skills. AGI is cool. After six.\nBefore that, let’s leverage data and computing power to build a better world.\n\n\nHi there! 👋 I’m Fabrizio.\n🎓 PhD in Computational Neuroscience, now a 💻 Data Scientist in Hamburg (Germany). I work on fraud detection 🕵🏽 using neural networks and large datasets at one of the top e-commerce platforms in Europe.\nAs an open source advocate, I have contributed to a few projects and created a couple of Python packages that I maintain 🤓. Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, 📉 Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people’s life better.\nI prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 my blog and 🎥 videos covering Python/ML/Data Science topics."
   },
   {
     "objectID": "posts/2023-09-13-pytorch-dataloader-collate.html",

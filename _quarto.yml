@@ -6,7 +6,6 @@ website:
   favicon: /images/favicon-32x32.png
   twitter-card: true
   open-graph: true
-    # google-analytics: G-LRXD97FB1E
   site-url: https://fabridamicelli.github.io
   description: ""
   navbar:
@@ -17,7 +16,7 @@ website:
       - href: posts.qmd
         text: Blog
       - href: code.qmd
-        text: Code
+        text: Open Source
           # icon: github
       - href: research.qmd
         text: Research
@@ -30,12 +29,12 @@ website:
         text: TIL
 
     right:
-      - icon: github
-        href: https://github.com/fabridamicelli
-      - icon: twitter
-        href: https://twitter.com/fabridamicelli
-      - icon: linkedin
-        href: https://linkedin.com/in/fabridamicelli
+      - href: https://github.com/fabridamicelli
+        icon: github
+      - href: https://twitter.com/fabridamicelli
+        icon: twitter
+      - href: https://linkedin.com/in/fabridamicelli
+        icon: linkedin
 
 format:
   html:

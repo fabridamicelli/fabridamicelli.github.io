@@ -13,7 +13,7 @@ website:
       - href: index.qmd
         text: About
           # icon: house
-      - href: posts.qmd
+      - href: blog.qmd
         text: Blog
       - href: code.qmd
         text: Open Source

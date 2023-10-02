@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Fabrizio Damicelli - Links</title>
+<title>Fabrizio Damicelli - Blog</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -31,6 +31,8 @@ ul.task-list li input[type="checkbox"] {
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
 <link href=".//images/favicon-32x32.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-listing/list.min.js"></script>
+<script src="site_libs/quarto-listing/quarto-listing.js"></script>
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -60,15 +62,50 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script>
 
+  window.document.addEventListener("DOMContentLoaded", function (_event) {
+    const listingTargetEl = window.document.querySelector('#listing-listing .list');
+    if (!listingTargetEl) {
+      // No listing discovered, do not attach.
+      return; 
+    }
+
+    const options = {
+      valueNames: ['listing-date','listing-title','listing-description','listing-image',{ data: ['index'] },{ data: ['categories'] },{ data: ['listing-date-sort'] },{ data: ['listing-file-modified-sort'] }],
+      
+      searchColumns: ["listing-date","listing-title","listing-author","listing-image","listing-description"],
+    };
+
+    window['quarto-listings'] = window['quarto-listings'] || {};
+    window['quarto-listings']['listing-listing'] = new List('listing-listing', options);
+
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  });
+
+  window.addEventListener('hashchange',() => {
+    if (window['quarto-listing-loaded']) {
+      window['quarto-listing-loaded']();
+    }
+  })
+  </script>
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
 <link rel="stylesheet" href="styles.css">
-<meta property="og:title" content="Fabrizio Damicelli - Links">
-<meta property="og:description" content="">
+<link rel="alternate" type="application/rss+xml" title="Fabrizio Damicelli" href="blog.xml"><meta property="og:title" content="Fabrizio Damicelli - Blog">
+<meta property="og:image" content="https://fabridamicelli.github.io/images/preview-placeholder.png">
 <meta property="og:site-name" content="Fabrizio Damicelli">
-<meta name="twitter:title" content="Fabrizio Damicelli - Links">
-<meta name="twitter:description" content="">
-<meta name="twitter:card" content="summary">
+<meta property="og:image:height" content="257">
+<meta property="og:image:width" content="293">
+<meta name="twitter:title" content="Fabrizio Damicelli - Blog">
+<meta name="twitter:image" content="https://fabridamicelli.github.io/images/preview-placeholder.png">
+<meta name="twitter:image-height" content="257">
+<meta name="twitter:image-width" content="293">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-fixed">
@@ -93,7 +130,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./blog.html" rel="" target="">
+    <a class="nav-link active" href="./blog.html" rel="" target="" aria-current="page">
  <span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
@@ -109,7 +146,7 @@ ul.task-list li input[type="checkbox"] {
  <span class="menu-text">Videos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link active" href="./links.html" rel="" target="" aria-current="page">
+    <a class="nav-link" href="./links.html" rel="" target="">
  <span class="menu-text">Links</span></a>
   </li>  
   <li class="nav-item">
@@ -141,161 +178,295 @@ ul.task-list li input[type="checkbox"] {
     </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<header id="title-block-header" class="quarto-title-block default page-columns page-full">
+  <div class="quarto-title-banner page-columns page-full">
+    <div class="quarto-title column-page">
+      <h1 class="title">Blog</h1>
+                      </div>
+  </div>
+    
+  
+  <div class="quarto-title-meta">
+
+      
+    
+      
+    </div>
+    
+  
+  </header><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#tutorials" id="toc-tutorials" class="nav-link active" data-scroll-target="#tutorials">Tutorials</a></li>
-  <li><a href="#talks" id="toc-talks" class="nav-link" data-scroll-target="#talks">Talks</a></li>
-  <li><a href="#youtube-channels" id="toc-youtube-channels" class="nav-link" data-scroll-target="#youtube-channels">Youtube channels</a></li>
-  <li><a href="#blogs" id="toc-blogs" class="nav-link" data-scroll-target="#blogs">Blogs</a></li>
-  <li><a href="#podcasts" id="toc-podcasts" class="nav-link" data-scroll-target="#podcasts">Podcasts</a>
-  <ul class="collapse">
-  <li><a href="#python-co." id="toc-python-co." class="nav-link" data-scroll-target="#python-co.">Python &amp; co.</a></li>
-  <li><a href="#data-ml-maths-etc." id="toc-data-ml-maths-etc." class="nav-link" data-scroll-target="#data-ml-maths-etc.">Data, ML, Maths, etc.</a></li>
-  <li><a href="#discussion-interviews-philosophy" id="toc-discussion-interviews-philosophy" class="nav-link" data-scroll-target="#discussion-interviews-philosophy">Discussion, interviews, philosophy</a></li>
-  </ul></li>
-  </ul>
-</nav>
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar zindex-bottom">
+        
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content quarto-banner-title-block column-page" id="quarto-document-content">
 
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Links</h1>
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="pytorch,python,data,neural-nets" data-listing-date-sort="1694556000000" data-listing-file-modified-sort="1696096353119" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="thumbnail">
+<p><a href="./posts/2023-09-13-pytorch-dataloader-collate.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
 </div>
+<div class="body">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html">
+<h3 class="no-anchor listing-title">
+PyTorch DataLoader: Understand and implement a custom collate function
+</h3>
+<div class="listing-subtitle">
 
+</div>
+<div class="listing-description">
+<p>Understand DataLoader’s inner workings and bring your data pipeline to the next level.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html">
+<div class="listing-date">
+2023-09-13
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="python,seaborn,pytorch,tensor,visualization" data-listing-date-sort="1659564000000" data-listing-file-modified-sort="1696096375255" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="thumbnail">
+<p><a href="./posts/2022-08-04-seaborn-tensors.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2022-08-04-seaborn-tensors.html">
+<h3 class="no-anchor listing-title">
+seaborn and tensors: A match not quite made in heaven
+</h3>
+<div class="listing-subtitle">
 
+</div>
+<div class="listing-description">
+<p>Autopsy of a little gotcha plotting tensors data.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2022-08-04-seaborn-tensors.html">
+<div class="listing-date">
+2022-08-04
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="python,collections,ChainMap,python-standard-library" data-listing-date-sort="1643410800000" data-listing-file-modified-sort="1696096366487" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1">
+<div class="thumbnail">
+<p><a href="./posts/2022-01-29-chainmap.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2022-01-29-chainmap.html">
+<h3 class="no-anchor listing-title">
+from collections import ChainMap
+</h3>
+<div class="listing-subtitle">
 
-<div class="quarto-title-meta">
+</div>
+<div class="listing-description">
+<p>An elegant solution to efficiently carry out a look up over more than one dictionary.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2022-01-29-chainmap.html">
+<div class="listing-date">
+2022-01-29
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="python,scikit-learn,statsmodels,linear-regression" data-listing-date-sort="1634335200000" data-listing-file-modified-sort="1696096384311" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="thumbnail">
+<p><a href="./posts/2021-10-16-lr_add_constant.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2021-10-16-lr_add_constant.html">
+<h3 class="no-anchor listing-title">
+Linear Regression: Don’t forget your bias
+</h3>
+<div class="listing-subtitle">
 
-    
-  
-    
-  </div>
-  
+</div>
+<div class="listing-description">
+<p>Defaults matter. This one tricks more people than you think.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2021-10-16-lr_add_constant.html">
+<div class="listing-date">
+2021-10-16
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="python,functools,functional-programming,python-standard-library" data-listing-date-sort="1633816800000" data-listing-file-modified-sort="1696096347783" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3">
+<div class="thumbnail">
+<p><a href="./posts/2021-10-10-merge_dicts.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2021-10-10-merge_dicts.html">
+<h3 class="no-anchor listing-title">
+Merging Python dictionaries: A functional take
+</h3>
+<div class="listing-subtitle">
 
-</header>
+</div>
+<div class="listing-description">
+<p>An elegant way to merge <em>many</em> dictionaries in Python by leveraging some functional tools.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2021-10-10-merge_dicts.html">
+<div class="listing-date">
+2021-10-10
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="python,itertools,functional-programming,python-standard-library" data-listing-date-sort="1631916000000" data-listing-file-modified-sort="1696097097265" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="thumbnail">
+<p><a href="./posts/2021-09-18-starmap.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2021-09-18-starmap.html">
+<h3 class="no-anchor listing-title">
+What is starmap?
+</h3>
+<div class="listing-subtitle">
 
-<p>Always growing list of cool, free learning/fun resources out there that will make you love the internet.</p>
-<section id="tutorials" class="level2">
-<h2 class="anchored" data-anchor-id="tutorials">Tutorials</h2>
-<ul>
-<li><a href="http://calmcode.io">calmcode</a>: A goldmine – learn calmly bit by bit with hands-on tutorials.</li>
-<li><a href="https://realpython.com/">Real Python</a>: Awesome in depth tutorials about all sorts of aspects of the language.</li>
-<li><a href="http://scipy-lectures.org">Scipy Lectures</a>: Learn numerics, scientific and data oriented Python.</li>
-<li><a href="https://www.youtube.com/watch?v=SzBi3xdEF2Y&amp;list=PLYx7XA2nY5Gf37zYZMw6OqGFRPjB1jCy6&amp;index=7">Numba - Tell Those C++ Bullies to Get Lost - Forsyth &amp; Barba - SciPy 2017</a></li>
-<li><a href="https://www.youtube.com/playlist?list=PLYCpMb24GpOC704uO9svUrihl-HY1tTJJ">Reproducible workflow in Jupyter - Jake van der Plas</a></li>
-<li><a href="https://www.youtube.com/watch?v=6gdNUDs6QPc">Anatomy of Matplotlib - Root &amp; Aizenman - SciPy 2018</a></li>
-<li><a href="https://www.youtube.com/watch?v=fqMOX6JJhGo">Docker</a>: Nail down the basics with this tutorial from freeCodeCamp.</li>
-<li><a href="https://selectstarsql.com/">SQL</a>: Interactive book, aims to be “the best place on the internet for learning SQL” - you decide.</li>
-<li><a href="https://missing.csail.mit.edu/2020/version-control/">Git</a>: Go beyond typing commmands blindly - understand git’s data model.</li>
-<li><a href="https://www.youtube.com/watch?v=qsTthZi23VE">Git-Advanced</a>: Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.</li>
-<li><a href="https://www.fast.ai/">fast.ai</a>: A myriad of learning resources – ML, python, developer tools, etc.</li>
-<li><a href="https://setosa.io/">Setosa: visual explanations</a></li>
-<li><a href="https://www.youtube.com/watch?v=yGTUuEx3GkA">Transformers &amp; Attention</a>: A great explanation by V. Warmerdam at Rasa Whiteboard series.</li>
-<li><a href="https://www.youtube.com/watch?v=UPtG_38Oq8o">The math behind Attention: Keys, Queries, and Values matrices</a>: Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano.</li>
-</ul>
-</section>
-<section id="talks" class="level2">
-<h2 class="anchored" data-anchor-id="talks">Talks</h2>
-<ul>
-<li><a href="https://boringtechnology.club/">Choose Boring Technology – Dan McKinley</a></li>
-<li><a href="https://www.youtube.com/watch?v=_AEJHKGk9ns">Facts and Myths about Python names and values - Ned Batchelder - PyCon 2015</a></li>
-<li><a href="https://www.youtube.com/watch?v=Iq9DzN6mvYA">Statistics for Hackers - Jake van der Plas - PyCon 2016</a></li>
-<li><a href="https://www.youtube.com/watch?v=lyDLAutA88s">Built in Super Heroes - David Beazley - PyData 2016</a></li>
-<li><a href="https://www.youtube.com/watch?v=He9MCbs1wgE">Computational Statistics - Allen Downey - SciPy 2017</a></li>
-<li><a href="https://www.youtube.com/watch?v=9iol3Lk6kyU">A Bluffer’s Guide to Dimension Reduction - Leland McInnes - PyData 2018</a></li>
-<li><a href="https://www.youtube.com/watch?list=PLGVZCDnMOq0pDxc2cSp_N42M4OPfLgtBD&amp;v=yXGCKqo5cEYt">Untitled12 - Vincent Warmerdam - PyData 2019</a></li>
-<li><a href="https://www.youtube.com/watch?v=aICqoAG5BXQ">Gaussian Progress – Vincent Warmerdam - PyData 2019</a></li>
-</ul>
-</section>
-<section id="youtube-channels" class="level2">
-<h2 class="anchored" data-anchor-id="youtube-channels">Youtube channels</h2>
-<ul>
-<li><a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw">3brown1blue</a>: One of the best teachers in the internet. Ever.</li>
-<li><a href="https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g">Corey Schafer</a>: Hands down one of the best Python resources out there.</li>
-<li><a href="https://www.youtube.com/channel/UC46xhU1EH7aywEgvA9syS3w">anthonywritescode</a>: Mostly (not only) Python features, tools &amp; idioms explained.</li>
-<li><a href="https://www.youtube.com/channel/UCI0vQvr9aFn27yR6Ej6n5UA">Real Python</a></li>
-<li><a href="https://www.youtube.com/channel/UCgBncpylJ1kiVaPyP-PZauQ">Luis serrano</a>: Machine learning algorithms and intuitions, in simple words.</li>
-<li><a href="https://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA">Luke Smith</a>: Unix, vim, latex, markdown, free-software, etc.</li>
-<li><a href="https://www.youtube.com/channel/UCbXgNpp0jedKWcQiULLbDTA">Python Engineer</a></li>
-<li><a href="https://www.youtube.com/user/SpartacanUsuals">Ben Lambert</a>: Stats, ML, Bayesian stuff.</li>
-<li><a href="https://www.youtube.com/user/joshstarmer">Statsquest – Josh Starmer</a>: Stats, machine learning, algorithms, bam!</li>
-<li><a href="https://www.youtube.com/channel/UCNIkB2IeJ-6AmZv7bQ1oBYg">Arxiv Insights</a>: Machine learning papers explained and discussed.</li>
-</ul>
-</section>
-<section id="blogs" class="level2">
-<h2 class="anchored" data-anchor-id="blogs">Blogs</h2>
-<ul>
-<li><a href="https://koaning.io">Vincent Warmerdam</a>: Data, machine learning, algorithms – and nice drawings.</li>
-<li><a href="http://maxhalford.github.io">Max Halford</a></li>
-<li><a href="https://adamj.eu/tech">Adam Johnson</a>: Mostly Python, tackling core aspects of the language.</li>
-<li><a href="https://notsquirrel.com/pca/">Squirrel, Not Squirrel</a>: Amazing PCA explanation.</li>
-<li><a href="http://cognitivemedium.com/">Michael Nielsen</a></li>
-<li><a href="https://mlu-explain.github.io/">MLU-EXPLAIN</a>: Visual explanations of core machine learning concepts.</li>
-</ul>
-</section>
-<section id="podcasts" class="level2">
-<h2 class="anchored" data-anchor-id="podcasts">Podcasts</h2>
-<section id="python-co." class="level3">
-<h3 class="anchored" data-anchor-id="python-co.">Python &amp; co.</h3>
-<ul>
-<li><a href="https://www.pythonpodcast.com/episodes/">Podcast.__init__</a></li>
-<li><a href="https://talkpython.fm/">Talk python to me</a></li>
-<li><a href="https://pythonbytes.fm/episodes/all">Python Bytes</a></li>
-<li><a href="http://www.pydata-podcast.com/">dats’n’stats</a></li>
-<li><a href="https://realpython.com/podcasts/rpp/">The Real Python</a></li>
-<li><a href="https://python-podcast.de/show/">Python Podcast (in German)</a></li>
-</ul>
-</section>
-<section id="data-ml-maths-etc." class="level3">
-<h3 class="anchored" data-anchor-id="data-ml-maths-etc.">Data, ML, Maths, etc.</h3>
-<ul>
-<li><a href="https://vanishinggradients.fireside.fm/">Vanishing Gradients - Hugo Bowne-Anderson</a></li>
-<li><a href="https://thegradientpub.substack.com/s/podcast">The Gradient Podcast</a></li>
-<li><a href="https://www.therobotbrains.ai/">The Robot Brains Podcast - Peter Abeel</a></li>
-<li><a href="https://open.spotify.com/episode/0dXmvOSo6bvcVRjUY6qWI8?si=r1EyetnTSaWnU8KjRf6Drg">Practical AI</a></li>
-<li><a href="https://open.spotify.com/show/6z0wTS6N8Lwj8zuZHeFKLx">AI in action</a></li>
-<li><a href="https://www.youtube.com/channel/UCMLtBahI5DMrt0NPvDSoIRQ/videos">Machine Learning Street Talks</a></li>
-<li><a href="https://www.santafe.edu/culture/podcast">Complexity - Sta. Fe Institute</a></li>
-<li><a href="https://twimlai.com/">This week in machine learning</a></li>
-<li><a href="https://www.underratedml.com/">Underrated ML</a></li>
-<li><a href="https://www.thetalkingmachines.com/">Talking Machines</a></li>
-<li><a href="https://www.numberphile.com/podcast">Numberphile</a></li>
-<li><a href="https://dataskeptic.com/">Data skeptic</a></li>
-<li><a href="http://lineardigressions.com/">Linear Digressions</a></li>
-<li><a href="https://open.spotify.com/show/7o9r3fFig3MhTJwehXDbXm?si=d7Ncp7nXQ7C1O7wu0Oxvqg">Gradient dissent: Weights and biases</a></li>
-<li><a href="https://www.datacamp.com/community/podcast">Dataframed</a></li>
-<li><a href="http://partiallyderivative.com/">Partially derivative</a></li>
-</ul>
-</section>
-<section id="discussion-interviews-philosophy" class="level3">
-<h3 class="anchored" data-anchor-id="discussion-interviews-philosophy">Discussion, interviews, philosophy</h3>
-<ul>
-<li><a href="https://www.preposterousuniverse.com/podcast/">Sean Carrol’s Mindscape</a></li>
-<li><a href="https://fs.blog/knowledge-project/">The knowledge project</a></li>
-<li><a href="http://nssdeviations.com/">Not so standard deviations</a></li>
-<li><a href="https://lexfridman.com/ai/">Lex Fridman Podcast</a></li>
-<li><a href="https://adversariallearning.com/">Adversarial Learning</a></li>
-<li><a href="https://braininspired.co/">Brain inspired</a></li>
-<li><a href="https://soundcloud.com/stephenwolfram">Stephen Wolfram podcast</a></li>
-<li><a href="https://chaitimedatascience.com/">Chai Tea Data Science</a></li>
-<li><a href="https://deepmind.com/blog/article/welcome-to-the-deepmind-podcast">DeepMind Podcast</a></li>
-<li><a href="https://towardsdatascience.com/podcast/home">Towards data science</a></li>
-<li><a href="https://thedataexchange.media/episodes/">The data exchange</a></li>
-</ul>
+</div>
+<div class="listing-description">
+<p>A quick explanation of this useful functionality from the Python itertools module.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2021-09-18-starmap.html">
+<div class="listing-date">
+2021-09-18
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="python,pandas,text" data-listing-date-sort="1589925600000" data-listing-file-modified-sort="1696096362883" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="thumbnail">
+<p><a href="./posts/2020-05-20-achtung-german-csv-reader.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html">
+<h3 class="no-anchor listing-title">
+Achtung: Watch out, German csv readers!
+</h3>
+<div class="listing-subtitle">
 
+</div>
+<div class="listing-description">
+<p>Little pandas Gotcha dealing with German text.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html">
+<div class="listing-date">
+2020-05-20
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="python,numpy" data-listing-date-sort="1589061600000" data-listing-file-modified-sort="1696096358455" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2">
+<div class="thumbnail">
+<p><a href="./posts/2020-05-10-numpy-array-in-place.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2020-05-10-numpy-array-in-place.html">
+<h3 class="no-anchor listing-title">
+Explicit is better than implicit
+</h3>
+<div class="listing-subtitle">
 
-</section>
-</section>
+</div>
+<div class="listing-description">
+<p>A basic but not so obvious numpy example.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2020-05-10-numpy-array-in-place.html">
+<div class="listing-date">
+2020-05-10
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="python,dataviz,dimensionality-reduction" data-listing-date-sort="1576105200000" data-listing-file-modified-sort="1696096379183" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4">
+<div class="thumbnail">
+<p><a href="./posts/2019-12-12-interactive-embedding.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2019-12-12-interactive-embedding.html">
+<h3 class="no-anchor listing-title">
+Does your embedding make sense?
+</h3>
+<div class="listing-subtitle">
 
-</main> <!-- /main -->
+</div>
+<div class="listing-description">
+<p>Projecting data is easy. Understanding the outcome, less so. Interactive plots can help.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2019-12-12-interactive-embedding.html">
+<div class="listing-date">
+2019-12-12
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-categories="python,scikit-learn,scientific-computing" data-listing-date-sort="1575068400000" data-listing-file-modified-sort="1696096391811" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6">
+<div class="thumbnail">
+<p><a href="./posts/2019-11-30-divide-and-conquer.html"> <img src="./images/preview-placeholder.png" class="thumbnail-image" style="height: 3em;"> </a></p>
+</div>
+<div class="body">
+<a href="./posts/2019-11-30-divide-and-conquer.html">
+<h3 class="no-anchor listing-title">
+Divide and conquer
+</h3>
+<div class="listing-subtitle">
+
+</div>
+<div class="listing-description">
+<p>How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.</p>
+</div>
+</a>
+</div>
+<div class="metadata">
+<a href="./posts/2019-11-30-divide-and-conquer.html">
+<div class="listing-date">
+2019-11-30
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div></main> <!-- /main -->
 <!-- plausible -->
 <script defer="" data-domain="fabridamicelli.github.io" src="https://plausible.io/js/script.js"></script>
 <script id="quarto-html-after-body" type="application/javascript">

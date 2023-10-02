@@ -2,66 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fabridamicelli.github.io/code.html</loc>
-    <lastmod>2023-10-02T21:02:16.961Z</lastmod>
+    <lastmod>2023-10-02T21:27:45.660Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2022-01-29-chainmap.html</loc>
-    <lastmod>2023-10-02T21:02:16.085Z</lastmod>
+    <lastmod>2023-10-02T21:27:44.852Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2020-05-20-achtung-german-csv-reader.html</loc>
-    <lastmod>2023-10-02T21:02:14.845Z</lastmod>
+    <lastmod>2023-10-02T21:27:43.684Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2021-10-16-lr_add_constant.html</loc>
-    <lastmod>2023-10-02T21:02:13.585Z</lastmod>
+    <lastmod>2023-10-02T21:27:42.400Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html</loc>
-    <lastmod>2023-10-02T21:02:12.225Z</lastmod>
+    <lastmod>2023-10-02T21:27:41.120Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2022-08-04-seaborn-tensors.html</loc>
-    <lastmod>2023-10-02T21:02:11.341Z</lastmod>
+    <lastmod>2023-10-02T21:27:40.244Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/research.html</loc>
-    <lastmod>2023-10-02T21:02:10.449Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/links.html</loc>
-    <lastmod>2023-10-02T21:02:09.045Z</lastmod>
+    <lastmod>2023-10-02T21:27:39.396Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til.html</loc>
-    <lastmod>2023-10-02T21:02:08.081Z</lastmod>
+    <lastmod>2023-10-02T21:27:38.192Z</lastmod>
   </url>
   <url>
-    <loc>https://fabridamicelli.github.io/posts.html</loc>
-    <lastmod>2023-10-02T21:02:10.073Z</lastmod>
+    <loc>https://fabridamicelli.github.io/links.html</loc>
+    <lastmod>2023-10-02T21:27:39.060Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/index.html</loc>
-    <lastmod>2023-10-02T21:02:10.813Z</lastmod>
+    <lastmod>2023-10-02T21:27:39.732Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2023-09-13-pytorch-dataloader-collate.html</loc>
-    <lastmod>2023-10-02T21:02:11.813Z</lastmod>
+    <lastmod>2023-10-02T21:27:40.688Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2021-10-10-merge_dicts.html</loc>
-    <lastmod>2023-10-02T21:02:13.033Z</lastmod>
+    <lastmod>2023-10-02T21:27:41.884Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html</loc>
-    <lastmod>2023-10-02T21:02:14.337Z</lastmod>
+    <lastmod>2023-10-02T21:27:43.160Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2019-12-12-interactive-embedding.html</loc>
-    <lastmod>2023-10-02T21:02:15.717Z</lastmod>
+    <lastmod>2023-10-02T21:27:44.500Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2021-09-18-starmap.html</loc>
-    <lastmod>2023-10-02T21:02:16.577Z</lastmod>
+    <lastmod>2023-10-02T21:27:45.300Z</lastmod>
   </url>
 </urlset>

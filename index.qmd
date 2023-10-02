@@ -18,22 +18,25 @@ about:
 ---
 
 <div align="right">
- <i>Cut through the hype one commit at a time.<br/>
-   Intuitions. That's the game about.<br/>
-   Neural nets are useful.  
-   But only together with software and communication skills.<br/>
-   AGI is cool. After six.  
-   Before that, let's leverage data and computing power to build a better world.</i>
+  <i>
+   Cut through the hype <br/>
+   one commit at a time. <br/>
+   Neural nets are cool. <br/>
+   Software and communication skills rule. <br/>
+   AGI is interesting. After 5pm. <br/>
+   Before that, let's leverage data and computing power <br/>
+   to build a better world. 
+  </i>
 <div align="left">
 
 <hr>
 
-Hi there! 👋 I'm Fabrizio.
+Hi there! 👋  
 
-🎓 [PhD in Computational Neuroscience](/research.html), now a 💻 Data Scientist in Hamburg (Germany).
+I'm Fabrizio 🧉, [PhD in Computational Neuroscience](/research.html) 🎓, now a Data Scientist 💻 in Hamburg (Germany).
 I work on fraud detection 🕵🏽 using neural networks and large datasets at [one of the top e-commerce](https://www.otto.de/) platforms in Europe.
 
 As an open source advocate, I have contributed to a [few projects and created a couple of Python packages](/code.html) that I maintain 🤓.
-Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, 📉 Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people's life better.
+Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people's life better.
 
 I prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 [my blog](/blog.html) and 🎥 [videos](https://www.youtube.com/@fabridamicelli) covering Python/ML/Data Science topics.

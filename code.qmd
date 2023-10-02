@@ -9,9 +9,10 @@ I created and maintain the following Python packages:
 ### [**echoes**](https://github.com/fabridamicelli/echoes)
 A scikit-learn compatible package for Machine Learning with Echo State Networks  
 
-> - A high level API for machine learning with [Echo State Networks (ESN)](http://www.scholarpedia.org/article/Echo_state_network) 
-  - scikit-learn compatible implementation, powered by [numba](http://numba.pydata.org/) for speed.   
-  - `pip install echoes`  
+> - 🤖 Machine learning with [Echo State Networks (ESN)](http://www.scholarpedia.org/article/Echo_state_network) 
+  - 🧱 High level API, scikit-learn compatible API, eg fit-predict interface
+  - 💨 Fast! (Thanks to [numba](http://numba.pydata.org/) ✨)
+  - 🐍 `pip install echoes`  
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80">
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16">
 </a>
@@ -19,17 +20,18 @@ A scikit-learn compatible package for Machine Learning with Echo State Networks
 ### [**kuramoto**](https://github.com/fabridamicelli/kuramoto)
 Classical model to study synchronization phenomena
 
-> - Python implementation of the [Kuramoto model](https://en.wikipedia.org/wiki/Kuramoto_model) on graphs.  
-  - `pip install kuramoto`  
+> - 🤹 Implementation of the [Kuramoto model](https://en.wikipedia.org/wiki/Kuramoto_model) on graphs.  
+  - 🐍 `pip install kuramoto`  
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80">
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16">
 </a>
 
 ### [**ser**](https://github.com/fabridamicelli/ser)
-Susceptible-Excited-Refractory, a dynamical model of spreading excitations on graphs
+Susceptible-Excited-Refractory, a dynamical model of spreading excitations
 
-> - Powered by numba for speed.  
-  - `pip install ser`  
+  - 🚥 Implementation of classic SER model on graphs
+  - 🏃 Powered by [numba](http://numba.pydata.org/) for speed.
+  - 🐍 `pip install ser`  
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80">
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16">
 </a>

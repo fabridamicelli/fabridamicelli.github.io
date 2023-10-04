@@ -1,0 +1,21 @@
+---
+title: "Blog"
+listing:
+  contents: posts
+  sort:
+    - "date desc"
+    - "title asc"
+  type: default
+  categories: false
+  fields: [date, title, description, image]
+  feed: true
+  sort-ui: false
+  filter-ui: false
+  image-align: right
+  image-height: 0em
+  image-placeholder: /images/preview-placeholder.png
+  date-format: YYYY-MM-DD
+  grid-item-align: center
+page-layout: full
+title-block-banner: true
+---

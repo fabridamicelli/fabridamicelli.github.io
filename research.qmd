@@ -2,14 +2,20 @@
 title: Research
 ---
 
-I finished my PhD in 2021 at the [Institute of Computational Neuroscience](https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html) in Hamburg.
-
+I finished my PhD in 2021 at the [Institute of Computational Neuroscience](https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html) in Hamburg.  
 My PhD research was centered around two main topics:  
 
-  - Modeling how connectivity patterns emerge in the brain from a graph theoretical, computational perspective.
-  - The cross-talk between biological and artificial neural networks, i.e., brain inspired neural networks.
+  - **Modeling how connectivity patterns emerge in the brain from a graph theoretical, computational perspective.**
+
+    ![](/images/summary-topological-reinforcement.png){fig-align="center" width=14cm}
 
 
+  - **The cross-talk between biological and artificial neural networks, i.e., brain inspired neural networks.**
+
+    ![](/images/summary-brain-connectivity-meets-reservoir-computing.png){width=15cm fig-align="center"}
+
+\
+\
 Selected publications: 
 
   - [*Brain Connectivity meets Reservoir Computing*](https://doi.org/10.1371/journal.pcbi.1010639)  

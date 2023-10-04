@@ -4,28 +4,28 @@ project:
 website:
   title: "Fabrizio Damicelli"
   favicon: /images/favicon-32x32.png
-  twitter-card: true
-  open-graph: true
+    # twitter-card: true
+    # open-graph: true
   site-url: https://fabridamicelli.github.io
   description: ""
   navbar:
     left:
-      - href: index.qmd
+      - file: index.qmd
         text: About
           # icon: house
-      - href: blog.qmd
+      - file: blog.qmd
         text: Blog
-      - href: code.qmd
+      - file: code.qmd
         text: Open Source
           # icon: github
-      - href: research.qmd
+      - file: research.qmd
         text: Research
           # icon: puzzle-fill
       - href: https://www.youtube.com/@fabridamicelli
         text: Videos
-      - href: links.qmd
+      - file: links.qmd
         text: Links
-      - href: til.qmd
+      - file: til.qmd
         text: TIL
 
     right:

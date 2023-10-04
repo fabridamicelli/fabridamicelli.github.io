@@ -2,41 +2,55 @@
 title: "Open Source Contributions"
 ---
 
-## Python Packages
+### Python Packages
 
 I created and maintain the following Python packages:
 
+---
+
+::: {layout="[[0.4, 0.6]]"}
 ### [**echoes**](https://github.com/fabridamicelli/echoes)
 A scikit-learn compatible package for Machine Learning with Echo State Networks  
-
-> - 🤖 Machine learning with [Echo State Networks (ESN)](http://www.scholarpedia.org/article/Echo_state_network) 
-  - 🧱 High level API, scikit-learn compatible API, eg fit-predict interface
-  - 💨 Fast! (Thanks to [numba](http://numba.pydata.org/) ✨)
-  - 🐍 `pip install echoes`  
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80">
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16">
 </a>
 
-### [**kuramoto**](https://github.com/fabridamicelli/kuramoto)
-Classical model to study synchronization phenomena
+  - 🤖 Machine learning with [Echo State Networks](http://www.scholarpedia.org/article/Echo_state_network) 
+  - 🧱 High level API, scikit-learn compatible API, eg fit-predict interface
+  - 💨 Fast! (Thanks to [numba](http://numba.pydata.org/) ✨)
+  - 🐍 `pip install echoes`  
+:::
 
-> - 🤹 Implementation of the [Kuramoto model](https://en.wikipedia.org/wiki/Kuramoto_model) on graphs.  
-  - 🐍 `pip install kuramoto`  
+---
+
+::: {layout="[[0.4, 0.6]]"}
+### [**kuramoto**](https://github.com/fabridamicelli/kuramoto)
+Classical model to study synchronization phenomena  
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80">
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16">
 </a>
 
-### [**ser**](https://github.com/fabridamicelli/ser)
-Susceptible-Excited-Refractory, a dynamical model of spreading excitations
+  - 🤹 Implementation of the [Kuramoto model](https://en.wikipedia.org/wiki/Kuramoto_model) on graphs.  
+  - 🐍 `pip install kuramoto`  
+::: 
 
-  - 🚥 Implementation of classic SER model on graphs
-  - 🏃 Powered by [numba](http://numba.pydata.org/) for speed.
-  - 🐍 `pip install ser`  
+---
+
+::: {layout="[[0.4, 0.6]]"}
+### [**ser**](https://github.com/fabridamicelli/ser)
+Susceptible-Excited-Refractory, a dynamical model of spreading excitations  
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80">
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16">
 </a>
 
-## Other Contributions
+  - 🚥 Implementation of classic SER model on graphs
+  - 🏃 Powered by [numba](http://numba.pydata.org/) for speed.
+  - 🐍 `pip install ser`  
+
+:::
+
+---
+
 ### TorchServe
 [TorchServe](https://pytorch.org/serve) is a popular framework to deploy PyTorch-based neural networks.
 I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli) in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.

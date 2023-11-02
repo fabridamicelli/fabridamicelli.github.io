@@ -1,6 +1,9 @@
 ---
-title: "Open Source Contributions"
+title: ""
 ---
+</p><ul><li><p>GitHub: <a href=https://github.com/fabridamicelli>https://github.com/fabridamicelli</a></p><p align=center><img src=https://ghchart.rshah.org/fabridamicelli width=800></p></li>
+
+## Open Source Contributions
 
 ### Python Packages
 

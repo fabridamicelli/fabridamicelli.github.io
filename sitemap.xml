@@ -2,66 +2,66 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fabridamicelli.github.io/code.html</loc>
-    <lastmod>2023-10-04T11:46:57.740Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/2022-01-29-chainmap.html</loc>
-    <lastmod>2023-10-04T11:46:56.632Z</lastmod>
+    <lastmod>2023-11-02T09:21:36.849Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2020-05-20-achtung-german-csv-reader.html</loc>
-    <lastmod>2023-10-04T11:46:55.292Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/2021-10-16-lr_add_constant.html</loc>
-    <lastmod>2023-10-04T11:46:53.728Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html</loc>
-    <lastmod>2023-10-04T11:46:52.144Z</lastmod>
+    <lastmod>2023-11-02T09:21:36.017Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2022-08-04-seaborn-tensors.html</loc>
-    <lastmod>2023-10-04T11:46:51.076Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/research.html</loc>
-    <lastmod>2023-10-04T11:46:50.040Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/til.html</loc>
-    <lastmod>2023-10-04T11:46:48.972Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/blog.html</loc>
-    <lastmod>2023-10-04T11:46:48.080Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/links.html</loc>
-    <lastmod>2023-10-04T11:46:49.620Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/index.html</loc>
-    <lastmod>2023-10-04T11:46:50.452Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/2023-09-13-pytorch-dataloader-collate.html</loc>
-    <lastmod>2023-10-04T11:46:51.632Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/2021-10-10-merge_dicts.html</loc>
-    <lastmod>2023-10-04T11:46:53.060Z</lastmod>
+    <lastmod>2023-11-02T09:21:34.969Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html</loc>
-    <lastmod>2023-10-04T11:46:54.664Z</lastmod>
+    <lastmod>2023-11-02T09:21:33.477Z</lastmod>
   </url>
   <url>
-    <loc>https://fabridamicelli.github.io/posts/2019-12-12-interactive-embedding.html</loc>
-    <lastmod>2023-10-04T11:46:56.200Z</lastmod>
+    <loc>https://fabridamicelli.github.io/posts/2021-10-16-lr_add_constant.html</loc>
+    <lastmod>2023-11-02T09:21:32.085Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html</loc>
+    <lastmod>2023-11-02T09:21:31.001Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/links.html</loc>
+    <lastmod>2023-11-02T09:21:29.505Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/til.html</loc>
+    <lastmod>2023-11-02T09:21:27.761Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/index.html</loc>
+    <lastmod>2023-11-02T09:21:26.957Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/blog.html</loc>
+    <lastmod>2023-11-02T09:21:28.841Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/2021-10-10-merge_dicts.html</loc>
+    <lastmod>2023-11-02T09:21:30.549Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/2022-01-29-chainmap.html</loc>
+    <lastmod>2023-11-02T09:21:31.465Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/2021-09-18-starmap.html</loc>
-    <lastmod>2023-10-04T11:46:57.244Z</lastmod>
+    <lastmod>2023-11-02T09:21:32.625Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/2019-12-12-interactive-embedding.html</loc>
+    <lastmod>2023-11-02T09:21:34.429Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/2023-09-13-pytorch-dataloader-collate.html</loc>
+    <lastmod>2023-11-02T09:21:35.457Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/research.html</loc>
+    <lastmod>2023-11-02T09:21:36.417Z</lastmod>
   </url>
 </urlset>

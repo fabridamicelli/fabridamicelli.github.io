@@ -16,7 +16,7 @@ website:
       - file: blog.qmd
         text: Blog
       - file: code.qmd
-        text: Open Source
+        text: Code
           # icon: github
       - file: research.qmd
         text: Research

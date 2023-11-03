@@ -1,8 +1,6 @@
 ---
 title: ""
 ---
-<p align=center><img src=https://ghchart.rshah.org/fabridamicelli width=800 href=https://github.com/fabridamicelli></p></li>
-
 
 ### Python Packages
 
@@ -68,3 +66,4 @@ The images are hosted on [Dockerhub](https://hub.docker.com/r/fabridamicelli/tor
 
 ---
 For more details, check out my [GitHub Profile](https://github.com/fabridamicelli).
+<p align=center><img src=https://ghchart.rshah.org/fabridamicelli width=800 href=https://github.com/fabridamicelli></p>

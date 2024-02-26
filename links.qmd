@@ -2,7 +2,7 @@
 title: "Links"
 ---
 
-Always growing list of cool, free learning/fun resources out there that will make you love the internet.
+Always growing list of cool, free learning/fun/useful resources out there that will make you love the internet.
 
 ## Tutorials
   - [calmcode](http://calmcode.io): A goldmine – learn calmly bit by bit with hands-on tutorials.
@@ -92,3 +92,5 @@ Always growing list of cool, free learning/fun resources out there that will mak
   - [Towards data science](https://towardsdatascience.com/podcast/home)
   - [The data exchange](https://thedataexchange.media/episodes/)
 
+## Tools
+  - [ezgif: Create, edit and convert GIFs](https://ezgif.com/)

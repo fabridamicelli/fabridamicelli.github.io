@@ -9,7 +9,160 @@
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.3.450</generator>
-<lastBuildDate>Fri, 03 Nov 2023 11:53:41 GMT</lastBuildDate>
+<generator>quarto-1.4.550</generator>
+<lastBuildDate>Mon, 26 Feb 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Force Python’s print function to flush the stream</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Say we have a python program that prints to <code>stdout</code> and we want to write that output into a file.<br>
+We can achieve that like this:</p>
+<div id="cell-2" class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb1-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'print("great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always")'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.txt</span></code></pre></div>
+</div>
+<p>Which works fine:</p>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb2-2">cat <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.txt</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>great output
+as always</code></pre>
+</div>
+</div>
+<p>Now, if we want to do the same <strong>while</strong> the program is still running, things are a bit different.<br>
+For example, this program will not write to file until we interrumpt it:</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb4-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb4-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">while True:</span></span>
+<span id="cb4-4"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">    print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always"</span>)<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb4-5"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+</div>
+<p>That is, the command on the left side of <code>&gt;</code> will be run until it’s done and only then the file will be written.<br>
+We want to fix that.<br>
+In other words, stream the program output directly into the file while it’s being generated.</p>
+<p>I found this solution to work, passing <code>flush=True</code> to the <code>print</code> function:</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb5-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb5-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">import time</span></span>
+<span id="cb5-4"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">while True:</span></span>
+<span id="cb5-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always"</span>, flush<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;----- HERE</span></span>
+<span id="cb5-6">    time.sleep(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb5-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+</div>
+<p>As the docstrings say, that forces the stream to be flushed:</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Docstring:</span>
+print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+Prints the values to a stream, or to sys.stdout by default.
+Optional keyword arguments:
+file:  a file-like object (stream); defaults to the current sys.stdout.
+sep:   string inserted between values, default a space.
+end:   string appended after the last value, default a newline.
+flush: whether to forcibly flush the stream.
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method
+</pre>
+</div>
+</div>
+</div>
+<p><strong>FIN</strong></p>
+<hr>
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <guid>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</guid>
+  <pubDate>Mon, 26 Feb 2024 00:00:00 GMT</pubDate>
+</item>
 </channel>
 </rss>

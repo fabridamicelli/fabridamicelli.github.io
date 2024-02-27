@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.3.450">
+<meta name="generator" content="quarto-1.4.550">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -25,7 +25,7 @@ ul.task-list li input[type="checkbox"] {
 }
 /* CSS for syntax highlighting */
 pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span { line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
@@ -85,7 +85,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   "collapse-after": 3,
   "panel-placement": "end",
   "type": "overlay",
-  "limit": 20,
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
   "language": {
     "search-no-results-text": "No results",
     "search-matching-documents-text": "matching documents",
@@ -94,6 +100,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     "search-more-match-text": "more match in this document",
     "search-more-matches-text": "more matches in this document",
     "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
     "search-detached-cancel-button-title": "Cancel",
     "search-submit-button-title": "Submit",
     "search-label": "Search"
@@ -108,9 +115,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-    <nav class="navbar navbar-expand-lg navbar-dark ">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
       <div class="navbar-container container-fluid">
-      <div class="navbar-brand-container">
+      <div class="navbar-brand-container mx-auto">
     <a class="navbar-brand" href="../index.html">
     <span class="navbar-title">Fabrizio Damicelli</span>
     </a>
@@ -122,54 +129,54 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
           <div class="collapse navbar-collapse" id="navbarCollapse">
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
-    <a class="nav-link" href="../index.html" rel="" target="">
- <span class="menu-text">About</span></a>
+    <a class="nav-link" href="../index.html"> 
+<span class="menu-text">About</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../blog.html" rel="" target="">
- <span class="menu-text">Blog</span></a>
+    <a class="nav-link" href="../blog.html"> 
+<span class="menu-text">Blog</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../code.html" rel="" target="">
- <span class="menu-text">Code</span></a>
+    <a class="nav-link" href="../code.html"> 
+<span class="menu-text">Code</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../research.html" rel="" target="">
- <span class="menu-text">Research</span></a>
+    <a class="nav-link" href="../research.html"> 
+<span class="menu-text">Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="https://www.youtube.com/@fabridamicelli" rel="" target="">
- <span class="menu-text">Videos</span></a>
+    <a class="nav-link" href="https://www.youtube.com/@fabridamicelli"> 
+<span class="menu-text">Videos</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../links.html" rel="" target="">
- <span class="menu-text">Links</span></a>
+    <a class="nav-link" href="../links.html"> 
+<span class="menu-text">Links</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="../til.html" rel="" target="">
- <span class="menu-text">TIL</span></a>
+    <a class="nav-link" href="../til.html"> 
+<span class="menu-text">TIL</span></a>
   </li>  
 </ul>
             <ul class="navbar-nav navbar-nav-scroll ms-auto">
   <li class="nav-item compact">
-    <a class="nav-link" href="https://github.com/fabridamicelli" rel="" target=""><i class="bi bi-github" role="img">
+    <a class="nav-link" href="https://github.com/fabridamicelli"> <i class="bi bi-github" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://twitter.com/fabridamicelli" rel="" target=""><i class="bi bi-twitter" role="img">
+    <a class="nav-link" href="https://twitter.com/fabridamicelli"> <i class="bi bi-twitter" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
   <li class="nav-item compact">
-    <a class="nav-link" href="https://linkedin.com/in/fabridamicelli" rel="" target=""><i class="bi bi-linkedin" role="img">
+    <a class="nav-link" href="https://linkedin.com/in/fabridamicelli"> <i class="bi bi-linkedin" role="img">
 </i> 
- <span class="menu-text"></span></a>
+<span class="menu-text"></span></a>
   </li>  
 </ul>
-            <div class="quarto-navbar-tools">
-</div>
           </div> <!-- /navcollapse -->
+          <div class="quarto-navbar-tools">
+</div>
       </div> <!-- /container-fluid -->
     </nav>
 </header>
@@ -218,11 +225,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </div>
   
 
+
 </header>
+
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-14051"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-14051").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-15418"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-15418").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>
@@ -232,8 +241,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>Let’s say you have your projected data in 2D, for example, after tSNE. First things first: you might want to check if the projection that your method just spit out makes any sense at all. But, why, what can go wrong? Well, a lot. For instance, your dimensionality reduction method might be using an inappropiate metric. In other words, the algorithm could be using a notion of distance between points in the multidimensional space which does not capture some fundamental aspect of the funky space that those data points live in. Thus, further operations we do with/to our data might be strongly misleading. That is not what we want. To keep it concrete, just take a look at these nice examples from the <a href="https://umap-learn.readthedocs.io/en/latest/parameters.html#metric">documentation of the UMAP library</a>, where the effect of using different metrics is clearly depicted.</p>
 <p>Some libraries, like UMAP, also allow you to <a href="https://umap-learn.readthedocs.io/en/latest/document_embedding.html">document your embedding</a> or <a href="https://umap-learn.readthedocs.io/en/latest/plotting.html">plot interactive figures</a>. But you might have a tougher luck this time around and just get a cloud of unintelligible points scattered when you plot the 2D-projected data. In that case, you might find it useful to interact with it by looking at the labels of your data. The labels can be anything, like <em>a priori</em> known categories the result of your favourite clustering method.</p>
 <p>That’s what you came for :) So without further ado, on to the code.</p>
-<div class="cell">
-<details>
+<div id="cell-8" class="cell">
+<details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> altair <span class="im">as</span> alt</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
@@ -347,8 +356,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div class="cell">
-<details open="">
+<div id="cell-9" class="cell">
+<details open="" class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Get digits dataset</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>digits <span class="op">=</span> load_digits()</span>
@@ -377,7 +386,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 <div class="cell-output cell-output-display">
-<p><img src="2019-12-12-interactive-embedding_files/figure-html/cell-3-output-1.png" class="img-fluid"></p>
+<div>
+<figure class="figure">
+<p><img src="2019-12-12-interactive-embedding_files/figure-html/cell-3-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
 </div>
 </div>
 <p>You can save the output by passing a <code>filename</code> argument. That will generate an interactive file like <a href="https://nbviewer.jupyter.org/github/fabridamicelli/pythonicity/blob/master/figs/interactiveEmbedding.html">this</a>.</p>
@@ -482,10 +495,9 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
-  function tippyHover(el, contentFn) {
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
-      content: contentFn,
       maxWidth: 500,
       delay: 100,
       arrow: false,
@@ -495,8 +507,17 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       interactive: true,
       interactiveBorder: 10,
       theme: 'quarto',
-      placement: 'bottom-start'
+      placement: 'bottom-start',
     };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
     window.tippy(el, config); 
   }
   const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
@@ -509,6 +530,125 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
       return note.innerHTML;
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
     });
   }
       let selectedAnnoteEl;
@@ -552,6 +692,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
             }
             div.style.top = top - 2 + "px";
             div.style.height = height + 4 + "px";
+            div.style.left = 0;
             let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
             if (gutterDiv === null) {
               gutterDiv = window.document.createElement("div");
@@ -577,6 +718,32 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         });
         selectedAnnoteEl = undefined;
       };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
       // Attach click handler to the DT
       const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
       for (const annoteDlNode of annoteDls) {
@@ -639,6 +806,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div> <!-- /content -->
 <script>videojs(video_shortcode_videojs_video1);</script>
 <script>videojs(video_shortcode_videojs_video2);</script>
+
 
 
 

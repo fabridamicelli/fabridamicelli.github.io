@@ -1,9 +1,5 @@
 [
   {
-    "listing": "/til.html",
-    "items": []
-  },
-  {
     "listing": "/blog.html",
     "items": [
       "/posts/2023-09-13-pytorch-dataloader-collate.html",
@@ -16,6 +12,12 @@
       "/posts/2020-05-10-numpy-array-in-place.html",
       "/posts/2019-12-12-interactive-embedding.html",
       "/posts/2019-11-30-divide-and-conquer.html"
+    ]
+  },
+  {
+    "listing": "/til.html",
+    "items": [
+      "/til/2024-02-26-python-print-flush.html"
     ]
   }
 ]

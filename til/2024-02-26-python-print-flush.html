@@ -7,10 +7,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Fabrizio Damicelli">
-<meta name="dcterms.date" content="2021-10-16">
-<meta name="description" content="Defaults matter. This one tricks more people than you think.">
+<meta name="dcterms.date" content="2024-02-26">
+<meta name="description" content="A useful parameter in Python’s print function to consume stream output in a subsequent program.">
 
-<title>Fabrizio Damicelli - Linear Regression: Don’t forget your bias</title>
+<title>Fabrizio Damicelli - Force Python’s print function to flush the stream</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -105,40 +105,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 
-  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
-
-<script type="text/javascript">
-const typesetMath = (el) => {
-  if (window.MathJax) {
-    // MathJax Typeset
-    window.MathJax.typeset([el]);
-  } else if (window.katex) {
-    // KaTeX Render
-    var mathElements = el.getElementsByClassName("math");
-    var macros = [];
-    for (var i = 0; i < mathElements.length; i++) {
-      var texText = mathElements[i].firstChild;
-      if (mathElements[i].tagName == "SPAN") {
-        window.katex.render(texText.data, mathElements[i], {
-          displayMode: mathElements[i].classList.contains('display'),
-          throwOnError: false,
-          macros: macros,
-          fleqn: false
-        });
-      }
-    }
-  }
-}
-window.Quarto = {
-  typesetMath
-};
-</script>
 
 <link rel="stylesheet" href="../styles.css">
 </head>
 
-<body class="nav-fixed fullcontent">
+<body class="nav-fixed">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
@@ -211,24 +182,23 @@ window.Quarto = {
 <div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
 <!-- margin-sidebar -->
-    
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        
+    </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Linear Regression: Don’t forget your bias</h1>
+<h1 class="title">Force Python’s <code>print</code> function to flush the stream</h1>
   <div class="quarto-categories">
     <div class="quarto-category">python</div>
-    <div class="quarto-category">scikit-learn</div>
-    <div class="quarto-category">statsmodels</div>
-    <div class="quarto-category">linear-regression</div>
   </div>
   </div>
 
 <div>
   <div class="description">
-    Defaults matter. This one tricks more people than you think.
+    A useful parameter in Python’s <code>print</code> function to consume stream output in a subsequent program.
   </div>
 </div>
 
@@ -245,7 +215,7 @@ window.Quarto = {
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">October 16, 2021</p>
+      <p class="date">February 26, 2024</p>
     </div>
   </div>
   
@@ -257,137 +227,66 @@ window.Quarto = {
 </header>
 
 
-<section id="the-situation" class="level2">
-<h2 class="anchored" data-anchor-id="the-situation">The situation</h2>
-<p>This is a question on Stackoverflow:</p>
-<p><a href="https://stackoverflow.com/questions/20701484/why-do-i-get-only-one-parameter-from-a-statsmodels-ols-fit">“Why do I get only one parameter from a statsmodels OLS fit?”</a><br>
-As of today it has 52K views.<br>
-So, if you ran into this problem, you’re not alone.</p>
-<p>OLS refers to <a href="https://en.wikipedia.org/wiki/Ordinary_least_squares">Ordinary Least Squares</a>, a method to estimate the parameters of a <a href="https://en.wikipedia.org/wiki/Linear_regression">Linear Regression</a> model.</p>
-<p><strong>The fix:</strong><br>
-Instead of doing just</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> statsmodels.api <span class="im">as</span> sm</span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>sm.OLS(y, X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>do:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>X <span class="op">=</span> sm.add_constant(X)    <span class="co"># I am the fix, nice to meet you :)</span></span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>sm.OLS(y, X)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>All good. But <em>why</em> does that fix it?</p>
-</section>
-<section id="the-problem" class="level2">
-<h2 class="anchored" data-anchor-id="the-problem">The problem</h2>
-<p>The basic problem is that, as the <a href="https://www.statsmodels.org/stable/regression.html">documentation states</a>, the default model for which the method fits the parameters is the following:</p>
-<p><span class="math display">\[
-Y = X \beta + \mu
-\]</span></p>
-<p>where <span class="math inline">\(Y\)</span> is the dependent variable, <span class="math inline">\(X\)</span> is the so called “design matrix”, ie your independent variables (predictors) packed into columns, <span class="math inline">\(\beta\)</span> the coefficients that we are figuring out with ordinary least squares and <span class="math inline">\(\mu\)</span> the “noise” or “error term”, ie bag of factors that influence our variable <span class="math inline">\(Y\)</span> but we are not including in <span class="math inline">\(X\)</span>.</p>
-<p>What we actually might need is:</p>
-<p><span class="math display">\[
-Y = X \beta_1 + \beta_0 + \mu
-\]</span></p>
-<p><span class="math inline">\(\beta_0\)</span> is a constant term, ie the “bias” in our model, also called “intercept”, as we are talking about a line equation and that is the value of <code>y</code> at which a line intecepts such axis when <code>x = 0</code>.</p>
-<p>So what is the bias?<br>
-Here’s an analogy: Imagine we are trying to predict beer consumption (liters per person per year) based on number of sunny days (per year). The mental model (hypothesis) being that people will spend more time outdoors on sunny days and beer would be their choice. Silly model, but bear with me. We go out and get data for the last 50 years regarding on how much beer people drank and how many sunny days per year there were, so we’d have:</p>
-<p><span class="math display">\[
-Y_{beer} = X \beta_{sun} + \beta_0 + \mu
-\]</span></p>
-<p>Now, say we carry out the study in Germany and Indonesia. Then maybe (just maybe) people tend to <a href="https://ourworldindata.org/alcohol-consumption">consume more alcohol in general in one of those countries than in the other</a>, regardless of the number of sunny days. The bias in our model could capture that. In other words, we could see if the “starting point” (the <span class="math inline">\(\beta_0\)</span> term) is different for the countries, on top of what we could have the influence of our independent variable, by looking at the data separately and fit two different models (one per country):</p>
-<p><span class="math display">\[
-Y_{beer-Indonesia} = X \beta_{sun} + \beta_{0-Indonesia} + \mu
-\]</span></p>
-<p><span class="math display">\[
-Y_{beer-Germany} = X \beta_{sun} + \beta_{0-Germany} + \mu
-\]</span></p>
-<p>OK. That’s all I will say about linear regression here.</p>
-<blockquote class="blockquote">
-<p>warning: Don’t take that example too seriously. For the sake of the story I am deliberately using a <em>causal</em> narrative, which is by no means supported by a regression model based on correlations. But you got the point.</p>
-</blockquote>
-<p>Aside from that, let’s look at some code examples that will be more illustrative of what the bias is doing in our model.</p>
-</section>
-<section id="experiment-with-synthetic-data" class="level2">
-<h2 class="anchored" data-anchor-id="experiment-with-synthetic-data">Experiment with synthetic data</h2>
-<p>Let’s create a synthetic ground truth dataset so that we can see these models in action on a concrete example.</p>
-<div id="3f662336-77b2-4815-a8b8-3eac043f15e9" class="cell">
-<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> make_regression</span>
-<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">200</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">50</span>, noise<span class="op">=</span><span class="dv">20</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Say we have a python program that prints to <code>stdout</code> and we want to write that output into a file.<br>
+We can achieve that like this:</p>
+<div id="cell-2" class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>c <span class="st">'print("great output</span><span class="ch">\n</span><span class="st">as always")'</span> <span class="op">&gt;</span> <span class="bu">file</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>As the parameter <code>bias</code> shows, the data will have this intrinsic bias. So we know it’s there. Now we will fit a model with and another without bias and observe their behaviour.</p>
-<div id="778454f8-5b98-412d-8b3a-57f5d757cdb4" class="cell">
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.linear_model <span class="im">import</span> LinearRegression</span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
-<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>model_without_bias <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>).fit(x, y)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Which works fine:</p>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>cat <span class="bu">file</span>.txt</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>great output
+as always</code></pre>
 </div>
-<p>Let’s check how well these models fit the training data by plotting predictions coming from both of them:</p>
-<div id="8ae596d2-bb21-444b-8353-e05afea362a8" class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> plot_models_fit(x, y, model_with_bias, model_without_bias):</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>    plt.figure(figsize<span class="op">=</span>(<span class="dv">8</span>, <span class="dv">6</span>))</span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, y, <span class="st">'o'</span>, label<span class="op">=</span><span class="st">"data"</span>, alpha<span class="op">=</span><span class="fl">.5</span>)</span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, model_with_bias.predict(x),  label<span class="op">=</span><span class="st">"model with bias"</span>)</span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    plt.plot(x, model_without_bias.predict(x), label<span class="op">=</span><span class="st">"model without bias"</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    plt.ylabel(<span class="st">"Dependent variable"</span>)</span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>    plt.xlabel(<span class="st">"Independent variable"</span>)</span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>    plt.legend()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="4e063336-a5d3-4c22-9185-b83344eba20c" class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>plot_models_fit(x, y, model_with_bias, model_without_bias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Now, if we want to do the same <strong>while</strong> the program is still running, things are a bit different.<br>
+For example, this program will not write to file until we interrumpt it:</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>c <span class="st">'</span><span class="ch">\</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="st">while True:</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="er">    print</span>(<span class="st">"great output</span><span class="ch">\n</span><span class="st">as always"</span>)<span class="st">' </span><span class="ch">\</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; newfile.txt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>That is, the command on the left side of <code>&gt;</code> will be run until it’s done and only then the file will be written.<br>
+We want to fix that.<br>
+In other words, stream the program output directly into the file while it’s being generated.</p>
+<p>I found this solution to work, passing <code>flush=True</code> to the <code>print</code> function:</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>bash</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>python <span class="op">-</span>c <span class="st">'</span><span class="ch">\</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="st">import time</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="er">while True:</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"great output</span><span class="ch">\n</span><span class="st">as always"</span>, flush<span class="op">=</span><span class="va">True</span>) <span class="co"># &lt;----- HERE</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">2</span>)<span class="st">' </span><span class="ch">\</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="st">&gt; newfile.txt</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>As the docstrings say, that forces the stream to be flushed:</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>?</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2021-10-16-lr_add_constant_files/figure-html/cell-6-output-1.png" class="img-fluid figure-img"></p>
-</figure>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Docstring:</span>
+print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+Prints the values to a stream, or to sys.stdout by default.
+Optional keyword arguments:
+file:  a file-like object (stream); defaults to the current sys.stdout.
+sep:   string inserted between values, default a space.
+end:   string appended after the last value, default a newline.
+flush: whether to forcibly flush the stream.
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method
+</pre>
 </div>
 </div>
 </div>
-<p>As we see, the two models produce different outcomes. The one without bias “forces” the line to pass through the origin. The slope may be similar because of ordinary least squares minimizes the vertical (square) distance from the line to the data points, but that really depends on the data at hand, as we can see in the following example with different ground truth data:</p>
-<div id="84ee0380-36f2-47ab-8b30-30ac677390ad" class="cell">
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">100</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">300</span>, noise<span class="op">=</span><span class="dv">80</span>)</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
-<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>model_without_bias <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>).fit(x, y)</span>
-<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>plot_models_fit(x, y, model_with_bias, model_without_bias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2021-10-16-lr_add_constant_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>Finally, what if the data indeed does not have such a bias? Let’s try it:</p>
-<div id="a54e5832-aab4-4a6d-9e4d-233ea0f43e8b" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>x, y <span class="op">=</span> make_regression(n_samples<span class="op">=</span><span class="dv">100</span>, n_features<span class="op">=</span><span class="dv">1</span>, bias<span class="op">=</span><span class="dv">0</span>, noise<span class="op">=</span><span class="dv">80</span>)</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>model_with_bias <span class="op">=</span> LinearRegression().fit(x, y)   <span class="co"># default: fit_intercept=True</span></span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>model_without_bias <span class="op">=</span> LinearRegression(fit_intercept<span class="op">=</span><span class="va">False</span>).fit(x, y)</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>plot_models_fit(x, y, model_with_bias, model_without_bias)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display">
-<div>
-<figure class="figure">
-<p><img src="2021-10-16-lr_add_constant_files/figure-html/cell-8-output-1.png" class="img-fluid figure-img"></p>
-</figure>
-</div>
-</div>
-</div>
-<p>In general, the models indeed tend to become more similar (provided enough data points are given). But, again, the exact outcome depends on the data at hand.</p>
-</section>
-<section id="take-home-messages" class="level2">
-<h2 class="anchored" data-anchor-id="take-home-messages">Take-home messages</h2>
-<ul>
-<li>Excluding the bias constrains the parameters fit such that we will only get a similarly good (or bad) model compared to the one with bias <em>if the data happens to</em> not have such a bias.</li>
-<li><code>scikit-learn</code>’s<code>LinearRegression</code> model fits the intercept per default. <code>statsmodels</code> <code>OLS</code> does not.</li>
-<li>Whenever in doubt in a situation like this, just try it out. Fake some data that you understand and run your own experiments.</li>
-</ul>
-<p><strong>Fin</strong></p>
+<p><strong>FIN</strong></p>
 <hr>
 <p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
 
 
-</section>
 
 </main> <!-- /main -->
 <!-- plausible -->

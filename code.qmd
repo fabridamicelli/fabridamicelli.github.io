@@ -55,9 +55,13 @@ Susceptible-Excited-Refractory, a dynamical model of spreading excitations
 [TorchServe](https://pytorch.org/serve) is a popular framework to deploy PyTorch-based neural networks.
 I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli) in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.
 
+---
+
 ### torchserve-docker
 I put together [a simple GitHub-Action-based cron job](https://github.com/fabridamicelli/torchserve-docker) to build TorchServe images with specific Python version working out-of-the-box.
 The images are hosted on [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).
+
+---
 
 ### Translations
 

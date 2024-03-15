@@ -59,7 +59,8 @@ I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamice
 
 ### torchserve-docker
 I put together [a simple GitHub-Action-based cron job](https://github.com/fabridamicelli/torchserve-docker) to build TorchServe images with specific Python version working out-of-the-box.
-The images are hosted on [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).
+The images are hosted on [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).  
+<a href="https://hub.docker.com/r/fabridamicelli/torchserve"><img src="https://img.shields.io/docker/pulls/fabridamicelli/torchserve.svg" height="16">
 
 ---
 

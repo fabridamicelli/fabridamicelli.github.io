@@ -35,6 +35,8 @@ website:
         icon: twitter
       - href: https://linkedin.com/in/fabridamicelli
         icon: linkedin
+      - href: index.html
+        icon: rss
 
 format:
   html:

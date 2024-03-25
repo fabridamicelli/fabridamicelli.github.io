@@ -15,27 +15,6 @@
     ]
   },
   {
-    "listing": "/index.html",
-    "items": [
-      "/posts/2020-05-20-achtung-german-csv-reader.html",
-      "/blog.html",
-      "/posts/2019-11-30-divide-and-conquer.html",
-      "/posts/2019-12-12-interactive-embedding.html",
-      "/posts/2020-05-10-numpy-array-in-place.html",
-      "/til/2024-02-26-python-print-flush.html",
-      "/posts/2021-10-16-lr_add_constant.html",
-      "/links.html",
-      "/posts/2021-10-10-merge_dicts.html",
-      "/posts/2023-09-13-pytorch-dataloader-collate.html",
-      "/code.html",
-      "/research.html",
-      "/til.html",
-      "/posts/2021-09-18-starmap.html",
-      "/posts/2022-01-29-chainmap.html",
-      "/posts/2022-08-04-seaborn-tensors.html"
-    ]
-  },
-  {
     "listing": "/til.html",
     "items": [
       "/til/2024-02-26-python-print-flush.html"

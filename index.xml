@@ -6,11 +6,171 @@
       version="2.0">
 <channel>
 <title>Fabrizio Damicelli</title>
-<link>https://fabridamicelli.github.io/blog.html</link>
-<atom:link href="https://fabridamicelli.github.io/blog.xml" rel="self" type="application/rss+xml"/>
+<link>https://fabridamicelli.github.io/</link>
+<atom:link href="https://fabridamicelli.github.io/index.xml" rel="self" type="application/rss+xml"/>
 <description></description>
+<image>
+<url>https://fabridamicelli.github.io/./images/profile-pixels.png</url>
+<title>Fabrizio Damicelli</title>
+<link>https://fabridamicelli.github.io/</link>
+<height>144</height>
+<width>144</width>
+</image>
 <generator>quarto-1.4.551</generator>
-<lastBuildDate>Wed, 13 Sep 2023 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 26 Feb 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Force Python’s print function to flush the stream</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Say we have a python program that prints to <code>stdout</code> and we want to write that output into a file.<br>
+We can achieve that like this:</p>
+<div id="cell-2" class="cell">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb1-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'print("great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always")'</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.txt</span></code></pre></div>
+</div>
+<p>Which works fine:</p>
+<div id="cell-4" class="cell">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb2-2">cat <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.txt</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>great output
+as always</code></pre>
+</div>
+</div>
+<p>Now, if we want to do the same <strong>while</strong> the program is still running, things are a bit different.<br>
+For example, this program will not write to file until we interrumpt it:</p>
+<div id="cell-6" class="cell">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb4-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb4-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">while True:</span></span>
+<span id="cb4-4"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">    print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always"</span>)<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb4-5"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+</div>
+<p>That is, the command on the left side of <code>&gt;</code> will be run until it’s done and only then the file will be written.<br>
+We want to fix that.<br>
+In other words, stream the program output directly into the file while it’s being generated.</p>
+<p>I found this solution to work, passing <code>flush=True</code> to the <code>print</code> function:</p>
+<div id="cell-8" class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb5-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb5-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">import time</span></span>
+<span id="cb5-4"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">while True:</span></span>
+<span id="cb5-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always"</span>, flush<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;----- HERE</span></span>
+<span id="cb5-6">    time.sleep(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb5-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+</div>
+<p>As the docstrings say, that forces the stream to be flushed:</p>
+<div id="cell-10" class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>?</span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">Docstring:</span>
+print(value, ..., sep=' ', end='\n', file=sys.stdout, flush=False)
+Prints the values to a stream, or to sys.stdout by default.
+Optional keyword arguments:
+file:  a file-like object (stream); defaults to the current sys.stdout.
+sep:   string inserted between values, default a space.
+end:   string appended after the last value, default a newline.
+flush: whether to forcibly flush the stream.
+<span class="ansi-red-fg">Type:</span>      builtin_function_or_method
+</pre>
+</div>
+</div>
+</div>
+<p><strong>FIN</strong></p>
+<hr>
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <guid>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</guid>
+  <pubDate>Mon, 26 Feb 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>PyTorch DataLoader: Understand and implement a custom collate function</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -4179,6 +4339,625 @@ Tip
   <category>scientific-computing</category>
   <guid>https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html</guid>
   <pubDate>Sat, 30 Nov 2019 00:00:00 GMT</pubDate>
+</item>
+<item>
+  <title>Blog</title>
+  <link>https://fabridamicelli.github.io/blog.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-default" id="listing-listing">
+<div class="list quarto-listing-default">
+<div class="quarto-post image-right" data-index="0" data-categories="pytorch,python,data,neural-nets" data-listing-date-sort="1694563200000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="233">
+<div class="thumbnail">
+<p><a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external"></a></p><a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2023-09-13-pytorch-dataloader-collate.html -->
+</a><p><a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external">PyTorch DataLoader: Understand and implement a custom collate function</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external">Understand DataLoader’s inner workings and bring your data pipeline to the next level.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2023-09-13-pytorch-dataloader-collate.html" class="no-external">
+<div class="listing-date">
+2023-09-13
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="1" data-categories="python,seaborn,pytorch,tensor,visualization" data-listing-date-sort="1659571200000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="382">
+<div class="thumbnail">
+<p><a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external"></a></p><a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2022-08-04-seaborn-tensors.html -->
+</a><p><a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external">seaborn and tensors: A match not quite made in heaven</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external">Autopsy of a little gotcha plotting tensors data.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2022-08-04-seaborn-tensors.html" class="no-external">
+<div class="listing-date">
+2022-08-04
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="2" data-categories="python,collections,ChainMap,python-standard-library" data-listing-date-sort="1643414400000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="52">
+<div class="thumbnail">
+<p><a href="./posts/2022-01-29-chainmap.html" class="no-external"></a></p><a href="./posts/2022-01-29-chainmap.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2022-01-29-chainmap.html -->
+</a><p><a href="./posts/2022-01-29-chainmap.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2022-01-29-chainmap.html" class="no-external">from collections import ChainMap</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2022-01-29-chainmap.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2022-01-29-chainmap.html" class="no-external">An elegant solution to efficiently carry out a look up over more than one dictionary.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2022-01-29-chainmap.html" class="no-external">
+<div class="listing-date">
+2022-01-29
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="3" data-categories="python,scikit-learn,statsmodels,linear-regression" data-listing-date-sort="1634342400000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="739">
+<div class="thumbnail">
+<p><a href="./posts/2021-10-16-lr_add_constant.html" class="no-external"></a></p><a href="./posts/2021-10-16-lr_add_constant.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2021-10-16-lr_add_constant.html -->
+</a><p><a href="./posts/2021-10-16-lr_add_constant.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2021-10-16-lr_add_constant.html" class="no-external">Linear Regression: Don’t forget your bias</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2021-10-16-lr_add_constant.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2021-10-16-lr_add_constant.html" class="no-external">Defaults matter. This one tricks more people than you think.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2021-10-16-lr_add_constant.html" class="no-external">
+<div class="listing-date">
+2021-10-16
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="4" data-categories="python,functools,functional-programming,python-standard-library" data-listing-date-sort="1633824000000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="3" data-listing-word-count-sort="440">
+<div class="thumbnail">
+<p><a href="./posts/2021-10-10-merge_dicts.html" class="no-external"></a></p><a href="./posts/2021-10-10-merge_dicts.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2021-10-10-merge_dicts.html -->
+</a><p><a href="./posts/2021-10-10-merge_dicts.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2021-10-10-merge_dicts.html" class="no-external">Merging Python dictionaries: A functional take</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2021-10-10-merge_dicts.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2021-10-10-merge_dicts.html" class="no-external">An elegant way to merge <em>many</em> dictionaries in Python by leveraging some functional tools.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2021-10-10-merge_dicts.html" class="no-external">
+<div class="listing-date">
+2021-10-10
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="5" data-categories="python,itertools,functional-programming,python-standard-library" data-listing-date-sort="1631923200000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="233">
+<div class="thumbnail">
+<p><a href="./posts/2021-09-18-starmap.html" class="no-external"></a></p><a href="./posts/2021-09-18-starmap.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2021-09-18-starmap.html -->
+</a><p><a href="./posts/2021-09-18-starmap.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2021-09-18-starmap.html" class="no-external">What is starmap?</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2021-09-18-starmap.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2021-09-18-starmap.html" class="no-external">A quick explanation of this useful functionality from the Python itertools module.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2021-09-18-starmap.html" class="no-external">
+<div class="listing-date">
+2021-09-18
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="6" data-categories="python,pandas,text" data-listing-date-sort="1589932800000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="326">
+<div class="thumbnail">
+<p><a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external"></a></p><a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2020-05-20-achtung-german-csv-reader.html -->
+</a><p><a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external">Achtung: Watch out, German csv readers!</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external">Little pandas Gotcha dealing with German text.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2020-05-20-achtung-german-csv-reader.html" class="no-external">
+<div class="listing-date">
+2020-05-20
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="7" data-categories="python,numpy" data-listing-date-sort="1589068800000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="2" data-listing-word-count-sort="246">
+<div class="thumbnail">
+<p><a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external"></a></p><a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2020-05-10-numpy-array-in-place.html -->
+</a><p><a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external">Explicit is better than implicit</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external">A basic but not so obvious numpy example.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2020-05-10-numpy-array-in-place.html" class="no-external">
+<div class="listing-date">
+2020-05-10
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="8" data-categories="python,dataviz,dimensionality-reduction" data-listing-date-sort="1576108800000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="4" data-listing-word-count-sort="753">
+<div class="thumbnail">
+<p><a href="./posts/2019-12-12-interactive-embedding.html" class="no-external"></a></p><a href="./posts/2019-12-12-interactive-embedding.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2019-12-12-interactive-embedding.html -->
+</a><p><a href="./posts/2019-12-12-interactive-embedding.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2019-12-12-interactive-embedding.html" class="no-external">Does your embedding make sense?</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2019-12-12-interactive-embedding.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2019-12-12-interactive-embedding.html" class="no-external">Projecting data is easy. Understanding the outcome, less so. Interactive plots can help.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2019-12-12-interactive-embedding.html" class="no-external">
+<div class="listing-date">
+2019-12-12
+</div>
+</a>
+</div>
+</div>
+<div class="quarto-post image-right" data-index="9" data-categories="python,scikit-learn,scientific-computing" data-listing-date-sort="1575072000000" data-listing-file-modified-sort="1711369633253" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="6" data-listing-word-count-sort="1172">
+<div class="thumbnail">
+<p><a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external"></a></p><a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external">
+<!-- img(9CEB782EFEE6)[progressive=false, height=0em]:posts/2019-11-30-divide-and-conquer.html -->
+</a><p><a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external"></a></p>
+</div>
+<div class="body">
+<h3 class="no-anchor listing-title">
+<a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external">Divide and conquer</a>
+</h3>
+<div class="listing-subtitle">
+<a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external"></a>
+</div>
+<div class="listing-description">
+<a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external">How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.</a>
+</div>
+</div>
+<div class="metadata">
+<a href="./posts/2019-11-30-divide-and-conquer.html" class="no-external">
+<div class="listing-date">
+2019-11-30
+</div>
+</a>
+</div>
+</div>
+</div>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div> ]]></description>
+  <guid>https://fabridamicelli.github.io/blog.html</guid>
+  <pubDate>Mon, 25 Mar 2024 12:27:30 GMT</pubDate>
+</item>
+<item>
+  <title>Links</title>
+  <link>https://fabridamicelli.github.io/links.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Always growing list of cool, free learning/fun/useful resources out there that will make you love the internet.</p>
+<section id="tutorials" class="level2">
+<h2 class="anchored" data-anchor-id="tutorials">Tutorials</h2>
+<ul>
+<li><a href="http://calmcode.io">calmcode</a>: A goldmine – learn calmly bit by bit with hands-on tutorials.</li>
+<li><a href="https://realpython.com/">Real Python</a>: Awesome in depth tutorials about all sorts of aspects of the language.</li>
+<li><a href="http://scipy-lectures.org">Scipy Lectures</a>: Learn numerics, scientific and data oriented Python.</li>
+<li><a href="https://www.youtube.com/watch?v=SzBi3xdEF2Y&amp;list=PLYx7XA2nY5Gf37zYZMw6OqGFRPjB1jCy6&amp;index=7">Numba - Tell Those C++ Bullies to Get Lost - Forsyth &amp; Barba - SciPy 2017</a></li>
+<li><a href="https://www.youtube.com/playlist?list=PLYCpMb24GpOC704uO9svUrihl-HY1tTJJ">Reproducible workflow in Jupyter - Jake van der Plas</a></li>
+<li><a href="https://www.youtube.com/watch?v=6gdNUDs6QPc">Anatomy of Matplotlib - Root &amp; Aizenman - SciPy 2018</a></li>
+<li><a href="https://www.youtube.com/watch?v=fqMOX6JJhGo">Docker</a>: Nail down the basics with this tutorial from freeCodeCamp.</li>
+<li><a href="https://selectstarsql.com/">SQL</a>: Interactive book, aims to be “the best place on the internet for learning SQL” - you decide.</li>
+<li><a href="https://missing.csail.mit.edu/2020/version-control/">Git</a>: Go beyond typing commmands blindly - understand git’s data model.</li>
+<li><a href="https://www.youtube.com/watch?v=qsTthZi23VE">Git-Advanced</a>: Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.</li>
+<li><a href="https://www.fast.ai/">fast.ai</a>: A myriad of learning resources – ML, python, developer tools, etc.</li>
+<li><a href="https://setosa.io/">Setosa: visual explanations</a></li>
+<li><a href="https://www.youtube.com/watch?v=yGTUuEx3GkA">Transformers &amp; Attention</a>: A great explanation by V. Warmerdam at Rasa Whiteboard series.</li>
+<li><a href="https://www.youtube.com/watch?v=UPtG_38Oq8o">The math behind Attention: Keys, Queries, and Values matrices</a>: Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano.</li>
+</ul>
+</section>
+<section id="talks" class="level2">
+<h2 class="anchored" data-anchor-id="talks">Talks</h2>
+<ul>
+<li><a href="https://boringtechnology.club/">Choose Boring Technology – Dan McKinley</a></li>
+<li><a href="https://www.youtube.com/watch?v=_AEJHKGk9ns">Facts and Myths about Python names and values - Ned Batchelder - PyCon 2015</a></li>
+<li><a href="https://www.youtube.com/watch?v=Iq9DzN6mvYA">Statistics for Hackers - Jake van der Plas - PyCon 2016</a></li>
+<li><a href="https://www.youtube.com/watch?v=lyDLAutA88s">Built in Super Heroes - David Beazley - PyData 2016</a></li>
+<li><a href="https://www.youtube.com/watch?v=He9MCbs1wgE">Computational Statistics - Allen Downey - SciPy 2017</a></li>
+<li><a href="https://www.youtube.com/watch?v=9iol3Lk6kyU">A Bluffer’s Guide to Dimension Reduction - Leland McInnes - PyData 2018</a></li>
+<li><a href="https://www.youtube.com/watch?list=PLGVZCDnMOq0pDxc2cSp_N42M4OPfLgtBD&amp;v=yXGCKqo5cEYt">Untitled12 - Vincent Warmerdam - PyData 2019</a></li>
+<li><a href="https://www.youtube.com/watch?v=aICqoAG5BXQ">Gaussian Progress – Vincent Warmerdam - PyData 2019</a></li>
+</ul>
+</section>
+<section id="youtube-channels" class="level2">
+<h2 class="anchored" data-anchor-id="youtube-channels">Youtube channels</h2>
+<ul>
+<li><a href="https://www.youtube.com/channel/UCYO_jab_esuFRV4b17AJtAw">3brown1blue</a>: One of the best teachers in the internet. Ever.</li>
+<li><a href="https://www.youtube.com/channel/UCCezIgC97PvUuR4_gbFUs5g">Corey Schafer</a>: Hands down one of the best Python resources out there.</li>
+<li><a href="https://www.youtube.com/channel/UC46xhU1EH7aywEgvA9syS3w">anthonywritescode</a>: Mostly (not only) Python features, tools &amp; idioms explained.</li>
+<li><a href="https://www.youtube.com/channel/UCI0vQvr9aFn27yR6Ej6n5UA">Real Python</a></li>
+<li><a href="https://www.youtube.com/channel/UCgBncpylJ1kiVaPyP-PZauQ">Luis serrano</a>: Machine learning algorithms and intuitions, in simple words.</li>
+<li><a href="https://www.youtube.com/channel/UC2eYFnH61tmytImy1mTYvhA">Luke Smith</a>: Unix, vim, latex, markdown, free-software, etc.</li>
+<li><a href="https://www.youtube.com/channel/UCbXgNpp0jedKWcQiULLbDTA">Python Engineer</a></li>
+<li><a href="https://www.youtube.com/user/SpartacanUsuals">Ben Lambert</a>: Stats, ML, Bayesian stuff.</li>
+<li><a href="https://www.youtube.com/user/joshstarmer">Statsquest – Josh Starmer</a>: Stats, machine learning, algorithms, bam!</li>
+<li><a href="https://www.youtube.com/channel/UCNIkB2IeJ-6AmZv7bQ1oBYg">Arxiv Insights</a>: Machine learning papers explained and discussed.</li>
+</ul>
+</section>
+<section id="blogs" class="level2">
+<h2 class="anchored" data-anchor-id="blogs">Blogs</h2>
+<ul>
+<li><a href="https://koaning.io">Vincent Warmerdam</a>: Data, machine learning, algorithms – and nice drawings.</li>
+<li><a href="http://maxhalford.github.io">Max Halford</a></li>
+<li><a href="https://adamj.eu/tech">Adam Johnson</a>: Mostly Python, tackling core aspects of the language.</li>
+<li><a href="https://notsquirrel.com/pca/">Squirrel, Not Squirrel</a>: Amazing PCA explanation.</li>
+<li><a href="http://cognitivemedium.com/">Michael Nielsen</a></li>
+<li><a href="https://mlu-explain.github.io/">MLU-EXPLAIN</a>: Visual explanations of core machine learning concepts.</li>
+</ul>
+</section>
+<section id="podcasts" class="level2">
+<h2 class="anchored" data-anchor-id="podcasts">Podcasts</h2>
+<section id="python-co." class="level3">
+<h3 class="anchored" data-anchor-id="python-co.">Python &amp; co.</h3>
+<ul>
+<li><a href="https://www.pythonpodcast.com/episodes/">Podcast.__init__</a></li>
+<li><a href="https://talkpython.fm/">Talk python to me</a></li>
+<li><a href="https://pythonbytes.fm/episodes/all">Python Bytes</a></li>
+<li><a href="http://www.pydata-podcast.com/">dats’n’stats</a></li>
+<li><a href="https://realpython.com/podcasts/rpp/">The Real Python</a></li>
+<li><a href="https://python-podcast.de/show/">Python Podcast (in German)</a></li>
+</ul>
+</section>
+<section id="data-ml-maths-etc." class="level3">
+<h3 class="anchored" data-anchor-id="data-ml-maths-etc.">Data, ML, Maths, etc.</h3>
+<ul>
+<li><a href="https://vanishinggradients.fireside.fm/">Vanishing Gradients - Hugo Bowne-Anderson</a></li>
+<li><a href="https://thegradientpub.substack.com/s/podcast">The Gradient Podcast</a></li>
+<li><a href="https://www.therobotbrains.ai/">The Robot Brains Podcast - Peter Abeel</a></li>
+<li><a href="https://open.spotify.com/episode/0dXmvOSo6bvcVRjUY6qWI8?si=r1EyetnTSaWnU8KjRf6Drg">Practical AI</a></li>
+<li><a href="https://open.spotify.com/show/6z0wTS6N8Lwj8zuZHeFKLx">AI in action</a></li>
+<li><a href="https://www.youtube.com/channel/UCMLtBahI5DMrt0NPvDSoIRQ/videos">Machine Learning Street Talks</a></li>
+<li><a href="https://www.santafe.edu/culture/podcast">Complexity - Sta. Fe Institute</a></li>
+<li><a href="https://twimlai.com/">This week in machine learning</a></li>
+<li><a href="https://www.underratedml.com/">Underrated ML</a></li>
+<li><a href="https://www.thetalkingmachines.com/">Talking Machines</a></li>
+<li><a href="https://www.numberphile.com/podcast">Numberphile</a></li>
+<li><a href="https://dataskeptic.com/">Data skeptic</a></li>
+<li><a href="http://lineardigressions.com/">Linear Digressions</a></li>
+<li><a href="https://open.spotify.com/show/7o9r3fFig3MhTJwehXDbXm?si=d7Ncp7nXQ7C1O7wu0Oxvqg">Gradient dissent: Weights and biases</a></li>
+<li><a href="https://www.datacamp.com/community/podcast">Dataframed</a></li>
+<li><a href="http://partiallyderivative.com/">Partially derivative</a></li>
+</ul>
+</section>
+<section id="discussion-interviews-philosophy" class="level3">
+<h3 class="anchored" data-anchor-id="discussion-interviews-philosophy">Discussion, interviews, philosophy</h3>
+<ul>
+<li><a href="https://www.preposterousuniverse.com/podcast/">Sean Carrol’s Mindscape</a></li>
+<li><a href="https://fs.blog/knowledge-project/">The knowledge project</a></li>
+<li><a href="http://nssdeviations.com/">Not so standard deviations</a></li>
+<li><a href="https://lexfridman.com/ai/">Lex Fridman Podcast</a></li>
+<li><a href="https://adversariallearning.com/">Adversarial Learning</a></li>
+<li><a href="https://braininspired.co/">Brain inspired</a></li>
+<li><a href="https://soundcloud.com/stephenwolfram">Stephen Wolfram podcast</a></li>
+<li><a href="https://chaitimedatascience.com/">Chai Tea Data Science</a></li>
+<li><a href="https://deepmind.com/blog/article/welcome-to-the-deepmind-podcast">DeepMind Podcast</a></li>
+<li><a href="https://towardsdatascience.com/podcast/home">Towards data science</a></li>
+<li><a href="https://thedataexchange.media/episodes/">The data exchange</a></li>
+</ul>
+</section>
+</section>
+<section id="tools" class="level2">
+<h2 class="anchored" data-anchor-id="tools">Tools</h2>
+<ul>
+<li><a href="https://ezgif.com/">ezgif: Create, edit and convert GIFs</a></li>
+</ul>
+
+
+</section>
+
+ ]]></description>
+  <guid>https://fabridamicelli.github.io/links.html</guid>
+  <pubDate>Mon, 25 Mar 2024 12:27:30 GMT</pubDate>
+</item>
+<item>
+  <title></title>
+  <link>https://fabridamicelli.github.io/code.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<section id="python-packages" class="level3">
+<h3 class="anchored" data-anchor-id="python-packages">Python Packages</h3>
+<p>I created and maintain the following Python packages:</p>
+<hr>
+<div>
+
+</div>
+</section>
+<div class="quarto-layout-panel" data-layout="[[0.4, 0.6]]">
+<div class="quarto-layout-row">
+<section id="echoes" class="level3 quarto-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
+<h3 class="anchored" data-anchor-id="echoes"><a href="https://github.com/fabridamicelli/echoes"><strong>echoes</strong></a></h3>
+<p>A scikit-learn compatible package for Machine Learning with Echo State Networks<br>
+<a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80"> </a><a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16"> </a></p>
+</section>
+<div class="quarto-layout-cell" style="flex-basis: 60.0%;justify-content: flex-start;">
+<ul>
+<li>🤖 Machine learning with <a href="http://www.scholarpedia.org/article/Echo_state_network">Echo State Networks</a></li>
+<li>🧱 High level API, scikit-learn compatible API, eg fit-predict interface</li>
+<li>💨 Fast! (Thanks to <a href="http://numba.pydata.org/">numba</a> ✨)</li>
+<li>🐍 <code>pip install echoes</code><br>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout="[[0.4, 0.6]]">
+<div class="quarto-layout-row">
+<section id="kuramoto" class="level3 quarto-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
+<h3 class="anchored" data-anchor-id="kuramoto"><a href="https://github.com/fabridamicelli/kuramoto"><strong>kuramoto</strong></a></h3>
+<p>Classical model to study synchronization phenomena<br>
+<a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80"> </a><a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16"> </a></p>
+</section>
+<div class="quarto-layout-cell" style="flex-basis: 60.0%;justify-content: flex-start;">
+<ul>
+<li>🤹 Implementation of the <a href="https://en.wikipedia.org/wiki/Kuramoto_model">Kuramoto model</a> on graphs.<br>
+</li>
+<li>🐍 <code>pip install kuramoto</code><br>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<div>
+
+</div>
+<div class="quarto-layout-panel" data-layout="[[0.4, 0.6]]">
+<div class="quarto-layout-row">
+<section id="ser" class="level3 quarto-layout-cell" style="flex-basis: 40.0%;justify-content: flex-start;">
+<h3 class="anchored" data-anchor-id="ser"><a href="https://github.com/fabridamicelli/ser"><strong>ser</strong></a></h3>
+<p>Susceptible-Excited-Refractory, a dynamical model of spreading excitations<br>
+<a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80"> </a><a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16"> </a></p>
+</section>
+<div class="quarto-layout-cell" style="flex-basis: 60.0%;justify-content: flex-start;">
+<ul>
+<li>🚥 Implementation of classic SER model on graphs</li>
+<li>🏃 Powered by <a href="http://numba.pydata.org/">numba</a> for speed.</li>
+<li>🐍 <code>pip install ser</code></li>
+</ul>
+</div>
+</div>
+</div>
+<hr>
+<section id="torchserve" class="level3">
+<h3 class="anchored" data-anchor-id="torchserve">TorchServe</h3>
+<p><a href="https://pytorch.org/serve">TorchServe</a> is a popular framework to deploy PyTorch-based neural networks. I have <a href="https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli">fixed bugs</a> in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.</p>
+<hr>
+</section>
+<section id="torchserve-docker" class="level3">
+<h3 class="anchored" data-anchor-id="torchserve-docker">torchserve-docker</h3>
+<p>I put together <a href="https://github.com/fabridamicelli/torchserve-docker">a simple GitHub-Action-based cron job</a> to build TorchServe images with specific Python version working out-of-the-box. The images are hosted on <a href="https://hub.docker.com/r/fabridamicelli/torchserve">Dockerhub</a>.<br>
+<a href="https://hub.docker.com/r/fabridamicelli/torchserve"><img src="https://img.shields.io/docker/pulls/fabridamicelli/torchserve.svg" height="16"></a></p><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+<hr>
+</a></section><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+</a><section id="translations" class="level3"><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+<h3 class="anchored" data-anchor-id="translations">Translations</h3>
+</a><blockquote class="blockquote"><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+</a><ul><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+</a><li><a href="https://hub.docker.com/r/fabridamicelli/torchserve">English → German of the </a><a href="https://github.com/huggingface/course/pulls?q=is%3Apr+author%3Afabridamicelli">HuggingFace Course</a></li>
+<li>English → Spanish of the <a href="https://github.com/python/python-docs-es/pulls?q=is%3Apr+author%3Afabridamicelli+">Python 3.9 Official Documentation</a></li>
+</ul>
+</blockquote>
+<hr>
+For more details, check out my <a href="https://github.com/fabridamicelli">GitHub Profile</a>.
+<p align="center">
+<img src="https://ghchart.rshah.org/fabridamicelli" width="800" href="https://github.com/fabridamicelli">
+</p>
+
+
+</section>
+
+ ]]></description>
+  <guid>https://fabridamicelli.github.io/code.html</guid>
+  <pubDate>Mon, 25 Mar 2024 12:27:30 GMT</pubDate>
+</item>
+<item>
+  <title>Research</title>
+  <link>https://fabridamicelli.github.io/research.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I finished my PhD in 2021 at the <a href="https://www.uke.de/english/departments-institutes/institutes/computational-neuroscience/research/index.html">Institute of Computational Neuroscience</a> in Hamburg.<br>
+My PhD research was centered around two main topics:</p>
+<ul>
+<li><p><strong>Modeling how connectivity patterns emerge in the brain from a graph theoretical, computational perspective.</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://fabridamicelli.github.io/images/summary-topological-reinforcement.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:14cm"></p>
+</figure>
+</div></li>
+<li><p><strong>The cross-talk between biological and artificial neural networks, i.e., brain inspired neural networks.</strong></p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://fabridamicelli.github.io/images/summary-brain-connectivity-meets-reservoir-computing.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:15cm"></p>
+</figure>
+</div></li>
+</ul>
+<p><br>
+<br>
+Selected publications:</p>
+<ul>
+<li><a href="https://doi.org/10.1371/journal.pcbi.1010639"><em>Brain Connectivity meets Reservoir Computing</em></a><br>
+<strong>Damicelli</strong>, Hilgetag, A Goulas. Plos Computational Biology, 2021.</li>
+<li><a href="https://doi.org/10.1016/j.neunet.2021.07.011"><em>Bio-instantiated recurrent neural networks: Integrating neurobiology-based network topology in artificial networks</em></a><br>
+Goulas, <strong>Damicelli</strong>, Hilgetag. Neural Networks, 2021.</li>
+<li><a href="https://www.mitpressjournals.org/doi/full/10.1162/netn_a_00085"><em>Topological reinforcement as a principle of modularity emergence in brain networks</em></a><br>
+<strong>Damicelli</strong>, Hilgetag, Hütt, Messé. Network Neuroscience, 2019.</li>
+</ul>
+<p>Check out <a href="https://scholar.google.com/citations?user=Ktdpi1MAAAAJ&amp;hl=de">Google Scholar</a> for a complete list.</p>
+
+
+
+ ]]></description>
+  <guid>https://fabridamicelli.github.io/research.html</guid>
+  <pubDate>Mon, 25 Mar 2024 12:27:30 GMT</pubDate>
+</item>
+<item>
+  <title>TIL: Today I learned</title>
+  <link>https://fabridamicelli.github.io/til.html</link>
+  <description><![CDATA[ 
+
+
+
+
+
+
+
+
+<div class="quarto-listing quarto-listing-container-table" id="listing-listing">
+<div class="listing-actions-group">
+   <div class="input-group input-group-sm quarto-listing-sort">
+     <span class="input-group-text"><i class="bi bi-sort-down"></i></span>
+     <select id="listing-listing-sort" class="form-select" aria-label="Order By" onchange="window['quarto-listings']['listing-listing'].sort(this.options[this.selectedIndex].value, { order: this.options[this.selectedIndex].getAttribute('data-direction')})">
+       <option value="" disabled="" selected="" hidden="">Order By</option>
+       <option value="index" data-direction="asc">Default</option>
+         <option value="listing-date-sort" data-direction="asc">
+          Date - Oldest
+        </option>
+         <option value="listing-date-sort" data-direction="desc">
+          Date - Newest
+        </option>
+         <option value="listing-title-sort" data-direction="asc">
+          Title
+        </option>
+     </select>
+  </div>
+    <div class="input-group input-group-sm quarto-listing-filter">
+      <span class="input-group-text"><i class="bi bi-search"></i></span>
+      <input type="text" class="search form-control" placeholder="Filter">
+    </div>
+</div>
+<table class="quarto-listing-table table">
+<thead>
+<tr>
+<th>
+<a class="sort" data-sort="listing-date-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Date</a>
+</th>
+<th>
+<a class="sort" data-sort="listing-title-sort" onclick="if (this.classList.contains('sort-asc')) { this.classList.add('sort-desc'); this.classList.remove('sort-asc') } else { this.classList.add('sort-asc'); this.classList.remove('sort-desc')} return false;">Title</a>
+</th>
+</tr>
+</thead>
+<tbody class="list">
+<tr data-index="0" data-categories="python" data-listing-date-sort="1708905600000" data-listing-file-modified-sort="1711369633257" data-listing-date-modified-sort="NaN" data-listing-reading-time-sort="1" data-listing-word-count-sort="146" data-listing-title-sort="Force Python's `print` function to flush the stream" data-listing-filename-sort="2024-02-26-python-print-flush.ipynb">
+<td>
+<span class="listing-date">2024-02-26</span>
+</td>
+<td>
+<a href="./til/2024-02-26-python-print-flush.html" class="title listing-title">Force Python’s <code>print</code> function to flush the stream</a>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="listing-no-matching d-none">
+No matching items
+</div>
+</div> ]]></description>
+  <guid>https://fabridamicelli.github.io/til.html</guid>
+  <pubDate>Mon, 25 Mar 2024 12:27:30 GMT</pubDate>
 </item>
 </channel>
 </rss>

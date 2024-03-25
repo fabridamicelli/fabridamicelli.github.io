@@ -1,6 +1,8 @@
 ---
 title: ""
 image: "./images/profile-pixels.png"
+listing:
+  feed: true
 about:
   template: solana
   image-width: 11em

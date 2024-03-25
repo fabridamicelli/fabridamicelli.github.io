@@ -8,8 +8,6 @@ website:
     # open-graph: true
   site-url: https://fabridamicelli.github.io
   description: ""
-  listing:
-    - feed: true
   navbar:
     left:
       - file: index.qmd

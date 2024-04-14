@@ -66,6 +66,14 @@ I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamice
 
 ---
 
+### [cronex.nvim](https://github.com/fabridamicelli/cronex.nvim)
+[A Neovim Plugin](https://github.com/fabridamicelli/cronex.nvim) to render in-line, human-readable cron expressions.
+Cronex is kind of a "client" that allows the Neovim user to integrate and customize "servers" that actually parse the expressions ("explainers") in a flexible fashion.  
+
+![](/images/screencast-cronex.gif){width=18cm fig-align="center"}
+
+---
+
 ### Translations
 
 > - English → German of the [HuggingFace Course](https://github.com/huggingface/course/pulls?q=is%3Apr+author%3Afabridamicelli)

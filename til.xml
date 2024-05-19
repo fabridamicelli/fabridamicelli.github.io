@@ -9,8 +9,99 @@
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.4.553</generator>
-<lastBuildDate>Mon, 26 Feb 2024 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.4.554</generator>
+<lastBuildDate>Sun, 19 May 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Use .bigqueryrc to set BigQuery global configuration</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/til/2024-05-19-bigqueryrc.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>I started using the nice vim plugin <a href="https://github.com/tpope/vim-dadbod">vim-dadbod</a> which allows to fire database queries and see the output <em>inside</em> vim/neovim.</p>
+<p>While setting it up to work with <a href="https://cloud.google.com/bigquery?hl=en">BigQuery</a> I ran into the error coming from the fact that BigQuery’s format to name a table has changed in time and <code>bq</code> uses the old one (legacy) as default. The legacy format reads: <code>project:dataset.table</code> (notice <code>:</code>) while the newer format goes by: <code>project.dataset.table</code> (with <code>.</code> instead).</p>
+<p>It turns out there is a file called <code>.bigqueryrc</code> where you can set a global configuration and tell <code>bq</code> (the command line tool to interact with BigQuery in the terminal) to use the newer format by setting the flag <code>use_legacy_sql=false</code>:</p>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb1-1"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">credential_file</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">/</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">path</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">/</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">to</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">/</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">some</span><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">/</span><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">file.json</span></span>
+<span id="cb1-2"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">project_id</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">name-of-your-default-project</span></span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">[query]</span></span>
+<span id="cb1-5"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">use_legacy_sql</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
+background-color: null;
+font-style: inherit;">false</span></span></code></pre></div>
+<p>The CLI-tool <code>bq</code> also accepts the file as optional argument so you can pass custom config for a query. If you run <code>bq --help</code> you’ll see:</p>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1">  <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">--bigqueryrc:</span> Path to configuration file. The configuration file specifies new</span>
+<span id="cb2-2">    <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">defaults</span> for any flags, and can be overrridden by specifying the flag on the</span>
+<span id="cb2-3">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">command</span> line. If the <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--bigqueryrc</span> flag is not specified, the BIGQUERYRC</span>
+<span id="cb2-4">    <span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">environment</span> variable is used. If that is not specified, the path</span>
+<span id="cb2-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"~/.bigqueryrc"</span> is used.</span>
+<span id="cb2-6">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">(</span><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">default:</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'~/.bigqueryrc'</span><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">)</span></span>
+<span id="cb2-7">    </span></code></pre></div>
+<p>Read more about that in the <a href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference?hl=en">official documetation</a>.</p>
+<p><strong>FIN</strong></p>
+<hr>
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <guid>https://fabridamicelli.github.io/til/2024-05-19-bigqueryrc.html</guid>
+  <pubDate>Sun, 19 May 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Force Python’s print function to flush the stream</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>

@@ -9,8 +9,686 @@
 <link>https://fabridamicelli.github.io/blog.html</link>
 <atom:link href="https://fabridamicelli.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.4.554</generator>
-<lastBuildDate>Wed, 13 Sep 2023 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.4.555</generator>
+<lastBuildDate>Sun, 23 Jun 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Deserialize Numpy arrays efficiently</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/posts/2023-06-23-np-array-tobytes.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Numpy’s bytes format can be considerably faster than other formats to deserialize. When storing/retrieving vectors arrays just use the methods <code>array.tobytes()</code> and <code>numpy.frombuffer()</code> (instead of, for example, <code>pickle.dumps/loads</code>).</p>
+</div>
+</div>
+<section id="the-situation" class="level1">
+<h1>The Situation</h1>
+<p>Let’s say you have a bunch of entities, e.g.&nbsp;product-ids of on online shop, for which you have a vector representation (think for example of a word or an image embedding) stored somewhere like a database.</p>
+<p>Now it’s time to put your model in production and you need to retrieve the vectors from the database in order to deliver your predictions (for example, you might need to get an embedding representation of product images in order to calculate similarities and show product recommendations). The most typical (and probably sane thing to do) is to have an <a href="https://sqlite.org/">sqlite database</a> for storage.</p>
+<p>It turns out, we can store the vectors in different formats and which format we use can <strong>heavily</strong> affect the retrieval (loading and deserialization) speed in our application. That can be critical if your predictions behind your use-case need to be fast (e.g.&nbsp;under 100ms).</p>
+<p>Let’s create some fake data consisting of vectors of length 256 filled with random numbers. We will use that data to profile the retrieval (from the database) performance of different formats.</p>
+<div id="3af0448c-b58f-42ef-b524-2eeab1566beb" class="cell" data-execution_count="1">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Path</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> json</span>
+<span id="cb1-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> sqlite3</span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pickle</span>
+<span id="cb1-5"></span>
+<span id="cb1-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span></code></pre></div>
+</details>
+</div>
+<div id="365fdce8-490e-44ae-aefc-2632fe7dbef1" class="cell" data-execution_count="2">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1">vectors <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.random.random(size<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">20_000</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">256</span>))</span>
+<span id="cb2-2">data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"product_id_</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>i<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span>: vec <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">enumerate</span>(vectors)}</span>
+<span id="cb2-3">data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"product_id_0"</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="2">
+<pre><code>array([0.79833198, 0.4067387 , 0.29900048, 0.62481841, 0.10382745])</code></pre>
+</div>
+</div>
+<section id="store-vectors-as-text" class="level2">
+<h2 class="anchored" data-anchor-id="store-vectors-as-text">Store Vectors as Text</h2>
+<p>Our first option is to just dump the numbers into the database as text.</p>
+<div id="9338d57c-77a8-458c-88d6-3c8affc21de7" class="cell" data-execution_count="3">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> dump_vectors_as_json(data, db_path):</span>
+<span id="cb4-2">    conn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sqlite3.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db_path)</span>
+<span id="cb4-3">    cur <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> conn.cursor()</span>
+<span id="cb4-4">    cur.execute(</span>
+<span id="cb4-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb4-6"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    CREATE TABLE vectors (</span></span>
+<span id="cb4-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb4-8"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    vector TEXT</span></span>
+<span id="cb4-9"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    )</span></span>
+<span id="cb4-10"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb4-11">    )</span>
+<span id="cb4-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> data.items():</span>
+<span id="cb4-13">        db_vec <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> json.dumps(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>(vec))</span>
+<span id="cb4-14">        cur.execute(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"INSERT INTO vectors VALUES (?,?)"</span>, (pid, db_vec))</span>
+<span id="cb4-15">        conn.commit()</span>
+<span id="cb4-16">    conn.close()</span></code></pre></div>
+</div>
+<div id="335874a1-4728-448f-b9da-f66022aaf632" class="cell" data-execution_count="4">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1">path_json <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/tmp/embeddings-json.db"</span></span>
+<span id="cb5-2">Path(path_json).unlink()  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># start fresh</span></span>
+<span id="cb5-3">dump_vectors_as_json(data, path_json)</span></code></pre></div>
+</div>
+<p>Now let’s take a look at the data by querying specific 5000 product_ids:</p>
+<div id="c6d3ff3f-7025-4df9-b932-5b342581a00f" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"product_id_</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>i<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5000</span>)]</span>
+<span id="cb6-2">ids[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="5">
+<pre><code>['product_id_0',
+ 'product_id_1',
+ 'product_id_2',
+ 'product_id_3',
+ 'product_id_4']</code></pre>
+</div>
+</div>
+<div id="ea1bcae7-6324-472b-a517-b4ba7fc9155b" class="cell" data-execution_count="6">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> load_vectors_from_db(db_path, ids):</span>
+<span id="cb8-2">    conn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sqlite3.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"file:</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>db_path<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">?mode=ro"</span>, uri<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb8-3">    cur <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> conn.cursor()</span>
+<span id="cb8-4">    placeholder <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"(</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">','</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">.</span>join(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'?'</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">*</span><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(ids))<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">)"</span></span>
+<span id="cb8-5">    out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> cur.execute(</span>
+<span id="cb8-6">        <span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"""</span></span>
+<span id="cb8-7"><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">        SELECT * FROM vectors</span></span>
+<span id="cb8-8"><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">        WHERE product_id in </span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>placeholder<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span></span>
+<span id="cb8-9"><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">        """</span>,</span>
+<span id="cb8-10">        ids</span>
+<span id="cb8-11">    ).fetchall()</span>
+<span id="cb8-12">    conn.close() </span>
+<span id="cb8-13">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>(out)</span></code></pre></div>
+</div>
+<div id="f5accefd-fc43-4ae7-b763-f8aebab2b0b7" class="cell" data-execution_count="7">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> load_vectors_from_db(path_json,ids).items():</span>
+<span id="cb9-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(pid, json.loads(vec)[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">3</span>])  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># show only first 3 values</span></span>
+<span id="cb9-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">break</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>product_id_0 [0.7983319793443949, 0.40673870083614216, 0.29900047552089304]</code></pre>
+</div>
+</div>
+<p>Looks fine, but we cannot do much with the values as text, let’s convert them back into numpy arrays:</p>
+<div id="d2b27d75-0b87-469f-a1b0-04c3e834a310" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">vecs <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {pid: np.array(json.loads(vec)) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> load_vectors_from_db(path_json,ids).items()}</span>
+<span id="cb11-2">vecs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"product_id_0"</span>][:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="9">
+<pre><code>array([0.79833198, 0.4067387 , 0.29900048, 0.62481841, 0.10382745,
+       0.87002711, 0.85462694, 0.74515139, 0.43963713, 0.31818414])</code></pre>
+</div>
+</div>
+<p>We should wrap that up into a function for later comparison:</p>
+<div id="78894cdd-8ca4-46d2-bc51-4979149e1386" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> deserialize_json(vec):</span>
+<span id="cb13-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> np.array(json.loads(vec))</span>
+<span id="cb13-3"></span>
+<span id="cb13-4"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> load_and_deserialize(db_path, ids, deserialize_func):</span>
+<span id="cb13-5">    loaded <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_vectors_from_db(db_path, ids)</span>
+<span id="cb13-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> {pid: deserialize_func(vec) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> loaded.items()}</span></code></pre></div>
+</div>
+<div id="97ef81bd-2f6c-429d-a588-315fa0b9e107" class="cell" data-execution_count="11">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> k,v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> load_and_deserialize(path_json, ids[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">4</span>], deserialize_json).items():</span>
+<span id="cb14-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(k, v[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
+product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]
+product_id_2 [0.03074145 0.07905214 0.10017818 0.45221472 0.65892765]
+product_id_3 [0.73958033 0.05280771 0.46632875 0.00501884 0.21381934]</code></pre>
+</div>
+</div>
+<p>That’s alright, let’s quickly check how long it takes for all our 5000 ids:</p>
+<div id="f4433a83-7166-499f-9477-8b76f3438cb4" class="cell" data-execution_count="12">
+<div class="sourceCode cell-code" id="cb16" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb16-2">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_json, ids, deserialize_json)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>605 ms ± 39.9 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>That might be good enough. But we can definitely do much better (without paying much of a complexity price).</p>
+</section>
+<section id="store-vectors-in-binary-format-pickle" class="level2">
+<h2 class="anchored" data-anchor-id="store-vectors-in-binary-format-pickle">Store Vectors in Binary Format: Pickle</h2>
+<p>We can store the arrays directly as binary data in the database.</p>
+<div id="a4077b05-dd7f-4b7c-80d0-77a18c168f51" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> dump_vectors_as_pickle_blob(data, db_path):</span>
+<span id="cb18-2">    conn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sqlite3.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db_path)</span>
+<span id="cb18-3">    cur <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> conn.cursor()</span>
+<span id="cb18-4">    cur.execute(</span>
+<span id="cb18-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb18-6"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    CREATE TABLE vectors (</span></span>
+<span id="cb18-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb18-8"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    vector BLOB</span></span>
+<span id="cb18-9"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    )</span></span>
+<span id="cb18-10"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb18-11">    )</span>
+<span id="cb18-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> data.items():</span>
+<span id="cb18-13">        db_vec <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pickle.dumps(vec)</span>
+<span id="cb18-14">        cur.execute(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"INSERT INTO vectors VALUES (?,?)"</span>, (pid, db_vec))</span>
+<span id="cb18-15">        conn.commit()</span>
+<span id="cb18-16">    conn.close()</span></code></pre></div>
+</div>
+<div id="3e575c0e-8789-42ba-824f-94a03858c99d" class="cell" data-execution_count="14">
+<div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">path_pickle <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/tmp/embeddings-pickle.db"</span></span>
+<span id="cb19-2">Path(path_pickle).unlink() <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># start fresh</span></span></code></pre></div>
+</div>
+<div id="c2e72509-d09b-4fee-9a34-213e5404cb41" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1">dump_vectors_as_pickle_blob(data, path_pickle)</span></code></pre></div>
+</div>
+<p>We need another function to deserialize them:</p>
+<div id="a0bbadd4-6139-4832-adf7-36557fa0b9b2" class="cell" data-execution_count="16">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> deserialize_pickle(vec):</span>
+<span id="cb21-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> pickle.loads(vec)</span></code></pre></div>
+</div>
+<div id="7ee1bd37-ab5b-419c-afb2-2b8462a3767b" class="cell" data-execution_count="17">
+<div class="sourceCode cell-code" id="cb22" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> k,v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> load_and_deserialize(path_pickle, ids[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>], deserialize_pickle).items():</span>
+<span id="cb22-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(k,v[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
+product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]</code></pre>
+</div>
+</div>
+<p>What does our clock say?</p>
+<div id="ce08c6fe-9c46-420c-af57-af993621c916" class="cell" data-execution_count="18">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb24-2"></span>
+<span id="cb24-3">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_pickle, ids, deserialize_pickle)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>42.6 ms ± 1.05 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>That’s roughly more than 10 times faster. We’re cruising :)</p>
+<p>But we can still do better. After all we are working with numpy arrays, so we can avoid the pickling path altogether.</p>
+</section>
+<section id="store-vectors-in-binary-format-numpy-bytes" class="level2">
+<h2 class="anchored" data-anchor-id="store-vectors-in-binary-format-numpy-bytes">Store Vectors in Binary Format: Numpy Bytes</h2>
+<p>Numpy arrays have a method called <code>.tobytes</code> that does the job:</p>
+<div id="02213335-bda6-4508-b544-8be67d6301b5" class="cell" data-execution_count="19">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1">arr <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> np.arange(<span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5.</span>)</span>
+<span id="cb26-2">arr</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="19">
+<pre><code>array([0., 1., 2., 3., 4.])</code></pre>
+</div>
+</div>
+<div id="e3acd345-e2b5-411c-a656-7838789a9bf0" class="cell" data-execution_count="20">
+<div class="sourceCode cell-code" id="cb28" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1">buf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> arr.tobytes()</span>
+<span id="cb28-2">buf</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="20">
+<pre><code>b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf0?\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@'</code></pre>
+</div>
+</div>
+<div id="87b56d9e-f84e-4b4d-89da-c03bab32a6e5" class="cell" data-execution_count="21">
+<div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">np.frombuffer(buf)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="21">
+<pre><code>array([0., 1., 2., 3., 4.])</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When calling <code>.tobytes()</code> numpy does not store information about the data type. The default of <code>np.frombuffer</code> is <code>np.float64</code>. But if that does not match your data, the loaded data will be wrong! Make sure to explicitely pass the <code>dtype</code> argument <code>np.frombuffer(..., dtype=YOUR-TYPE)</code> for it to work properly.</p>
+</div>
+</div>
+<div id="7b14110a-8365-413f-aebf-abde44ea7974" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb32" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> dump_vectors_as_npbytes_blob(data, db_path):</span>
+<span id="cb32-2">    conn <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> sqlite3.<span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">connect</span>(db_path)</span>
+<span id="cb32-3">    cur <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> conn.cursor()</span>
+<span id="cb32-4">    cur.execute(</span>
+<span id="cb32-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb32-6"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    CREATE TABLE vectors (</span></span>
+<span id="cb32-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb32-8"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    vector BLOB</span></span>
+<span id="cb32-9"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    )</span></span>
+<span id="cb32-10"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb32-11">    )</span>
+<span id="cb32-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> pid, vec <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> data.items():</span>
+<span id="cb32-13">        db_vec <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vec.tobytes()   <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;-- HERE</span></span>
+<span id="cb32-14">        cur.execute(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"INSERT INTO vectors VALUES (?,?)"</span>, (pid, db_vec))</span>
+<span id="cb32-15">        conn.commit()</span>
+<span id="cb32-16">    conn.close()</span>
+<span id="cb32-17"></span>
+<span id="cb32-18"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">def</span> deserialize_npbytes(buf,dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>np.float64):</span>
+<span id="cb32-19">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">return</span> np.frombuffer(buf, dtype<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dtype)</span></code></pre></div>
+</div>
+<div id="e40eb2d0-534b-47fd-a30e-b1c8792c4a61" class="cell" data-execution_count="23">
+<div class="sourceCode cell-code" id="cb33" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1">path_npbytes <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/tmp/embeddings-npbytes"</span></span>
+<span id="cb33-2">Path(path_npbytes).unlink() <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># start fresh</span></span></code></pre></div>
+</div>
+<div id="5c2f80a1-f9d4-4b49-b8cb-282c25af3274" class="cell" data-execution_count="24">
+<div class="sourceCode cell-code" id="cb34" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1">dump_vectors_as_npbytes_blob(data, path_npbytes)</span></code></pre></div>
+</div>
+<div id="b3951b1e-2e20-47f0-9fdf-04dbb04bdb49" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb35" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> k,v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> load_and_deserialize(path_npbytes, ids[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>], deserialize_npbytes).items():</span>
+<span id="cb35-2">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(k,v[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>])</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
+product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]</code></pre>
+</div>
+</div>
+<div id="e1d34006-1be7-4835-9c4b-ac5afaab942a" class="cell" data-execution_count="26">
+<div class="sourceCode cell-code" id="cb37" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb37-2"></span>
+<span id="cb37-3">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_npbytes, ids, deserialize_npbytes)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>24.7 ms ± 2.08 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>That’s roughly 1.7 times faster than the pickle version – for free!</p>
+<p>Let’s recap with a side-by-side comparison with a bit larger list of ids to query:</p>
+<div id="52f5ce8d-3275-4842-9c4b-e8502a431fcb" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb39" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1">ids <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">f"product_id_</span><span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">{</span>i<span class="sc" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">}</span><span class="ss" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"</span> <span class="cf" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">for</span> i <span class="kw" style="color: #003B4F;
+background-color: null;
+font-style: inherit;">in</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">range</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10_000</span>)]</span></code></pre></div>
+</div>
+<div id="941cdf90-2266-4edf-bc1f-3b07985413db" class="cell" data-execution_count="28">
+<div class="sourceCode cell-code" id="cb40" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb40-2"></span>
+<span id="cb40-3">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_json, ids, deserialize_json)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>907 ms ± 48.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<div id="de7bd316-741e-4589-9a6e-db8ff2aea787" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb42" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb42-2"></span>
+<span id="cb42-3">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_pickle, ids, deserialize_pickle)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>71.5 ms ± 395 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<div id="e63df43c-0cda-4022-972b-07ecb570beb6" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb44" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb44-2"></span>
+<span id="cb44-3">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> load_and_deserialize(path_npbytes, ids, deserialize_npbytes)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>42.5 ms ± 1.65 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>Sometimes 40, 70 or even 500ms are not important. But sometimes they are (and can cost significant money). For example, in the context of high-traffic, real-time recommender systems, pushing down the response time by 20/30 ms (for free!) is definitely not a bad thing to have.</p>
+</section>
+<section id="fin" class="level2">
+<h2 class="anchored" data-anchor-id="fin">Fin</h2>
+<hr>
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+
+
+</section>
+</section>
+
+ ]]></description>
+  <category>python</category>
+  <category>numpy</category>
+  <category>sqlite</category>
+  <guid>https://fabridamicelli.github.io/posts/2023-06-23-np-array-tobytes.html</guid>
+  <pubDate>Sun, 23 Jun 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>PyTorch DataLoader: Understand and implement a custom collate function</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -1886,7 +2564,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
 </div>
 <p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
-<p></p><div id="tweet-15658"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-15658").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-31295"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-31295").innerHTML = tweet["html"];</script><p></p>
 <p>References:<br>
 - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
 - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
@@ -2315,10 +2993,9 @@ font-style: inherit;">"Number"</span>)</span>
 <span id="cb1-9">numbers</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <div>
-<div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2361,7 +3038,6 @@ font-style: inherit;">"Number"</span>)</span>
 </tbody>
 </table>
 
-</div>
 </div>
 </div>
 </div>
@@ -2499,10 +3175,9 @@ font-style: inherit;">False</span></span>
 <span id="cb8-13">numbers_loaded</span></code></pre></div>
 <div class="cell-output cell-output-display">
 <div>
-<div>
 
 
-<table class="dataframe table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
+<table class="dataframe caption-top table table-sm table-striped small" data-quarto-postprocess="true" data-border="1">
 <thead>
 <tr class="header">
 <th data-quarto-table-cell-role="th"></th>
@@ -2545,7 +3220,6 @@ font-style: inherit;">False</span></span>
 </tbody>
 </table>
 
-</div>
 </div>
 </div>
 </div>
@@ -2720,7 +3394,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-38101"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-38101").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-68809"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-68809").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>

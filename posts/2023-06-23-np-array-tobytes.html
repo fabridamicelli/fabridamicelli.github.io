@@ -8,9 +8,9 @@
 
 <meta name="author" content="Fabrizio Damicelli">
 <meta name="dcterms.date" content="2024-06-23">
-<meta name="description" content="Optimize lookup speed of stored vectors.">
+<meta name="description" content="Speed up the retrieval of stored vectors.">
 
-<title>Fabrizio Damicelli - Deserialize Numpy arrays efficiently</title>
+<title>Fabrizio Damicelli - Efficient Deserialization of Numpy Arrays</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -193,7 +193,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Deserialize Numpy arrays efficiently</h1>
+<h1 class="title">Efficient Deserialization of Numpy Arrays</h1>
   <div class="quarto-categories">
     <div class="quarto-category">python</div>
     <div class="quarto-category">numpy</div>
@@ -203,7 +203,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <div>
   <div class="description">
-    Optimize lookup speed of stored vectors.
+    Speed up the retrieval of stored vectors.
   </div>
 </div>
 
@@ -264,10 +264,10 @@ TL;DR
 </div>
 <div id="365fdce8-490e-44ae-aefc-2632fe7dbef1" class="cell" data-execution_count="2">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>vectors <span class="op">=</span> np.random.random(size<span class="op">=</span>(<span class="dv">20_000</span>, <span class="dv">256</span>))</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="ss">f"product_id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>: vec <span class="cf">for</span> i, vec <span class="kw">in</span> <span class="bu">enumerate</span>(vectors)}</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">"product_id_0"</span>][:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> {<span class="ss">f"id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span>: vec <span class="cf">for</span> i, vec <span class="kw">in</span> <span class="bu">enumerate</span>(vectors)}</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>data[<span class="st">"id_0"</span>][:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="2">
-<pre><code>array([0.79833198, 0.4067387 , 0.29900048, 0.62481841, 0.10382745])</code></pre>
+<pre><code>array([0.93501425, 0.70911416, 0.54255025, 0.84465434, 0.92316   ])</code></pre>
 </div>
 </div>
 <section id="store-vectors-as-text" class="level2">
@@ -280,7 +280,7 @@ TL;DR
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    cur.execute(</span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
 <span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE vectors (</span></span>
-<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="st">    id TEXT PRIMARY KEY,</span></span>
 <span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="st">    vector TEXT</span></span>
 <span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="st">    )</span></span>
 <span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span></span>
@@ -298,14 +298,10 @@ TL;DR
 </div>
 <p>Now let’s take a look at the data by querying specific 5000 product_ids:</p>
 <div id="c6d3ff3f-7025-4df9-b932-5b342581a00f" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ids <span class="op">=</span> [<span class="ss">f"product_id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5000</span>)]</span>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>ids <span class="op">=</span> [<span class="ss">f"id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">5000</span>)]</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>ids[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display" data-execution_count="5">
-<pre><code>['product_id_0',
- 'product_id_1',
- 'product_id_2',
- 'product_id_3',
- 'product_id_4']</code></pre>
+<pre><code>['id_0', 'id_1', 'id_2', 'id_3', 'id_4']</code></pre>
 </div>
 </div>
 <div id="ea1bcae7-6324-472b-a517-b4ba7fc9155b" class="cell" data-execution_count="6">
@@ -316,55 +312,55 @@ TL;DR
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    out <span class="op">=</span> cur.execute(</span>
 <span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"""</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="ss">        SELECT * FROM vectors</span></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">        WHERE product_id in </span><span class="sc">{</span>placeholder<span class="sc">}</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a><span class="ss">        WHERE id in </span><span class="sc">{</span>placeholder<span class="sc">}</span></span>
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a><span class="ss">        """</span>,</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>        ids</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    ).fetchall()</span>
 <span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    conn.close() </span>
 <span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">dict</span>(out)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="f5accefd-fc43-4ae7-b763-f8aebab2b0b7" class="cell" data-execution_count="7">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> pid, vec <span class="kw">in</span> load_vectors_from_db(path_json,ids).items():</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(pid, json.loads(vec)[:<span class="dv">3</span>])  <span class="co"># show only first 3 values</span></span>
+<div id="f5accefd-fc43-4ae7-b763-f8aebab2b0b7" class="cell" data-execution_count="9">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> id_, vec <span class="kw">in</span> load_vectors_from_db(path_json,ids).items():</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(id_, json.loads(vec)[:<span class="dv">3</span>])  <span class="co"># show only first 3 values</span></span>
 <span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>product_id_0 [0.7983319793443949, 0.40673870083614216, 0.29900047552089304]</code></pre>
+<pre><code>id_0 [0.9350142536057673, 0.7091141633646703, 0.5425502463856475]</code></pre>
 </div>
 </div>
 <p>Looks fine, but we cannot do much with the values as text, let’s convert them back into numpy arrays:</p>
-<div id="d2b27d75-0b87-469f-a1b0-04c3e834a310" class="cell" data-execution_count="9">
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vecs <span class="op">=</span> {pid: np.array(json.loads(vec)) <span class="cf">for</span> pid, vec <span class="kw">in</span> load_vectors_from_db(path_json,ids).items()}</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>vecs[<span class="st">"product_id_0"</span>][:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="9">
-<pre><code>array([0.79833198, 0.4067387 , 0.29900048, 0.62481841, 0.10382745,
-       0.87002711, 0.85462694, 0.74515139, 0.43963713, 0.31818414])</code></pre>
+<div id="d2b27d75-0b87-469f-a1b0-04c3e834a310" class="cell" data-execution_count="10">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>vecs <span class="op">=</span> {id_: np.array(json.loads(vec)) <span class="cf">for</span> id_, vec <span class="kw">in</span> load_vectors_from_db(path_json,ids).items()}</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>vecs[<span class="st">"id_0"</span>][:<span class="dv">10</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="10">
+<pre><code>array([0.93501425, 0.70911416, 0.54255025, 0.84465434, 0.92316   ,
+       0.04012891, 0.38365326, 0.69617891, 0.93489605, 0.32225334])</code></pre>
 </div>
 </div>
 <p>We should wrap that up into a function for later comparison:</p>
-<div id="78894cdd-8ca4-46d2-bc51-4979149e1386" class="cell" data-execution_count="10">
+<div id="78894cdd-8ca4-46d2-bc51-4979149e1386" class="cell" data-execution_count="11">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> deserialize_json(vec):</span>
 <span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.array(json.loads(vec))</span>
 <span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> load_and_deserialize(db_path, ids, deserialize_func):</span>
 <span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>    loaded <span class="op">=</span> load_vectors_from_db(db_path, ids)</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {pid: deserialize_func(vec) <span class="cf">for</span> pid, vec <span class="kw">in</span> loaded.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {id_: deserialize_func(vec) <span class="cf">for</span> id_, vec <span class="kw">in</span> loaded.items()}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="97ef81bd-2f6c-429d-a588-315fa0b9e107" class="cell" data-execution_count="11">
+<div id="97ef81bd-2f6c-429d-a588-315fa0b9e107" class="cell" data-execution_count="12">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k,v <span class="kw">in</span> load_and_deserialize(path_json, ids[:<span class="dv">4</span>], deserialize_json).items():</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(k, v[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
-product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]
-product_id_2 [0.03074145 0.07905214 0.10017818 0.45221472 0.65892765]
-product_id_3 [0.73958033 0.05280771 0.46632875 0.00501884 0.21381934]</code></pre>
+<pre><code>id_0 [0.93501425 0.70911416 0.54255025 0.84465434 0.92316   ]
+id_1 [0.73054276 0.69741267 0.71045242 0.41007697 0.27032626]
+id_2 [0.02500795 0.20845864 0.90890601 0.71998367 0.33240879]
+id_3 [0.48994333 0.24024084 0.62285499 0.18298199 0.34209958]</code></pre>
 </div>
 </div>
 <p>That’s alright, let’s quickly check how long it takes for all our 5000 ids:</p>
-<div id="f4433a83-7166-499f-9477-8b76f3438cb4" class="cell" data-execution_count="12">
+<div id="f4433a83-7166-499f-9477-8b76f3438cb4" class="cell" data-execution_count="13">
 <div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_json, ids, deserialize_json)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>605 ms ± 39.9 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+<pre><code>362 ms ± 3.57 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
 </div>
 </div>
 <p>That might be good enough. But we can definitely do much better (without paying much of a complexity price).</p>
@@ -372,14 +368,14 @@ product_id_3 [0.73958033 0.05280771 0.46632875 0.00501884 0.21381934]</code></pr
 <section id="store-vectors-in-binary-format-pickle" class="level2">
 <h2 class="anchored" data-anchor-id="store-vectors-in-binary-format-pickle">Store Vectors in Binary Format: Pickle</h2>
 <p>We can store the arrays directly as binary data in the database.</p>
-<div id="a4077b05-dd7f-4b7c-80d0-77a18c168f51" class="cell" data-execution_count="13">
+<div id="a4077b05-dd7f-4b7c-80d0-77a18c168f51" class="cell" data-execution_count="15">
 <div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dump_vectors_as_pickle_blob(data, db_path):</span>
 <span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>    conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(db_path)</span>
 <span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>    cur <span class="op">=</span> conn.cursor()</span>
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    cur.execute(</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
 <span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE vectors (</span></span>
-<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="st">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="st">    id TEXT PRIMARY KEY,</span></span>
 <span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a><span class="st">    vector BLOB</span></span>
 <span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="st">    )</span></span>
 <span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span></span>
@@ -390,33 +386,33 @@ product_id_3 [0.73958033 0.05280771 0.46632875 0.00501884 0.21381934]</code></pr
 <span id="cb18-15"><a href="#cb18-15" aria-hidden="true" tabindex="-1"></a>        conn.commit()</span>
 <span id="cb18-16"><a href="#cb18-16" aria-hidden="true" tabindex="-1"></a>    conn.close()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="3e575c0e-8789-42ba-824f-94a03858c99d" class="cell" data-execution_count="14">
+<div id="3e575c0e-8789-42ba-824f-94a03858c99d" class="cell" data-execution_count="16">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>path_pickle <span class="op">=</span> <span class="st">"/tmp/embeddings-pickle.db"</span></span>
 <span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>Path(path_pickle).unlink() <span class="co"># start fresh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="c2e72509-d09b-4fee-9a34-213e5404cb41" class="cell" data-execution_count="15">
+<div id="c2e72509-d09b-4fee-9a34-213e5404cb41" class="cell" data-execution_count="17">
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>dump_vectors_as_pickle_blob(data, path_pickle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>We need another function to deserialize them:</p>
-<div id="a0bbadd4-6139-4832-adf7-36557fa0b9b2" class="cell" data-execution_count="16">
+<div id="a0bbadd4-6139-4832-adf7-36557fa0b9b2" class="cell" data-execution_count="18">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> deserialize_pickle(vec):</span>
 <span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> pickle.loads(vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="7ee1bd37-ab5b-419c-afb2-2b8462a3767b" class="cell" data-execution_count="17">
+<div id="7ee1bd37-ab5b-419c-afb2-2b8462a3767b" class="cell" data-execution_count="19">
 <div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k,v <span class="kw">in</span> load_and_deserialize(path_pickle, ids[:<span class="dv">2</span>], deserialize_pickle).items():</span>
 <span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(k,v[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
-product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]</code></pre>
+<pre><code>id_0 [0.93501425 0.70911416 0.54255025 0.84465434 0.92316   ]
+id_1 [0.73054276 0.69741267 0.71045242 0.41007697 0.27032626]</code></pre>
 </div>
 </div>
 <p>What does our clock say?</p>
-<div id="ce08c6fe-9c46-420c-af57-af993621c916" class="cell" data-execution_count="18">
+<div id="ce08c6fe-9c46-420c-af57-af993621c916" class="cell" data-execution_count="20">
 <div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_pickle, ids, deserialize_pickle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>42.6 ms ± 1.05 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+<pre><code>40.8 ms ± 2.23 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
 <p>That’s roughly more than 10 times faster. We’re cruising :)</p>
@@ -425,23 +421,23 @@ product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]</code></pr
 <section id="store-vectors-in-binary-format-numpy-bytes" class="level2">
 <h2 class="anchored" data-anchor-id="store-vectors-in-binary-format-numpy-bytes">Store Vectors in Binary Format: Numpy Bytes</h2>
 <p>Numpy arrays have a method called <code>.tobytes</code> that does the job:</p>
-<div id="02213335-bda6-4508-b544-8be67d6301b5" class="cell" data-execution_count="19">
+<div id="02213335-bda6-4508-b544-8be67d6301b5" class="cell" data-execution_count="21">
 <div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>arr <span class="op">=</span> np.arange(<span class="fl">5.</span>)</span>
 <span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>arr</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="19">
+<div class="cell-output cell-output-display" data-execution_count="21">
 <pre><code>array([0., 1., 2., 3., 4.])</code></pre>
 </div>
 </div>
-<div id="e3acd345-e2b5-411c-a656-7838789a9bf0" class="cell" data-execution_count="20">
+<div id="e3acd345-e2b5-411c-a656-7838789a9bf0" class="cell" data-execution_count="22">
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>buf <span class="op">=</span> arr.tobytes()</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>buf</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="20">
+<div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>b'\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\xf0?\x00\x00\x00\x00\x00\x00\x00@\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@'</code></pre>
 </div>
 </div>
-<div id="87b56d9e-f84e-4b4d-89da-c03bab32a6e5" class="cell" data-execution_count="21">
+<div id="87b56d9e-f84e-4b4d-89da-c03bab32a6e5" class="cell" data-execution_count="23">
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>np.frombuffer(buf)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="cell-output cell-output-display" data-execution_count="21">
+<div class="cell-output cell-output-display" data-execution_count="23">
 <pre><code>array([0., 1., 2., 3., 4.])</code></pre>
 </div>
 </div>
@@ -458,14 +454,14 @@ Warning
 <p>When calling <code>.tobytes()</code> numpy does not store information about the data type. The default of <code>np.frombuffer</code> is <code>np.float64</code>. But if that does not match your data, the loaded data will be wrong! Make sure to explicitely pass the <code>dtype</code> argument <code>np.frombuffer(..., dtype=YOUR-TYPE)</code> for it to work properly.</p>
 </div>
 </div>
-<div id="7b14110a-8365-413f-aebf-abde44ea7974" class="cell" data-execution_count="22">
+<div id="7b14110a-8365-413f-aebf-abde44ea7974" class="cell" data-execution_count="24">
 <div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dump_vectors_as_npbytes_blob(data, db_path):</span>
 <span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>    conn <span class="op">=</span> sqlite3.<span class="ex">connect</span>(db_path)</span>
 <span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    cur <span class="op">=</span> conn.cursor()</span>
 <span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    cur.execute(</span>
 <span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"""</span></span>
 <span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="st">    CREATE TABLE vectors (</span></span>
-<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="st">    product_id TEXT PRIMARY KEY,</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="st">    id TEXT PRIMARY KEY,</span></span>
 <span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a><span class="st">    vector BLOB</span></span>
 <span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="st">    )</span></span>
 <span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a><span class="st">    """</span></span>
@@ -479,56 +475,56 @@ Warning
 <span id="cb32-18"><a href="#cb32-18" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> deserialize_npbytes(buf,dtype<span class="op">=</span>np.float64):</span>
 <span id="cb32-19"><a href="#cb32-19" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> np.frombuffer(buf, dtype<span class="op">=</span>dtype)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="e40eb2d0-534b-47fd-a30e-b1c8792c4a61" class="cell" data-execution_count="23">
+<div id="e40eb2d0-534b-47fd-a30e-b1c8792c4a61" class="cell" data-execution_count="25">
 <div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>path_npbytes <span class="op">=</span> <span class="st">"/tmp/embeddings-npbytes"</span></span>
 <span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>Path(path_npbytes).unlink() <span class="co"># start fresh</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="5c2f80a1-f9d4-4b49-b8cb-282c25af3274" class="cell" data-execution_count="24">
+<div id="5c2f80a1-f9d4-4b49-b8cb-282c25af3274" class="cell" data-execution_count="26">
 <div class="sourceCode cell-code" id="cb34"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>dump_vectors_as_npbytes_blob(data, path_npbytes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="b3951b1e-2e20-47f0-9fdf-04dbb04bdb49" class="cell" data-execution_count="25">
+<div id="b3951b1e-2e20-47f0-9fdf-04dbb04bdb49" class="cell" data-execution_count="27">
 <div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> k,v <span class="kw">in</span> load_and_deserialize(path_npbytes, ids[:<span class="dv">2</span>], deserialize_npbytes).items():</span>
 <span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(k,v[:<span class="dv">5</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>product_id_0 [0.79833198 0.4067387  0.29900048 0.62481841 0.10382745]
-product_id_1 [0.42344724 0.67867578 0.54476415 0.7560517  0.86685388]</code></pre>
+<pre><code>id_0 [0.93501425 0.70911416 0.54255025 0.84465434 0.92316   ]
+id_1 [0.73054276 0.69741267 0.71045242 0.41007697 0.27032626]</code></pre>
 </div>
 </div>
-<div id="e1d34006-1be7-4835-9c4b-ac5afaab942a" class="cell" data-execution_count="26">
+<div id="e1d34006-1be7-4835-9c4b-ac5afaab942a" class="cell" data-execution_count="28">
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_npbytes, ids, deserialize_npbytes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>24.7 ms ± 2.08 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+<pre><code>19.1 ms ± 1.3 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
 <p>That’s roughly 1.7 times faster than the pickle version – for free!</p>
 <p>Let’s recap with a side-by-side comparison with a bit larger list of ids to query:</p>
-<div id="52f5ce8d-3275-4842-9c4b-e8502a431fcb" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ids <span class="op">=</span> [<span class="ss">f"product_id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10_000</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div id="52f5ce8d-3275-4842-9c4b-e8502a431fcb" class="cell" data-execution_count="29">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a>ids <span class="op">=</span> [<span class="ss">f"id_</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10_000</span>)]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div id="941cdf90-2266-4edf-bc1f-3b07985413db" class="cell" data-execution_count="28">
+<div id="941cdf90-2266-4edf-bc1f-3b07985413db" class="cell" data-execution_count="30">
 <div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_json, ids, deserialize_json)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>907 ms ± 48.1 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+<pre><code>729 ms ± 7.49 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
 </div>
 </div>
-<div id="de7bd316-741e-4589-9a6e-db8ff2aea787" class="cell" data-execution_count="29">
+<div id="de7bd316-741e-4589-9a6e-db8ff2aea787" class="cell" data-execution_count="31">
 <div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_pickle, ids, deserialize_pickle)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>71.5 ms ± 395 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+<pre><code>67.7 ms ± 2.58 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="e63df43c-0cda-4022-972b-07ecb570beb6" class="cell" data-execution_count="30">
+<div id="e63df43c-0cda-4022-972b-07ecb570beb6" class="cell" data-execution_count="32">
 <div class="sourceCode cell-code" id="cb44"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>timeit</span>
 <span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>_ <span class="op">=</span> load_and_deserialize(path_npbytes, ids, deserialize_npbytes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>42.5 ms ± 1.65 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+<pre><code>37.1 ms ± 319 µs per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
 <p>Sometimes 40, 70 or even 500ms are not important. But sometimes they are (and can cost significant money). For example, in the context of high-traffic, real-time recommender systems, pushing down the response time by 20/30 ms (for free!) is definitely not a bad thing to have.</p>

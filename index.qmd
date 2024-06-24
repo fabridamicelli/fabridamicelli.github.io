@@ -1,6 +1,6 @@
 ---
 title: ""
-image: "./images/profile-pixels.png"
+image: "./images/profile-talk.png"
 about:
   template: solana
   image-width: 11em
@@ -21,8 +21,6 @@ about:
   <i>
    Cut through the hype <br/>
    one commit at a time. <br/>
-   Neural nets are cool. <br/>
-   Software and communication skills rule. <br/>
    AGI is interesting. After 5pm. <br/>
    Before that, let's leverage data and computing power <br/>
    to build a better world. 

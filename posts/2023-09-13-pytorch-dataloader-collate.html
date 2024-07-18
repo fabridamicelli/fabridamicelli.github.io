@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2023-09-13">
 <meta name="description" content="Understand DataLoader’s inner workings and bring your data pipeline to the next level.">
 
-<title>Fabrizio Damicelli - PyTorch DataLoader: Understand and implement a custom collate function</title>
+<title>PyTorch DataLoader: Understand and implement a custom collate function – Fabrizio Damicelli</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -36,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -293,43 +293,106 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> dloader:</span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(batch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>RuntimeError: each element in list of batch should be of equal size</code></pre>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">RuntimeError</span>                              Traceback (most recent call last)
+Cell <span class="ansi-green-fg">In[6], line 1</span>
+<span class="ansi-green-fg">----&gt; 1</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> batch <span style="font-weight:bold;color:rgb(175,0,255)">in</span> dloader:
+<span class="ansi-green-fg ansi-bold">      2</span>     <span style="color:rgb(0,135,0)">print</span>(batch)
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py:628</span>, in <span class="ansi-cyan-fg">_BaseDataLoaderIter.__next__</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-fg ansi-bold">    625</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_sampler_iter <span style="font-weight:bold;color:rgb(175,0,255)">is</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span>:
+<span class="ansi-green-fg ansi-bold">    626</span>     <span style="font-style:italic;color:rgb(95,135,135)"># TODO(https://github.com/pytorch/pytorch/issues/76750)</span>
+<span class="ansi-green-fg ansi-bold">    627</span>     <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_reset()  <span style="font-style:italic;color:rgb(95,135,135)"># type: ignore[call-arg]</span>
+<span class="ansi-green-fg">--&gt; 628</span> data <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_next_data</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">)</span>
+<span class="ansi-green-fg ansi-bold">    629</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_num_yielded <span style="color:rgb(98,98,98)">+</span><span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(98,98,98)">1</span>
+<span class="ansi-green-fg ansi-bold">    630</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_dataset_kind <span style="color:rgb(98,98,98)">==</span> _DatasetKind<span style="color:rgb(98,98,98)">.</span>Iterable <span style="font-weight:bold;color:rgb(175,0,255)">and</span> \
+<span class="ansi-green-fg ansi-bold">    631</span>         <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_IterableDataset_len_called <span style="font-weight:bold;color:rgb(175,0,255)">is</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> <span style="font-weight:bold;color:rgb(0,135,0)">None</span> <span style="font-weight:bold;color:rgb(175,0,255)">and</span> \
+<span class="ansi-green-fg ansi-bold">    632</span>         <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_num_yielded <span style="color:rgb(98,98,98)">&gt;</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_IterableDataset_len_called:
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/dataloader.py:671</span>, in <span class="ansi-cyan-fg">_SingleProcessDataLoaderIter._next_data</span><span class="ansi-blue-fg">(self)</span>
+<span class="ansi-green-fg ansi-bold">    669</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span> <span style="color:rgb(0,0,255)">_next_data</span>(<span style="color:rgb(0,135,0)">self</span>):
+<span class="ansi-green-fg ansi-bold">    670</span>     index <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_next_index()  <span style="font-style:italic;color:rgb(95,135,135)"># may raise StopIteration</span>
+<span class="ansi-green-fg">--&gt; 671</span>     data <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">_dataset_fetcher</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">fetch</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">index</span><span class="ansi-yellow-bg">)</span>  <span style="font-style:italic;color:rgb(95,135,135)"># may raise StopIteration</span>
+<span class="ansi-green-fg ansi-bold">    672</span>     <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_pin_memory:
+<span class="ansi-green-fg ansi-bold">    673</span>         data <span style="color:rgb(98,98,98)">=</span> _utils<span style="color:rgb(98,98,98)">.</span>pin_memory<span style="color:rgb(98,98,98)">.</span>pin_memory(data, <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>_pin_memory_device)
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/_utils/fetch.py:61</span>, in <span class="ansi-cyan-fg">_MapDatasetFetcher.fetch</span><span class="ansi-blue-fg">(self, possibly_batched_index)</span>
+<span class="ansi-green-fg ansi-bold">     59</span> <span style="font-weight:bold;color:rgb(0,135,0)">else</span>:
+<span class="ansi-green-fg ansi-bold">     60</span>     data <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">self</span><span style="color:rgb(98,98,98)">.</span>dataset[possibly_batched_index]
+<span class="ansi-green-fg">---&gt; 61</span> <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span style="color:rgb(0,135,0)" class="ansi-yellow-bg">self</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">.</span><span class="ansi-yellow-bg">collate_fn</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">data</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/_utils/collate.py:265</span>, in <span class="ansi-cyan-fg">default_collate</span><span class="ansi-blue-fg">(batch)</span>
+<span class="ansi-green-fg ansi-bold">    204</span> <span style="font-weight:bold;color:rgb(0,135,0)">def</span> <span style="color:rgb(0,0,255)">default_collate</span>(batch):
+<span class="ansi-green-fg ansi-bold">    205</span> <span style="color:rgb(188,188,188)">    </span><span style="color:rgb(175,0,0)">r</span><span style="font-style:italic;color:rgb(175,0,0)">"""</span>
+<span class="ansi-green-fg ansi-bold">    206</span> <span style="font-style:italic;color:rgb(175,0,0)">        Function that takes in a batch of data and puts the elements within the batch</span>
+<span class="ansi-green-fg ansi-bold">    207</span> <span style="font-style:italic;color:rgb(175,0,0)">        into a tensor with an additional outer dimension - batch size. The exact output type can be</span>
+<span class="ansi-green-fg">   (...)</span>
+<span class="ansi-green-fg ansi-bold">    263</span> <span style="font-style:italic;color:rgb(175,0,0)">            &gt;&gt;&gt; default_collate(batch)  # Handle `CustomType` automatically</span>
+<span class="ansi-green-fg ansi-bold">    264</span> <span style="font-style:italic;color:rgb(175,0,0)">    """</span>
+<span class="ansi-green-fg">--&gt; 265</span>     <span style="font-weight:bold;color:rgb(0,135,0)">return</span> <span class="ansi-yellow-bg">collate</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">batch</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">collate_fn_map</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">default_collate_fn_map</span><span class="ansi-yellow-bg">)</span>
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/_utils/collate.py:128</span>, in <span class="ansi-cyan-fg">collate</span><span class="ansi-blue-fg">(batch, collate_fn_map)</span>
+<span class="ansi-green-fg ansi-bold">    126</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">isinstance</span>(elem, collections<span style="color:rgb(98,98,98)">.</span>abc<span style="color:rgb(98,98,98)">.</span>Mapping):
+<span class="ansi-green-fg ansi-bold">    127</span>     <span style="font-weight:bold;color:rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 128</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> elem_type({key: collate([d[key] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> d <span style="font-weight:bold;color:rgb(175,0,255)">in</span> batch], collate_fn_map<span style="color:rgb(98,98,98)">=</span>collate_fn_map) <span style="font-weight:bold;color:rgb(0,135,0)">for</span> key <span style="font-weight:bold;color:rgb(175,0,255)">in</span> elem})
+<span class="ansi-green-fg ansi-bold">    129</span>     <span style="font-weight:bold;color:rgb(0,135,0)">except</span> <span style="font-weight:bold;color:rgb(215,95,95)">TypeError</span>:
+<span class="ansi-green-fg ansi-bold">    130</span>         <span style="font-style:italic;color:rgb(95,135,135)"># The mapping type may not support `__init__(iterable)`.</span>
+<span class="ansi-green-fg ansi-bold">    131</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> {key: collate([d[key] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> d <span style="font-weight:bold;color:rgb(175,0,255)">in</span> batch], collate_fn_map<span style="color:rgb(98,98,98)">=</span>collate_fn_map) <span style="font-weight:bold;color:rgb(0,135,0)">for</span> key <span style="font-weight:bold;color:rgb(175,0,255)">in</span> elem}
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/_utils/collate.py:128</span>, in <span class="ansi-cyan-fg">&lt;dictcomp&gt;</span><span class="ansi-blue-fg">(.0)</span>
+<span class="ansi-green-fg ansi-bold">    126</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">isinstance</span>(elem, collections<span style="color:rgb(98,98,98)">.</span>abc<span style="color:rgb(98,98,98)">.</span>Mapping):
+<span class="ansi-green-fg ansi-bold">    127</span>     <span style="font-weight:bold;color:rgb(0,135,0)">try</span>:
+<span class="ansi-green-fg">--&gt; 128</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> elem_type({key: <span class="ansi-yellow-bg">collate</span><span class="ansi-yellow-bg">(</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">d</span><span class="ansi-yellow-bg">[</span><span class="ansi-yellow-bg">key</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(0,135,0)" class="ansi-yellow-bg">for</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">d</span><span class="ansi-yellow-bg"> </span><span style="font-weight:bold;color:rgb(175,0,255)" class="ansi-yellow-bg">in</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">batch</span><span class="ansi-yellow-bg">]</span><span class="ansi-yellow-bg">,</span><span class="ansi-yellow-bg"> </span><span class="ansi-yellow-bg">collate_fn_map</span><span style="color:rgb(98,98,98)" class="ansi-yellow-bg">=</span><span class="ansi-yellow-bg">collate_fn_map</span><span class="ansi-yellow-bg">)</span> <span style="font-weight:bold;color:rgb(0,135,0)">for</span> key <span style="font-weight:bold;color:rgb(175,0,255)">in</span> elem})
+<span class="ansi-green-fg ansi-bold">    129</span>     <span style="font-weight:bold;color:rgb(0,135,0)">except</span> <span style="font-weight:bold;color:rgb(215,95,95)">TypeError</span>:
+<span class="ansi-green-fg ansi-bold">    130</span>         <span style="font-style:italic;color:rgb(95,135,135)"># The mapping type may not support `__init__(iterable)`.</span>
+<span class="ansi-green-fg ansi-bold">    131</span>         <span style="font-weight:bold;color:rgb(0,135,0)">return</span> {key: collate([d[key] <span style="font-weight:bold;color:rgb(0,135,0)">for</span> d <span style="font-weight:bold;color:rgb(175,0,255)">in</span> batch], collate_fn_map<span style="color:rgb(98,98,98)">=</span>collate_fn_map) <span style="font-weight:bold;color:rgb(0,135,0)">for</span> key <span style="font-weight:bold;color:rgb(175,0,255)">in</span> elem}
+
+File <span class="ansi-green-fg">/home/fabrizio/miniconda3/envs/olaf-training-py39/lib/python3.9/site-packages/torch/utils/data/_utils/collate.py:139</span>, in <span class="ansi-cyan-fg">collate</span><span class="ansi-blue-fg">(batch, collate_fn_map)</span>
+<span class="ansi-green-fg ansi-bold">    137</span> elem_size <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">len</span>(<span style="color:rgb(0,135,0)">next</span>(it))
+<span class="ansi-green-fg ansi-bold">    138</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="font-weight:bold;color:rgb(175,0,255)">not</span> <span style="color:rgb(0,135,0)">all</span>(<span style="color:rgb(0,135,0)">len</span>(elem) <span style="color:rgb(98,98,98)">==</span> elem_size <span style="font-weight:bold;color:rgb(0,135,0)">for</span> elem <span style="font-weight:bold;color:rgb(175,0,255)">in</span> it):
+<span class="ansi-green-fg">--&gt; 139</span>     <span style="font-weight:bold;color:rgb(0,135,0)">raise</span> <span style="font-weight:bold;color:rgb(215,95,95)">RuntimeError</span>(<span style="color:rgb(175,0,0)">'</span><span style="color:rgb(175,0,0)">each element in list of batch should be of equal size</span><span style="color:rgb(175,0,0)">'</span>)
+<span class="ansi-green-fg ansi-bold">    140</span> transposed <span style="color:rgb(98,98,98)">=</span> <span style="color:rgb(0,135,0)">list</span>(<span style="color:rgb(0,135,0)">zip</span>(<span style="color:rgb(98,98,98)">*</span>batch))  <span style="font-style:italic;color:rgb(95,135,135)"># It may be accessed twice, so we use a list.</span>
+<span class="ansi-green-fg ansi-bold">    142</span> <span style="font-weight:bold;color:rgb(0,135,0)">if</span> <span style="color:rgb(0,135,0)">isinstance</span>(elem, <span style="color:rgb(0,135,0)">tuple</span>):
+
+<span class="ansi-red-fg">RuntimeError</span>: each element in list of batch should be of equal size</pre>
+</div>
 </div>
 </div>
 <section id="a-first-solution-attempt" class="level2">
 <h2 class="anchored" data-anchor-id="a-first-solution-attempt">A first solution attempt</h2>
 <p>We can refactor our dataset and make it generate items with <code>x</code> sequences that all have the same length (a parameter <code>max_len</code> that we define beforehand).</p>
 <div id="7e485493-7228-4227-bb8d-99f5889c1725" class="cell">
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CustomDatasetFixLen(torch.utils.data.Dataset):</span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, max_len<span class="op">=</span><span class="dv">10</span>):</span>
-<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.max_len <span class="op">=</span> max_len</span>
-<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xs <span class="op">=</span> [</span>
-<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">11</span>, <span class="dv">13</span>)),</span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">13</span>, <span class="dv">16</span>)),</span>
-<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">16</span>, <span class="dv">21</span>)),</span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">21</span>, <span class="dv">24</span>)),</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">22</span>, <span class="dv">25</span>)),</span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">25</span>, <span class="dv">30</span>)),</span>
-<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ys <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]</span>
-<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">len</span>(<span class="va">self</span>.xs) <span class="op">==</span> <span class="bu">len</span>(<span class="va">self</span>.ys)</span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>): </span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.xs)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.xs[idx]</span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>        pad_len <span class="op">=</span> <span class="va">self</span>.max_len <span class="op">-</span> <span class="bu">len</span>(x)</span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> [<span class="dv">0</span>]<span class="op">*</span>pad_len</span>
-<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
-<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"x"</span>: np.array(x),</span>
-<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"y"</span>: <span class="va">self</span>.ys[idx],</span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> CustomDatasetFixLen(torch.utils.data.Dataset):</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__init__</span>(<span class="va">self</span>, max_len<span class="op">=</span><span class="dv">10</span>):</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.max_len <span class="op">=</span> max_len</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.xs <span class="op">=</span> [</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">11</span>, <span class="dv">13</span>)),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">13</span>, <span class="dv">16</span>)),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">16</span>, <span class="dv">21</span>)),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">21</span>, <span class="dv">24</span>)),</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">22</span>, <span class="dv">25</span>)),</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>            <span class="bu">list</span>(<span class="bu">range</span>(<span class="dv">25</span>, <span class="dv">30</span>)),</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>        <span class="va">self</span>.ys <span class="op">=</span> [<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>]</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>        <span class="cf">assert</span> <span class="bu">len</span>(<span class="va">self</span>.xs) <span class="op">==</span> <span class="bu">len</span>(<span class="va">self</span>.ys)</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__len__</span>(<span class="va">self</span>): </span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> <span class="bu">len</span>(<span class="va">self</span>.xs)</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> <span class="fu">__getitem__</span>(<span class="va">self</span>, idx):</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> <span class="va">self</span>.xs[idx]</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>        pad_len <span class="op">=</span> <span class="va">self</span>.max_len <span class="op">-</span> <span class="bu">len</span>(x)</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>        x <span class="op">=</span> x <span class="op">+</span> [<span class="dv">0</span>]<span class="op">*</span>pad_len</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> {</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>            <span class="st">"x"</span>: np.array(x),</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>            <span class="st">"y"</span>: <span class="va">self</span>.ys[idx],</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="5f6f879d-522d-46e7-b39c-1b003d5b2805" class="cell">
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dset <span class="op">=</span> CustomDatasetFixLen(max_len<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dset <span class="op">=</span> CustomDatasetFixLen(max_len<span class="op">=</span><span class="dv">10</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="6976dfd1-db0b-481e-9f39-690158018648" class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> dset:</span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> item <span class="kw">in</span> dset:</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(item)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'x': array([11, 12,  0,  0,  0,  0,  0,  0,  0,  0]), 'y': 0}
 {'x': array([13, 14, 15,  0,  0,  0,  0,  0,  0,  0]), 'y': 0}
@@ -345,25 +408,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <h2 class="anchored" data-anchor-id="there-must-be-a-better-way">There must be a better way</h2>
 <p>Let’s implement our own collate function, i.e.&nbsp;the logic to put items together, that will allow us to the padding on a per batch basis (thus we call it <code>dynamic_length_collate</code>)</p>
 <div id="1f22a8c3-b4be-43cb-9c9d-a84d180302fe" class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dynamic_length_collate(batch):</span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>    max_len <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(item[<span class="st">"x"</span>]) <span class="cf">for</span> item <span class="kw">in</span> batch)</span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>    batch_x <span class="op">=</span> []</span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> batch:</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>        pad_len <span class="op">=</span> max_len <span class="op">-</span> <span class="bu">len</span>(item[<span class="st">"x"</span>])</span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>        batch_x.append(item[<span class="st">"x"</span>] <span class="op">+</span> [<span class="dv">0</span>]<span class="op">*</span>pad_len)</span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>: tensor(batch_x).<span class="bu">type</span>(torch.<span class="bu">float</span>),</span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"y"</span>: tensor([item[<span class="st">"y"</span>] <span class="cf">for</span> item <span class="kw">in</span> batch])</span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> dynamic_length_collate(batch):</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>    max_len <span class="op">=</span> <span class="bu">max</span>(<span class="bu">len</span>(item[<span class="st">"x"</span>]) <span class="cf">for</span> item <span class="kw">in</span> batch)</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>    batch_x <span class="op">=</span> []</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> item <span class="kw">in</span> batch:</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>        pad_len <span class="op">=</span> max_len <span class="op">-</span> <span class="bu">len</span>(item[<span class="st">"x"</span>])</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a>        batch_x.append(item[<span class="st">"x"</span>] <span class="op">+</span> [<span class="dv">0</span>]<span class="op">*</span>pad_len)</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> {</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>        <span class="st">"x"</span>: tensor(batch_x).<span class="bu">type</span>(torch.<span class="bu">float</span>),</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>        <span class="st">"y"</span>: tensor([item[<span class="st">"y"</span>] <span class="cf">for</span> item <span class="kw">in</span> batch])</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>    }</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="8f188d2c-c18b-431e-b360-c21eda52286d" class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>dset <span class="op">=</span> CustomDataset()  <span class="co"># Use our original dataset, without fix max_len</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dloader <span class="op">=</span> DataLoader(dset, batch_size<span class="op">=</span><span class="dv">2</span>, shuffle<span class="op">=</span><span class="va">False</span>,</span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>                     collate_fn<span class="op">=</span>dynamic_length_collate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>dset <span class="op">=</span> CustomDataset()  <span class="co"># Use our original dataset, without fix max_len</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dloader <span class="op">=</span> DataLoader(dset, batch_size<span class="op">=</span><span class="dv">2</span>, shuffle<span class="op">=</span><span class="va">False</span>,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>                     collate_fn<span class="op">=</span>dynamic_length_collate)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div id="1c57da7d-76dd-41cd-b14f-ee6a9c58b94b" class="cell">
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> dloader:</span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(batch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> dloader:</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(batch)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>{'x': tensor([[11., 12.,  0.],
         [13., 14., 15.]]), 'y': tensor([0, 0])}
@@ -376,14 +439,14 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <p>That works!</p>
 <p>For the sake of completeness, let’s use our dataloader with the custom collate function and actually feed the data into a (toy) neural network.</p>
 <div id="f1b104a5-a16d-48a5-9807-4acc4d4ad95a" class="cell">
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A very toy example of a neural network</span></span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.nn.LSTM(input_size<span class="op">=</span><span class="dv">1</span>, hidden_size<span class="op">=</span><span class="dv">2</span>, batch_first<span class="op">=</span><span class="va">True</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> dloader:</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a>    bs, seq_len <span class="op">=</span> batch[<span class="st">"x"</span>].shape</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> model(batch[<span class="st">"x"</span>].reshape(bs, seq_len, <span class="dv">1</span>))</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(pred)</span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># A very toy example of a neural network</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>model <span class="op">=</span> torch.nn.LSTM(input_size<span class="op">=</span><span class="dv">1</span>, hidden_size<span class="op">=</span><span class="dv">2</span>, batch_first<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> batch <span class="kw">in</span> dloader:</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a>    bs, seq_len <span class="op">=</span> batch[<span class="st">"x"</span>].shape</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>    pred <span class="op">=</span> model(batch[<span class="st">"x"</span>].reshape(bs, seq_len, <span class="dv">1</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(pred)</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">break</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>(tensor([[[ 9.4607e-04,  4.0929e-03],
          [ 5.0468e-04,  5.7644e-03],
@@ -443,18 +506,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -486,7 +538,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/fabridamicelli\.github\.io");
@@ -494,7 +568,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

@@ -9,7 +9,7 @@
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.4.555</generator>
+<generator>quarto-1.5.54</generator>
 <lastBuildDate>Sun, 19 May 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Use .bigqueryrc to set BigQuery global configuration</title>
@@ -54,6 +54,7 @@ font-style: inherit;">name-of-your-default-project</span></span>
 <span id="cb1-3"></span>
 <span id="cb1-4"><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">[query]</span></span>
 <span id="cb1-5"><span class="dt" style="color: #AD0000;
 background-color: null;
@@ -82,12 +83,14 @@ background-color: null;
 font-style: inherit;">"~/.bigqueryrc"</span> is used.</span>
 <span id="cb2-6">    <span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">(</span><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">default:</span> <span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">'~/.bigqueryrc'</span><span class="kw" style="color: #003B4F;
 background-color: null;
+font-weight: bold;
 font-style: inherit;">)</span></span>
 <span id="cb2-7">    </span></code></pre></div>
 <p>Read more about that in the <a href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference?hl=en">official documetation</a>.</p>

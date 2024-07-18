@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.555">
+<meta name="generator" content="quarto-1.5.54">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -10,7 +10,7 @@
 <meta name="dcterms.date" content="2022-08-04">
 <meta name="description" content="Autopsy of a little gotcha plotting tensors data.">
 
-<title>Fabrizio Damicelli - seaborn and tensors: A match not quite made in heaven</title>
+<title>seaborn and tensors: A match not quite made in heaven – Fabrizio Damicelli</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -36,7 +36,7 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
 }
 pre.numberSource code
   { counter-reset: source-line 0; }
@@ -121,7 +121,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     </a>
   </div>
             <div id="quarto-search" class="" title="Search"></div>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
   <span class="navbar-toggler-icon"></span>
 </button>
           <div class="collapse navbar-collapse" id="navbarCollapse">
@@ -178,7 +178,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
-          <div class="quarto-navbar-tools">
+            <div class="quarto-navbar-tools">
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -373,7 +373,49 @@ That can be more explicitely seen if we try to plot the data with the <code>poin
 <div id="3c7e096e-27a4-4a25-83db-e9653b07addf" class="cell">
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>sns.pointplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-error">
-<pre><code>TypeError: Neither the `x` nor `y` variable appears to be numeric.</code></pre>
+<div class="ansi-escaped-output">
+<pre><span class="ansi-red-fg">---------------------------------------------------------------------------</span>
+<span class="ansi-red-fg">TypeError</span>                                 Traceback (most recent call last)
+<span class="ansi-green-fg">/tmp/ipykernel_418681/3817459137.py</span> in <span class="ansi-cyan-fg">&lt;module&gt;</span>
+<span class="ansi-green-fg">----&gt; 1</span><span class="ansi-red-fg"> </span>sns<span class="ansi-blue-fg">.</span>pointplot<span class="ansi-blue-fg">(</span>x<span class="ansi-blue-fg">=</span>x_pt<span class="ansi-blue-fg">,</span> y<span class="ansi-blue-fg">=</span>y_pt<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">;</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/myenv39/lib/python3.9/site-packages/seaborn/_decorators.py</span> in <span class="ansi-cyan-fg">inner_f</span><span class="ansi-blue-fg">(*args, **kwargs)</span>
+<span class="ansi-green-fg ansi-bold">     44</span>             )
+<span class="ansi-green-fg ansi-bold">     45</span>         kwargs<span class="ansi-blue-fg">.</span>update<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">{</span>k<span class="ansi-blue-fg">:</span> arg <span class="ansi-green-fg">for</span> k<span class="ansi-blue-fg">,</span> arg <span class="ansi-green-fg">in</span> zip<span class="ansi-blue-fg">(</span>sig<span class="ansi-blue-fg">.</span>parameters<span class="ansi-blue-fg">,</span> args<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">}</span><span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg">---&gt; 46</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">return</span> f<span class="ansi-blue-fg">(</span><span class="ansi-blue-fg">**</span>kwargs<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg ansi-bold">     47</span>     <span class="ansi-green-fg">return</span> inner_f
+<span class="ansi-green-fg ansi-bold">     48</span> 
+
+<span class="ansi-green-fg">~/miniconda3/envs/myenv39/lib/python3.9/site-packages/seaborn/categorical.py</span> in <span class="ansi-cyan-fg">pointplot</span><span class="ansi-blue-fg">(x, y, hue, data, order, hue_order, estimator, ci, n_boot, units, seed, markers, linestyles, dodge, join, scale, orient, color, palette, errwidth, capsize, ax, **kwargs)</span>
+<span class="ansi-green-fg ansi-bold">   3373</span> ):
+<span class="ansi-green-fg ansi-bold">   3374</span> 
+<span class="ansi-green-fg">-&gt; 3375</span><span class="ansi-red-fg">     plotter = _PointPlotter(x, y, hue, data, order, hue_order,
+</span><span class="ansi-green-fg ansi-bold">   3376</span>                             estimator<span class="ansi-blue-fg">,</span> ci<span class="ansi-blue-fg">,</span> n_boot<span class="ansi-blue-fg">,</span> units<span class="ansi-blue-fg">,</span> seed<span class="ansi-blue-fg">,</span>
+<span class="ansi-green-fg ansi-bold">   3377</span>                             markers<span class="ansi-blue-fg">,</span> linestyles<span class="ansi-blue-fg">,</span> dodge<span class="ansi-blue-fg">,</span> join<span class="ansi-blue-fg">,</span> scale<span class="ansi-blue-fg">,</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/myenv39/lib/python3.9/site-packages/seaborn/categorical.py</span> in <span class="ansi-cyan-fg">__init__</span><span class="ansi-blue-fg">(self, x, y, hue, data, order, hue_order, estimator, ci, n_boot, units, seed, markers, linestyles, dodge, join, scale, orient, color, palette, errwidth, capsize)</span>
+<span class="ansi-green-fg ansi-bold">   1653</span>                  orient, color, palette, errwidth=None, capsize=None):
+<span class="ansi-green-fg ansi-bold">   1654</span>         <span class="ansi-blue-fg">"""Initialize the plotter."""</span>
+<span class="ansi-green-fg">-&gt; 1655</span><span class="ansi-red-fg">         self.establish_variables(x, y, hue, data, orient,
+</span><span class="ansi-green-fg ansi-bold">   1656</span>                                  order, hue_order, units)
+<span class="ansi-green-fg ansi-bold">   1657</span>         self<span class="ansi-blue-fg">.</span>establish_colors<span class="ansi-blue-fg">(</span>color<span class="ansi-blue-fg">,</span> palette<span class="ansi-blue-fg">,</span> <span class="ansi-cyan-fg">1</span><span class="ansi-blue-fg">)</span>
+
+<span class="ansi-green-fg">~/miniconda3/envs/myenv39/lib/python3.9/site-packages/seaborn/categorical.py</span> in <span class="ansi-cyan-fg">establish_variables</span><span class="ansi-blue-fg">(self, x, y, hue, data, orient, order, hue_order, units)</span>
+<span class="ansi-green-fg ansi-bold">    154</span> 
+<span class="ansi-green-fg ansi-bold">    155</span>             <span class="ansi-red-fg"># Figure out the plotting orientation</span>
+<span class="ansi-green-fg">--&gt; 156</span><span class="ansi-red-fg">             orient = infer_orient(
+</span><span class="ansi-green-fg ansi-bold">    157</span>                 x<span class="ansi-blue-fg">,</span> y<span class="ansi-blue-fg">,</span> orient<span class="ansi-blue-fg">,</span> require_numeric<span class="ansi-blue-fg">=</span>self<span class="ansi-blue-fg">.</span>require_numeric
+<span class="ansi-green-fg ansi-bold">    158</span>             )
+
+<span class="ansi-green-fg">~/miniconda3/envs/myenv39/lib/python3.9/site-packages/seaborn/_core.py</span> in <span class="ansi-cyan-fg">infer_orient</span><span class="ansi-blue-fg">(x, y, orient, require_numeric)</span>
+<span class="ansi-green-fg ansi-bold">   1350</span>     <span class="ansi-green-fg">elif</span> require_numeric <span class="ansi-green-fg">and</span> <span class="ansi-blue-fg">"numeric"</span> <span class="ansi-green-fg">not</span> <span class="ansi-green-fg">in</span> <span class="ansi-blue-fg">(</span>x_type<span class="ansi-blue-fg">,</span> y_type<span class="ansi-blue-fg">)</span><span class="ansi-blue-fg">:</span>
+<span class="ansi-green-fg ansi-bold">   1351</span>         err <span class="ansi-blue-fg">=</span> <span class="ansi-blue-fg">"Neither the `x` nor `y` variable appears to be numeric."</span>
+<span class="ansi-green-fg">-&gt; 1352</span><span class="ansi-red-fg">         </span><span class="ansi-green-fg">raise</span> TypeError<span class="ansi-blue-fg">(</span>err<span class="ansi-blue-fg">)</span>
+<span class="ansi-green-fg ansi-bold">   1353</span> 
+<span class="ansi-green-fg ansi-bold">   1354</span>     <span class="ansi-green-fg">else</span><span class="ansi-blue-fg">:</span>
+
+<span class="ansi-red-fg">TypeError</span>: Neither the `x` nor `y` variable appears to be numeric.</pre>
+</div>
 </div>
 </div>
 <p>To go a bit deeper understanding this behaviour you can read the section <em>“Categorical plots will always be categorical”</em> of <a href="https://michaelwaskom.medium.com/three-common-seaborn-difficulties-10fdd0cc2a8b">this article</a> by seaborn’s creator Michaels Waskom himself.</p>
@@ -382,8 +424,8 @@ That can be more explicitely seen if we try to plot the data with the <code>poin
 <p>A couple of options to fix our plots.<br>
 We can flip the y-axis:</p>
 <div id="2c613be2-323a-46ad-8d21-1a2cc117bc31" class="cell">
-<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.scatterplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)</span>
-<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>ax <span class="op">=</span> sns.scatterplot(x<span class="op">=</span>x_pt, y<span class="op">=</span>y_pt)</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a>ax.invert_yaxis()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -394,7 +436,7 @@ We can flip the y-axis:</p>
 </div>
 <p>We can cast the data, for example to a numpy array:</p>
 <div id="8bc96d72-dccb-4c6f-87b4-a46daed375d4" class="cell">
-<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>np.array(x_pt), y<span class="op">=</span>np.array(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>np.array(x_pt), y<span class="op">=</span>np.array(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -405,7 +447,7 @@ We can flip the y-axis:</p>
 </div>
 <p>Or to a tensor:</p>
 <div id="f4d4b6fa-4ab3-4159-bc62-34897bfa649a" class="cell">
-<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>tensor(x_pt), y<span class="op">=</span>tensor(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>sns.scatterplot(x<span class="op">=</span>tensor(x_pt), y<span class="op">=</span>tensor(y_pt))<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -417,8 +459,8 @@ We can flip the y-axis:</p>
 <section id="note" class="level4">
 <h4 class="anchored" data-anchor-id="note">Note:</h4>
 <div id="c8270b66-46c5-4343-a870-bfeba6fb4988" class="cell">
-<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the state as of today with </span></span>
-<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>sns.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a><span class="co"># This is the state as of today with </span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>sns.__version__</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-display">
 <pre><code>'0.11.2'</code></pre>
 </div>
@@ -474,18 +516,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
     return false;
   }
-  const clipboard = new window.ClipboardJS('.code-copy-button', {
-    text: function(trigger) {
-      const codeEl = trigger.previousElementSibling.cloneNode(true);
-      for (const childEl of codeEl.children) {
-        if (isCodeAnnotation(childEl)) {
-          childEl.remove();
-        }
-      }
-      return codeEl.innerText;
-    }
-  });
-  clipboard.on('success', function(e) {
+  const onCopySuccess = function(e) {
     // button target
     const button = e.trigger;
     // don't keep focus
@@ -517,7 +548,29 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }, 1000);
     // clear code selection
     e.clearSelection();
+  }
+  const getTextToCopy = function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+    text: getTextToCopy
   });
+  clipboard.on('success', onCopySuccess);
+  if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+    // For code content inside modals, clipBoardJS needs to be initialized with a container option
+    // TODO: Check when it could be a function (https://github.com/zenorocha/clipboard.js/issues/860)
+    const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+      text: getTextToCopy,
+      container: window.document.getElementById('quarto-embedded-source-code-modal')
+    });
+    clipboardModal.on('success', onCopySuccess);
+  }
     var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
     var mailtoRegex = new RegExp(/^mailto:/);
       var filterRegex = new RegExp("https:\/\/fabridamicelli\.github\.io");
@@ -525,7 +578,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
         return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
     }
     // Inspect non-navigation links and adorn them if external
- 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
     for (var i=0; i<links.length; i++) {
       const link = links[i];
       if (!isInternal(link.href)) {

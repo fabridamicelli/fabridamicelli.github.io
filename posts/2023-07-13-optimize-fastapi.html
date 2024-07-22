@@ -664,7 +664,7 @@ On the other hand, the version <code>TypedDict &amp; TypeAdapter</code> has real
 </section>
 <section id="one-last-word-theres-no-free-lunch" class="level1">
 <h1>🤷 One last word: There’s no free lunch</h1>
-<p>Unfortunately, by stripping away the custom type hints and using the plain classes <code>Request</code> (from Starlette) and <code>TypedDict+TypeAdapter</code>, we loose the information that FastAPI uses to generate the automatic documentation based on the openapi spec. It will be up to you to decide if you can live with that and/or the performance gain is worth it.</p>
+<p>Unfortunately, by stripping away the custom type hints and using the plain classes <code>Request</code> (from Starlette) and <code>TypedDict+TypeAdapter</code>, we loose the information that FastAPI uses to generate the automatic documentation based on the openapi spec (do notice though that the data validation still works!). It will be up to you to decide if you can live with that and/or the performance gain is worth it.</p>
 <p>Here’s how this looks like (on the right is the version with all the optimizations):</p>
 <p><img align="center" src="../images/swagger.png" style="height:35%;"></p>
 <section id="fin" class="level2">

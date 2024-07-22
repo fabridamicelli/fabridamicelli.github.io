@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.5.54">
+<meta name="generator" content="quarto-1.5.55">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -250,7 +250,7 @@ Summary
 </div>
 </div>
 <p>Part of <a href="https://fastapi.tiangolo.com/">FastAPI</a>’s merit is how well it leverages other tools to serve its purpose. FastAPI adds the layers it needs on top of them to deliver all the niceties that make the framework so popular these days. Of course, one of them is right in the name: It’s <em>fast</em>. Such speed comes to a great extent from <a href="https://www.starlette.io/">Starlette</a>, a minimal web framework used by FastAPI under the hood and <a href="https://docs.pydantic.dev/latest/">Pydantic</a>, used for data validation, serialization, etc.</p>
-<p>It turns out that sometimes we can tweak those tools directly (even inside of a FastAPI application) in order to make things go even faster. I will show a few pretty simple tricks to speed up your app almost for free, meaning without adding much complexity or having to miss out on the good things that FastAPI gives us.</p>
+<p>It turns out that sometimes we can tweak those tools directly (even inside of a FastAPI application) in order to make things go even faster. I will show a few pretty simple tricks to speed up your app without adding much complexity, provided we can compromise a bit of FastAPI’s ergonomics in return.</p>
 <div class="callout callout-style-default callout-note callout-titled" title="Shout-Out">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -609,8 +609,8 @@ I think that’s pretty impressive.</p>
 The real-world use case included a lookup step on a Sqlite database which took around 30/40ms. So the speed up I just showed can be equivalent in time to skipping the lookup altogether!<br>
 The reason why that’s big deal is that the real-world microservice was supposed to respond under 100ms (P99), thus cutting 50ms is saving ~50% of our response time “budget”.</p>
 </section>
-<section id="one-last-word-scaling" class="level1">
-<h1>One Last Word: Scaling</h1>
+<section id="how-much-bang-for-the-buck-scaling" class="level1">
+<h1>How much bang for the buck: Scaling</h1>
 <p>Going back to the initial statement: These optimizations might not make sense if your processing time does not depend on the payload size (for example, because the payloads in your application are so small that you cannot squeeze much performance out of it).</p>
 <p>To demonstrate that, we can run a quick experiment to compare the performance of the different variants of the app that we presented above. We will simply measure the mean response time as a function of the payload size.</p>
 <div id="31e87fd6-3d55-4b19-ba50-a36de0bec31a" class="cell" data-execution_count="76">
@@ -661,6 +661,12 @@ The reason why that’s big deal is that the real-world microservice was suppose
 We see that the <code>Starlette &amp; Pydantic</code> optimization will reduce the processing time only by more or less a fix amount (at least for the tested range). So the larger the input, the less impact of the optimization, i.e.&nbsp;the less it will pay off to refactor the code.<br>
 On the other hand, the version <code>TypedDict &amp; TypeAdapter</code> has really a different, better scaling relationship. This means that such optimization will always pay off, since the larger payload, the larger absolute time save.</p>
 <p>Having said that, what I presented should simply be taken into account as an heuristic to search for optimizations in your code (only if you really need them!). You have to benchmark your code to decide if any of this makes sense for your use case.</p>
+</section>
+<section id="one-last-word-theres-no-free-lunch" class="level1">
+<h1>🤷 One last word: There’s no free lunch</h1>
+<p>Unfortunately, by stripping away the custom type hints and using the plain classes <code>Request</code> (from Starlette) and <code>TypedDict+TypeAdapter</code>, we loose the information that FastAPI uses to generate the automatic documentation based on the openapi spec. It will be up to you to decide if you can live with that and/or the performance gain is worth it.</p>
+<p>Here’s how this looks like (on the right is the version with all the optimizations):</p>
+<p><img align="center" src="../images/swagger.png" style="height:35%;"></p>
 <section id="fin" class="level2">
 <h2 class="anchored" data-anchor-id="fin">Fin</h2>
 <hr>

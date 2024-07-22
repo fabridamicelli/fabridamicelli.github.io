@@ -77,6 +77,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/social-share-0.1.0/social-share.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/social-share-0.1.0/all.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -311,8 +313,13 @@ Warning
 <p>This time the input array stays the same, ie., the modification remained in the scope of the function.</p>
 <p>Despite it being very basic, it is actually more difficult to debug than for the toy example in real life cases. <br> For instance, in the middle of a long data preprocessing pipeline. If you load your data <em>once</em> and run the preprocessing pipeline <em>once</em>, you will probably not notice the bug (that’s the tricky thing!).<br> But if the loaded data are passed more than once through the pipeline (without reloading the whole data), each pass will be actually feeding <em>different input</em>.<br> For example, if you run K-Fold cross-validation, most likely it won’t crash or anything, but you will be passing K different datasets to your model and your validation will be just rubbish!</p>
 <p><strong>Conclusions:</strong> <br> - <code>array *= something</code> is very different from <code>array = array * something</code> <br> - You’d better be <em>really</em> sure of what you’re doing with <code>array = array * something</code>.</p>
-<hr>
-<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
 
 
 
@@ -740,6 +747,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<div class="page-columns page-rows-contents page-layout-article"><div class="social-share"><a href="https://twitter.com/share?url=“https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html”&amp;text=“Explicit is better than implicit. A basic but not so obvious numpy example.”" target="_blank" class="twitter"><i class="fab fa-twitter fa-fw fa-lg"></i></a><a href="https://www.linkedin.com/shareArticle?url=“https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html”&amp;title=“Explicit is better than implicit. A basic but not so obvious numpy example.”" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin-in fa-fw fa-lg"></i></a><a href="https://reddit.com/submit?url=“https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html”&amp;title=“Explicit is better than implicit. A basic but not so obvious numpy example.”" target="_blank" class="reddit">   <i class="fa-brands fa-reddit-alien fa-fw fa-lg"></i></a><a href="javascript:void(0);" onclick="var mastodon_instance=prompt('Mastodon Instance / Server Name?'); if(typeof mastodon_instance==='string' &amp;&amp; mastodon_instance.length){this.href='https://'+mastodon_instance+'/share?text=“Explicit is better than implicit. A basic but not so obvious numpy example.” “https://fabridamicelli.github.io/posts/2020-05-10-numpy-array-in-place.html”'}else{return false;}" target="_blank" class="mastodon"><i class="fa-brands fa-mastodon fa-fw fa-lg"></i></a></div></div>
 
 
 

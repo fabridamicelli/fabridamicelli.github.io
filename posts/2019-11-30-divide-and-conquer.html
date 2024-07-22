@@ -77,6 +77,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/quarto-contrib/social-share-0.1.0/social-share.css" rel="stylesheet">
+<link href="../site_libs/quarto-contrib/social-share-0.1.0/all.css" rel="stylesheet">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -266,7 +268,9 @@ window.Quarto = {
 <h2 class="anchored" data-anchor-id="the-problem">The problem</h2>
 <p>I had to compute pairwise <a href="https://en.wikipedia.org/wiki/Cosine_similarity">cosine distances</a> for a large list of high-dimensional vectors (e.g.&nbsp;<a href="https://en.wikipedia.org/wiki/Word_embedding">word embedding</a>). After a couple of (very bad) possible solutions I found a reasonable one, of course, standing on the shoulders of giants: the sklearn function <code>sklearn.metrics.pairwise_distances_chunked</code>. It is pretty much a one-liner and you don’t need to care about manually splitting/parallelizing things. This is a quick write-up for other people to save that time.</p>
 <p>The intuition behind the computation we want to achieve is depicted in the following plot:</p>
-<p><img src="../images/divide-and-conquer/vector-distances.png" width="1200" height="1200"></p>
+<center>
+<img src="../images/divide-and-conquer/vector-distances.png" height="200">
+</center>
 <p><em>Two vectors in 2D space represented as points. The blue line shows the <em>euclidean</em> distance between the vectors. The <span class="math inline">\(\cos(\alpha)\)</span> is the <em>cosine</em> distance.</em></p>
 <div id="cell-6" class="cell">
 <details class="code-fold">
@@ -373,7 +377,9 @@ Wall time: 1.99 s</code></pre>
 </div>
 </div>
 <p>We can use what we know about the complexity (<span class="math inline">\(O(n^2)\)</span>) to fit a curve. In other words, we are going to fit a quadratic function that predicts the time it takes to compute all the pairwise distances as a function of the number of vectors. After that, we can use that function to extrapolate and estimate the performance for a much larger number of vectors.</p>
-<p><img src="../images/divide-and-conquer/xkcd-extrapolating.png"></p>
+<center>
+<img src="../images/divide-and-conquer/xkcd-extrapolating.png">
+</center>
 <div id="cell-21" class="cell">
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Fit a 2nd degree polynomial and get the polynomial evaluator</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>fit <span class="op">=</span> np.polyfit(n_vectors_vals, times, <span class="dv">2</span>)  </span>
@@ -671,10 +677,14 @@ Tip
 </div>
 <p>[1]: The sharp eye might have noticed that the term “metric” is not quite correct here. Strictly speaking cosine distance is not a metric (the reason for that can be found <a href="https://en.wikipedia.org/wiki/Cosine_similarity">here</a>).</p>
 <p>Take home message: Whenever you find yourself carrying out an data/machine learning task and you have the feeling that there must be a better way, check scikit-learn first. The odds that you’ll find something useful are really on your side.</p>
-<p><strong>Fin</strong></p>
 <p>References: - <a href="http://xkcd.com/605/">xkcd comic - extrapolation</a></p>
-<hr>
-<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
 
 
 </section>
@@ -1104,6 +1114,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
+<div class="page-columns page-rows-contents page-layout-article"><div class="social-share"><a href="https://twitter.com/share?url=“https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html”&amp;text=“Divide and conquer. How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.”" target="_blank" class="twitter"><i class="fab fa-twitter fa-fw fa-lg"></i></a><a href="https://www.linkedin.com/shareArticle?url=“https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html”&amp;title=“Divide and conquer. How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.”" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin-in fa-fw fa-lg"></i></a><a href="https://reddit.com/submit?url=“https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html”&amp;title=“Divide and conquer. How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.”" target="_blank" class="reddit">   <i class="fa-brands fa-reddit-alien fa-fw fa-lg"></i></a><a href="javascript:void(0);" onclick="var mastodon_instance=prompt('Mastodon Instance / Server Name?'); if(typeof mastodon_instance==='string' &amp;&amp; mastodon_instance.length){this.href='https://'+mastodon_instance+'/share?text=“Divide and conquer. How to compute over a billion cosine distances on a laptop. Standing on the shoulders of the same giants, once again.” “https://fabridamicelli.github.io/posts/2019-11-30-divide-and-conquer.html”'}else{return false;}" target="_blank" class="mastodon"><i class="fa-brands fa-mastodon fa-fw fa-lg"></i></a></div></div>
 
 
 

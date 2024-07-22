@@ -282,7 +282,7 @@ Note
 <p>I will repeat my self a bit in the definitions of each app. The idea is to have self-contained code in each case that will be written to a file to be run from there in the command line.</p>
 </div>
 </div>
-<div id="b05655d4-5d45-41a7-962c-11d52360ed31" class="cell" data-execution_count="39">
+<div id="b05655d4-5d45-41a7-962c-11d52360ed31" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
@@ -310,7 +310,7 @@ Note
 <span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"P99:"</span>, np.percentile(timings, <span class="dv">99</span>).<span class="bu">round</span>(<span class="dv">3</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="224c44b4-9984-4dbf-941e-863a75880625" class="cell" data-execution_count="90">
+<div id="224c44b4-9984-4dbf-941e-863a75880625" class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile pricing.py</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
@@ -329,7 +329,7 @@ Note
 <pre><code>Overwriting pricing.py</code></pre>
 </div>
 </div>
-<div id="42cd0522-6dcc-4ca0-a090-852bf5776e78" class="cell" data-execution_count="18">
+<div id="42cd0522-6dcc-4ca0-a090-852bf5776e78" class="cell">
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile app.py</span>
 <span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -365,13 +365,13 @@ Note
 <p>We launch the app in the background with</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">python</span> app.py</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>so that we can timeit from here:</p>
-<div id="df25f3c6-b59b-466a-8f3a-fc9a8613193a" class="cell" data-execution_count="19">
+<div id="df25f3c6-b59b-466a-8f3a-fc9a8613193a" class="cell">
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8000/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>69.9 ms ± 3.28 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="ae9260ed-08c0-4a23-84c9-9017364d3837" class="cell" data-execution_count="20">
+<div id="ae9260ed-08c0-4a23-84c9-9017364d3837" class="cell">
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>print_times(times.timings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.07
@@ -384,7 +384,7 @@ We can do better.</p>
 <section id="bring-starlette-and-pydantic-to-the-front" class="level1">
 <h1>🎩 Bring Starlette and Pydantic to the Front</h1>
 <p>We will read the bytes directly from the request body and build the Pydantic model ourselves. The reason for that is that Pydantic can directly parse the bytes into a Pydantic model, thus skipping the deserialization into a Python dict first. We will also let Pydantic serialize the model and wrap it as a Starlette’s response.</p>
-<div id="9a4cf33c-fe35-4457-8658-09ec44de324e" class="cell" data-execution_count="23">
+<div id="9a4cf33c-fe35-4457-8658-09ec44de324e" class="cell">
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile app_starlette_body.py</span>
 <span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -426,13 +426,13 @@ We can do better.</p>
 <pre><code>Overwriting app_starlette_body.py</code></pre>
 </div>
 </div>
-<div id="e95f9ebb-e34e-4e8e-ab24-1874a559ed62" class="cell" data-execution_count="25">
+<div id="e95f9ebb-e34e-4e8e-ab24-1874a559ed62" class="cell">
 <div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8001/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>62.7 ms ± 2.97 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="4220559c-2333-4b11-88b0-2e7430577043" class="cell" data-execution_count="26">
+<div id="4220559c-2333-4b11-88b0-2e7430577043" class="cell">
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>print_times(times.timings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.063
@@ -447,7 +447,7 @@ P99: 0.069</code></pre>
 <p>This solution I’d argue is a bit more involved, so you might really first make sure that you really need/want to optimize further. In any case, I think the complexity is not that much higher, so it might be definitely worth trying it.</p>
 <p>We will drop the <code>BaseModel</code> from Pydantic (which is what gives us the data validation under the hood). Instead we’ll use <code>TypedDict</code> and Pydantic’s <code>TypeAdapter</code>.</p>
 <p>Fasten your seatbelt! 🚀</p>
-<div id="801c432e-1bb3-4710-8506-b607d991882f" class="cell" data-execution_count="27">
+<div id="801c432e-1bb3-4710-8506-b607d991882f" class="cell">
 <div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="op">%%</span>writefile app_type_adapter.py</span>
 <span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
@@ -496,13 +496,13 @@ P99: 0.069</code></pre>
 <pre><code>Overwriting app_type_adapter.py</code></pre>
 </div>
 </div>
-<div id="513cb429-9052-49eb-8338-15a0ca8838bf" class="cell" data-execution_count="28">
+<div id="513cb429-9052-49eb-8338-15a0ca8838bf" class="cell">
 <div class="sourceCode cell-code" id="cb19"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8002/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>25.6 ms ± 2.03 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="13f44308-60cb-44ee-a919-253034d1440a" class="cell" data-execution_count="29">
+<div id="13f44308-60cb-44ee-a919-253034d1440a" class="cell">
 <div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>print_times(times.timings)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.026
@@ -512,7 +512,7 @@ P99: 0.031</code></pre>
 <p>We cut the response more or less by half! 🤯<br>
 I think that’s pretty impressive.</p>
 <p>Here’s the global comparison of response times:</p>
-<div id="38461dac-7635-443f-be1e-341e998b5cb7" class="cell" data-execution_count="32">
+<div id="38461dac-7635-443f-be1e-341e998b5cb7" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>vanilla <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8000/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -521,7 +521,7 @@ I think that’s pretty impressive.</p>
 <pre><code>70.6 ms ± 2 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="a33aef7e-af09-4aa9-b920-2e7f9bc38bbc" class="cell" data-execution_count="31">
+<div id="a33aef7e-af09-4aa9-b920-2e7f9bc38bbc" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>plain_star <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8001/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -530,7 +530,7 @@ I think that’s pretty impressive.</p>
 <pre><code>60.7 ms ± 2.19 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="6ba64f10-cedb-4b91-aeaa-7d2b53ad1e96" class="cell" data-execution_count="30">
+<div id="6ba64f10-cedb-4b91-aeaa-7d2b53ad1e96" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>typed_adap <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">20</span> do_request(payload, <span class="st">"http://0.0.0.0:8002/pricing"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -539,7 +539,7 @@ I think that’s pretty impressive.</p>
 <pre><code>23.4 ms ± 1.14 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="61c9ccf9-aa69-463d-af1b-6b4ad000b2ba" class="cell" data-execution_count="33">
+<div id="61c9ccf9-aa69-463d-af1b-6b4ad000b2ba" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.concat([</span>
@@ -559,7 +559,7 @@ I think that’s pretty impressive.</p>
 <span id="cb29-15"><a href="#cb29-15" aria-hidden="true" tabindex="-1"></a> .reset_index(drop<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb29-16"><a href="#cb29-16" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -604,16 +604,16 @@ I think that’s pretty impressive.</p>
 </div>
 </section>
 <section id="who-cares-about-50ms" class="level1">
-<h1>Who cares about 50ms?</h1>
+<h1>⏱️ Who cares about 50ms?</h1>
 <p>Fair question. I presented here a simplified, toy example of the REST API that I actually had to run production.<br>
 The real-world use case included a lookup step on a Sqlite database which took around 30/40ms. So the speed up I just showed can be equivalent in time to skipping the lookup altogether!<br>
 The reason why that’s big deal is that the real-world microservice was supposed to respond under 100ms (P99), thus cutting 50ms is saving ~50% of our response time “budget”.</p>
 </section>
 <section id="how-much-bang-for-the-buck-scaling" class="level1">
-<h1>How much bang for the buck: Scaling</h1>
+<h1>📈 How much bang for the buck: Scaling</h1>
 <p>Going back to the initial statement: These optimizations might not make sense if your processing time does not depend on the payload size (for example, because the payloads in your application are so small that you cannot squeeze much performance out of it).</p>
 <p>To demonstrate that, we can run a quick experiment to compare the performance of the different variants of the app that we presented above. We will simply measure the mean response time as a function of the payload size.</p>
-<div id="31e87fd6-3d55-4b19-ba50-a36de0bec31a" class="cell" data-execution_count="76">
+<div id="31e87fd6-3d55-4b19-ba50-a36de0bec31a" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>ns <span class="op">=</span> <span class="bu">range</span>(<span class="dv">500</span>, <span class="dv">10_001</span>, <span class="dv">500</span>)</span>
@@ -626,7 +626,7 @@ The reason why that’s big deal is that the real-world microservice was suppose
 <span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>        res[(var, n)] <span class="op">=</span> np.mean(times.timings).<span class="bu">round</span>(<span class="dv">5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
-<div id="e767ea47-e27a-41ef-847f-6535f970a097" class="cell" data-execution_count="92">
+<div id="e767ea47-e27a-41ef-847f-6535f970a097" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>

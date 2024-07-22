@@ -66,7 +66,7 @@ Note
 <p>I will repeat my self a bit in the definitions of each app. The idea is to have self-contained code in each case that will be written to a file to be run from there in the command line.</p>
 </div>
 </div>
-<div id="b05655d4-5d45-41a7-962c-11d52360ed31" class="cell" data-execution_count="39">
+<div id="b05655d4-5d45-41a7-962c-11d52360ed31" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
@@ -169,7 +169,7 @@ background-color: null;
 font-style: inherit;">3</span>))</span></code></pre></div>
 </details>
 </div>
-<div id="224c44b4-9984-4dbf-941e-863a75880625" class="cell" data-execution_count="90">
+<div id="224c44b4-9984-4dbf-941e-863a75880625" class="cell">
 <div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>writefile pricing.py</span>
@@ -232,7 +232,7 @@ font-style: inherit;">in</span> items</span>
 <pre><code>Overwriting pricing.py</code></pre>
 </div>
 </div>
-<div id="42cd0522-6dcc-4ca0-a090-852bf5776e78" class="cell" data-execution_count="18">
+<div id="42cd0522-6dcc-4ca0-a090-852bf5776e78" class="cell">
 <div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>writefile app.py</span>
@@ -351,7 +351,7 @@ font-style: inherit;">"error"</span>)</span></code></pre></div>
 background-color: null;
 font-style: inherit;">python</span> app.py</span></code></pre></div>
 <p>so that we can timeit from here:</p>
-<div id="df25f3c6-b59b-466a-8f3a-fc9a8613193a" class="cell" data-execution_count="19">
+<div id="df25f3c6-b59b-466a-8f3a-fc9a8613193a" class="cell">
 <div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1">times <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -369,7 +369,7 @@ font-style: inherit;">"http://0.0.0.0:8000/pricing"</span>)</span></code></pre><
 <pre><code>69.9 ms ± 3.28 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="ae9260ed-08c0-4a23-84c9-9017364d3837" class="cell" data-execution_count="20">
+<div id="ae9260ed-08c0-4a23-84c9-9017364d3837" class="cell">
 <div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1">print_times(times.timings)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.07
@@ -382,7 +382,7 @@ We can do better.</p>
 <section id="bring-starlette-and-pydantic-to-the-front" class="level1">
 <h1>🎩 Bring Starlette and Pydantic to the Front</h1>
 <p>We will read the bytes directly from the request body and build the Pydantic model ourselves. The reason for that is that Pydantic can directly parse the bytes into a Pydantic model, thus skipping the deserialization into a Python dict first. We will also let Pydantic serialize the model and wrap it as a Starlette’s response.</p>
-<div id="9a4cf33c-fe35-4457-8658-09ec44de324e" class="cell" data-execution_count="23">
+<div id="9a4cf33c-fe35-4457-8658-09ec44de324e" class="cell">
 <div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>writefile app_starlette_body.py</span>
@@ -522,7 +522,7 @@ font-style: inherit;">"error"</span>)</span></code></pre></div>
 <pre><code>Overwriting app_starlette_body.py</code></pre>
 </div>
 </div>
-<div id="e95f9ebb-e34e-4e8e-ab24-1874a559ed62" class="cell" data-execution_count="25">
+<div id="e95f9ebb-e34e-4e8e-ab24-1874a559ed62" class="cell">
 <div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">times <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -540,7 +540,7 @@ font-style: inherit;">"http://0.0.0.0:8001/pricing"</span>)</span></code></pre><
 <pre><code>62.7 ms ± 2.97 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="4220559c-2333-4b11-88b0-2e7430577043" class="cell" data-execution_count="26">
+<div id="4220559c-2333-4b11-88b0-2e7430577043" class="cell">
 <div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">print_times(times.timings)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.063
@@ -555,7 +555,7 @@ P99: 0.069</code></pre>
 <p>This solution I’d argue is a bit more involved, so you might really first make sure that you really need/want to optimize further. In any case, I think the complexity is not that much higher, so it might be definitely worth trying it.</p>
 <p>We will drop the <code>BaseModel</code> from Pydantic (which is what gives us the data validation under the hood). Instead we’ll use <code>TypedDict</code> and Pydantic’s <code>TypeAdapter</code>.</p>
 <p>Fasten your seatbelt! 🚀</p>
-<div id="801c432e-1bb3-4710-8506-b607d991882f" class="cell" data-execution_count="27">
+<div id="801c432e-1bb3-4710-8506-b607d991882f" class="cell">
 <div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>writefile app_type_adapter.py</span>
@@ -718,7 +718,7 @@ font-style: inherit;">"error"</span>)</span></code></pre></div>
 <pre><code>Overwriting app_type_adapter.py</code></pre>
 </div>
 </div>
-<div id="513cb429-9052-49eb-8338-15a0ca8838bf" class="cell" data-execution_count="28">
+<div id="513cb429-9052-49eb-8338-15a0ca8838bf" class="cell">
 <div class="sourceCode cell-code" id="cb19" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb19-1">times <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
@@ -736,7 +736,7 @@ font-style: inherit;">"http://0.0.0.0:8002/pricing"</span>)</span></code></pre><
 <pre><code>25.6 ms ± 2.03 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="13f44308-60cb-44ee-a919-253034d1440a" class="cell" data-execution_count="29">
+<div id="13f44308-60cb-44ee-a919-253034d1440a" class="cell">
 <div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1">print_times(times.timings)</span></code></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Mean: 0.026
@@ -746,7 +746,7 @@ P99: 0.031</code></pre>
 <p>We cut the response more or less by half! 🤯<br>
 I think that’s pretty impressive.</p>
 <p>Here’s the global comparison of response times:</p>
-<div id="38461dac-7635-443f-be1e-341e998b5cb7" class="cell" data-execution_count="32">
+<div id="38461dac-7635-443f-be1e-341e998b5cb7" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1">vanilla <span class="op" style="color: #5E5E5E;
@@ -767,7 +767,7 @@ font-style: inherit;">"http://0.0.0.0:8000/pricing"</span>)</span></code></pre><
 <pre><code>70.6 ms ± 2 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="a33aef7e-af09-4aa9-b920-2e7f9bc38bbc" class="cell" data-execution_count="31">
+<div id="a33aef7e-af09-4aa9-b920-2e7f9bc38bbc" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb25" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1">plain_star <span class="op" style="color: #5E5E5E;
@@ -788,7 +788,7 @@ font-style: inherit;">"http://0.0.0.0:8001/pricing"</span>)</span></code></pre><
 <pre><code>60.7 ms ± 2.19 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="6ba64f10-cedb-4b91-aeaa-7d2b53ad1e96" class="cell" data-execution_count="30">
+<div id="6ba64f10-cedb-4b91-aeaa-7d2b53ad1e96" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1">typed_adap <span class="op" style="color: #5E5E5E;
@@ -809,7 +809,7 @@ font-style: inherit;">"http://0.0.0.0:8002/pricing"</span>)</span></code></pre><
 <pre><code>23.4 ms ± 1.14 ms per loop (mean ± std. dev. of 20 runs, 10 loops each)</code></pre>
 </div>
 </div>
-<div id="61c9ccf9-aa69-463d-af1b-6b4ad000b2ba" class="cell" data-execution_count="33">
+<div id="61c9ccf9-aa69-463d-af1b-6b4ad000b2ba" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb29" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1">df <span class="op" style="color: #5E5E5E;
@@ -883,7 +883,7 @@ background-color: null;
 font-style: inherit;">True</span>)</span>
 <span id="cb29-16">)</span></code></pre></div>
 </details>
-<div class="cell-output cell-output-display" data-execution_count="33">
+<div class="cell-output cell-output-display">
 <div>
 
 
@@ -928,16 +928,16 @@ font-style: inherit;">True</span>)</span>
 </div>
 </section>
 <section id="who-cares-about-50ms" class="level1">
-<h1>Who cares about 50ms?</h1>
+<h1>⏱️ Who cares about 50ms?</h1>
 <p>Fair question. I presented here a simplified, toy example of the REST API that I actually had to run production.<br>
 The real-world use case included a lookup step on a Sqlite database which took around 30/40ms. So the speed up I just showed can be equivalent in time to skipping the lookup altogether!<br>
 The reason why that’s big deal is that the real-world microservice was supposed to respond under 100ms (P99), thus cutting 50ms is saving ~50% of our response time “budget”.</p>
 </section>
 <section id="how-much-bang-for-the-buck-scaling" class="level1">
-<h1>How much bang for the buck: Scaling</h1>
+<h1>📈 How much bang for the buck: Scaling</h1>
 <p>Going back to the initial statement: These optimizations might not make sense if your processing time does not depend on the payload size (for example, because the payloads in your application are so small that you cannot squeeze much performance out of it).</p>
 <p>To demonstrate that, we can run a quick experiment to compare the performance of the different variants of the app that we presented above. We will simply measure the mean response time as a function of the payload size.</p>
-<div id="31e87fd6-3d55-4b19-ba50-a36de0bec31a" class="cell" data-execution_count="76">
+<div id="31e87fd6-3d55-4b19-ba50-a36de0bec31a" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb30" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1">ns <span class="op" style="color: #5E5E5E;
@@ -1020,7 +1020,7 @@ background-color: null;
 font-style: inherit;">5</span>)</span></code></pre></div>
 </details>
 </div>
-<div id="e767ea47-e27a-41ef-847f-6535f970a097" class="cell" data-execution_count="92">
+<div id="e767ea47-e27a-41ef-847f-6535f970a097" class="cell">
 <details class="code-fold">
 <summary>Code</summary>
 <div class="sourceCode cell-code" id="cb31" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><span class="im" style="color: #00769E;
@@ -3885,7 +3885,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
 </div>
 <p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
-<p></p><div id="tweet-57641"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-57641").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-28443"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-28443").innerHTML = tweet["html"];</script><p></p>
 <p>References:<br>
 - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
 - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
@@ -4746,7 +4746,7 @@ font-style: inherit;">2</span>)</span></code></pre></div>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-81258"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-81258").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-37005"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-37005").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>

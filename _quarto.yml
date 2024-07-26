@@ -40,8 +40,8 @@ website:
 
 format:
   html:
-    theme: cosmo
-    mainfont: Inconsolata, monospace
     css: styles.css
+    theme: cosmo
+    mainfont: Inconsolata
     toc: true
     include-after-body: plausible.html

@@ -1,7 +1,7 @@
 import json
 from pathlib import Path
 
-POSTS_PATH = Path(".")/"posts"
+POSTS_PATH = Path(".").resolve().parent/"posts"
 LAST_CELL_PATH = Path(".")/"fin.json"
 last_cell = json.loads(LAST_CELL_PATH.read_text())
 

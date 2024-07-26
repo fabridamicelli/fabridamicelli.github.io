@@ -10,7 +10,648 @@
 <atom:link href="https://fabridamicelli.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.55</generator>
-<lastBuildDate>Sat, 13 Jul 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Fri, 26 Jul 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Parsing JSON takes time – time is money</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/posts/2024-07-24-parse-jsonl.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>JSON Lines is a common format encountered in modern data applications, as stated in <a href="https://jsonlines.org/">this documentation</a>:</p>
+<blockquote class="blockquote">
+<p>The JSON Lines text format, also called newline-delimited JSON, is a convenient format for storing structured data that may be processed one record at a time. It’s a great format for log files. It’s also a flexible format for passing messages between cooperating processes.</p>
+</blockquote>
+<p>For example Google Platform’s BigQuery exports tables in this format per default.</p>
+<p>I will cover a few simple tips that can speed up the parsing significantly. I’ve got a file on my computer which contains a ~9600 of such JSON lines.</p>
+<p>This is a toy example, as in the real-world workloads I deal with I typically have something like 300 Million JSON Lines to process. So the job might spend literally hours parsing JSON – you guessed right: and each minute running costs 💸.</p>
+<div id="19035a39-fef8-4589-bc95-e8a00711ed36" class="cell" data-execution_count="1">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">!</span>wc <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>l sample1.jsonl</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>9611 sample1.jsonl</code></pre>
+</div>
+</div>
+<p>Regardless of the very specific content, our data look like this:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1">{</span>
+<span id="cb3-2">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"key1"</span>: <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span></span>
+<span id="cb3-3">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"key2"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"hello"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"world"</span>], ...</span>
+<span id="cb3-4">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"key3"</span>: [<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1231123</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1234192</span>], ...</span>
+<span id="cb3-5">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"key4"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"super"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"coool"</span>], ... </span>
+<span id="cb3-6">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"key5"</span>: [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"very"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"niiice"</span>], ...</span>
+<span id="cb3-7">      . </span>
+<span id="cb3-8">      .</span>
+<span id="cb3-9">      .</span>
+<span id="cb3-10">}</span></code></pre></div>
+<p>where the lists can be anywhere between 8 and ~4400 length:</p>
+<div id="42c5de45-2645-4e87-87ad-7a10be5f5cbe" class="cell" data-execution_count="3">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> json</span>
+<span id="cb4-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Path</span>
+<span id="cb4-3"></span>
+<span id="cb4-4">lines <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> (json.loads(line) <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> Path(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sample1.jsonl"</span>).read_text().splitlines())</span>
+<span id="cb4-5">minlen, maxlen <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e6</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0</span></span>
+<span id="cb4-6"><span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> lines:</span>
+<span id="cb4-7">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> v <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> line.values():</span>
+<span id="cb4-8">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">isinstance</span>(v, (<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>)):</span>
+<span id="cb4-9">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> (l<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(v)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&gt;</span> maxlen:</span>
+<span id="cb4-10">                maxlen <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> l</span>
+<span id="cb4-11">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">if</span> (l<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">:=</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">len</span>(v)) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">&lt;</span> minlen:</span>
+<span id="cb4-12">                minlen <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> l</span>
+<span id="cb4-13"></span>
+<span id="cb4-14"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Min length:"</span>, minlen)</span>
+<span id="cb4-15"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Max length:"</span>, maxlen)</span></code></pre></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>Min length: 8
+Max length: 4403</code></pre>
+</div>
+</div>
+<div class="callout callout-style-default callout-warning callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Warning
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Code benchmarks are always tricky. The tips I will show, I believe, apply in general. But still the relative differences might vary depending on several factors, so you should profile the parsers with your own data to see which variant suits your case best.<br>
+Also, I will assume we don’t want to use schema information about the data, i.e., we want it back as as dictionary.</p>
+</div>
+</div>
+<p>For the sake of the comparison, we will have for each method a function that receives a file path and returns a generator of dictionaries (being each dictionary a JSON line in a file). We use a generator to avoid taking into account the time to create a container (e.g., a list).<br>
+By the way, that is already our <strong>Tip Number 1: Consume the lines lazily (if you only need them one by one)</strong>, to save memory footprint and time of allocating large container objects.</p>
+<div id="331e6116-b320-4a4e-a966-6f902087e9db" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> typing <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Generator, Callable</span>
+<span id="cb6-2"></span>
+<span id="cb6-3"><span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Path(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sample1.jsonl"</span>)</span></code></pre></div>
+</details>
+</div>
+<p>Here’s the canonical “pure-python” way of doing it, using the json module from the standard library:</p>
+<div id="72d4bef0-df68-41f8-bb83-aa5b6037ca9c" class="cell" data-execution_count="31">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_lines_text(p: Path) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb7-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"Notice we read as text"</span></span>
+<span id="cb7-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> p.read_text().splitlines():</span>
+<span id="cb7-4">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> line</span>
+<span id="cb7-5">        </span>
+<span id="cb7-6"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> read_python(p: Path, line_reader: Callable) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb7-7">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""Since we do not use third-party libraries, I call this _python"""</span></span>
+<span id="cb7-8">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> line_reader(p):</span>
+<span id="cb7-9">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> json.loads(line)</span></code></pre></div>
+</div>
+<div id="120deebb-e7d9-4653-8565-ed014c17b30c" class="cell" data-execution_count="32">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> traverse_lines(lines: Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]):</span>
+<span id="cb8-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb8-3"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    Go through the file, parsing the lines, but doing nothing with them.</span></span>
+<span id="cb8-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    We only want to parse them.</span></span>
+<span id="cb8-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb8-6">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> _ <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> lines: <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># Consume the generator</span></span>
+<span id="cb8-7">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">pass</span></span></code></pre></div>
+</div>
+<div id="635fe1f4-934e-43c0-955d-97d379545718" class="cell" data-execution_count="33">
+<div class="sourceCode cell-code" id="cb9" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb9-2">traverse_lines(</span>
+<span id="cb9-3">    read_python(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>, line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_text)</span>
+<span id="cb9-4">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2.64 s ± 286 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>That’s our baseline.</p>
+<p><strong>Tip Number 2: Consume bytes directly</strong></p>
+<p>Notice our function <code>get_lines_text</code> uses the method <code>read_text</code> to grab the text. That will under the hood first parse the bytes into a string which will then be converted into a dictionary. But we don’t need that! The function <code>json.loads</code> (same as for third-party libraries) accepts bytes as well, so let’s change our <code>get_lines</code> function to read bytes:</p>
+<div id="917a6b59-79d9-4557-8755-2cdcf886aa95" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_lines_bytes(p: Path) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb11-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> p.read_bytes().splitlines():</span>
+<span id="cb11-3">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> line</span></code></pre></div>
+</div>
+<div id="3541f9a4-71ca-4681-9b58-ed132ee8184e" class="cell" data-execution_count="34">
+<div class="sourceCode cell-code" id="cb12" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb12-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb12-2">traverse_lines(</span>
+<span id="cb12-3">    read_python(</span>
+<span id="cb12-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>,</span>
+<span id="cb12-5">        line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_bytes  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;-- here!</span></span>
+<span id="cb12-6">    )</span>
+<span id="cb12-7">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.82 s ± 79.6 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>That’s ~40% improvement for free – don’t know about you, but I’d take it ;)</p>
+<p>But we can push further.</p>
+<p><strong>Tip Number 3: Create the stream manually (skip <code>pathlib</code>)</strong><br>
+We all love <code>pathlib</code> as it is super handy, but there’s a tiny overhead in this case that can add up (if you have, say, thousands of files to read) – let’s see:</p>
+<div id="2d326a70-450d-4f02-b9fa-4736c2e0dd64" class="cell" data-execution_count="37">
+<div class="sourceCode cell-code" id="cb14" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_lines_bytes_stream(p: Path) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb14-2">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(p, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rb"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> f:  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># remember we read bytes (the default is "rt": read TEXT!)</span></span>
+<span id="cb14-3">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> f:</span>
+<span id="cb14-4">            <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> line</span></code></pre></div>
+</div>
+<div id="b7ac5ee7-482c-4f22-bc28-fedb5ca5ca24" class="cell" data-execution_count="39">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb15-2">traverse_lines(</span>
+<span id="cb15-3">    read_python(</span>
+<span id="cb15-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>,</span>
+<span id="cb15-5">        line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_bytes_stream  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;-- here!</span></span>
+<span id="cb15-6">    )</span>
+<span id="cb15-7">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.65 s ± 13.6 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>That’s not that much of a big deal, but still, ~10% improvement, for free – I’ll take it!</p>
+<p>Starting from here, we’ll see a few libraries beyond the python standard library. Here’s also where you might want to take results with a pinch of salt, as different libraries have different implementations under the hood, which might take advantage of different aspects or structure of the data for optimization. Thus you definitely want to try out with your own data to check the extent to which these following results apply.</p>
+<p><strong>Tip Number 4: Use Pydantic’s <code>from_json</code></strong><br>
+This little function is a bit of a hidden gem. Almost a drop-in replacement for <code>json.loads</code>:</p>
+<div id="a4b389d1-a221-4a81-82a8-5de1dac3e931" class="cell" data-execution_count="41">
+<div class="sourceCode cell-code" id="cb17" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pydantic_core <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> from_json</span>
+<span id="cb17-2"></span>
+<span id="cb17-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> read_pydantic(p: Path, line_reader: Callable) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb17-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> line_reader(p):</span>
+<span id="cb17-5">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> from_json(line, cache_strings<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"keys"</span>)</span></code></pre></div>
+</div>
+<div id="e0920210-0c9a-4af9-b834-4e5581c4212d" class="cell" data-execution_count="43">
+<div class="sourceCode cell-code" id="cb18" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb18-2">traverse_lines(</span>
+<span id="cb18-3">    read_pydantic(</span>
+<span id="cb18-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>,</span>
+<span id="cb18-5">        line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_bytes_stream</span>
+<span id="cb18-6">    )</span>
+<span id="cb18-7">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>1.22 s ± 74.3 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>That’s another 25% improvement (on top of what we already had so far). Not bad, I’d say.</p>
+<p><strong>Tip Number 5: Use <code>msgspec</code></strong><br>
+The performance of this library has blown my mind already a few times in the past and unfortunately it lives a bit in the shadows of more visible frameworks, but I think it deserves much more attention!</p>
+<div id="4710f53f-bfd8-4548-8af1-805476907c4a" class="cell" data-execution_count="51">
+<div class="sourceCode cell-code" id="cb20" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> msgspec</span>
+<span id="cb20-2"></span>
+<span id="cb20-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> read_msgspec(p: Path, line_reader: Callable) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb20-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> line_reader(p):</span>
+<span id="cb20-5">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> msgspec.json.decode(line)</span>
+<span id="cb20-6">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># you could also instantiate the decoder outside </span></span>
+<span id="cb20-7">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># of the function once (msgspec.json.Decoder())</span></span>
+<span id="cb20-8">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># and call .decode() method here.</span></span>
+<span id="cb20-9">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># For this use case, I didn't find that to have </span></span>
+<span id="cb20-10">        <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># a better performance.</span></span></code></pre></div>
+</div>
+<div id="fc522cf5-a1e4-41b8-be6b-4cd152b2a201" class="cell" data-execution_count="52">
+<div class="sourceCode cell-code" id="cb21" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb21-2">traverse_lines(</span>
+<span id="cb21-3">    read_msgspec(</span>
+<span id="cb21-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>,</span>
+<span id="cb21-5">        line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_bytes_stream</span>
+<span id="cb21-6">    )</span>
+<span id="cb21-7">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>989 ms ± 13.4 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>Almost 20% faster than the previous solution – and we are still talking about almost drop-in replacements!</p>
+<p><strong>Tip Number 6: Use <code>orjson</code></strong><br>
+This is a popular library, claiming to be the fastest JSON parser, let’s see:</p>
+<div id="adfc1a37-2f02-4a26-9d4f-3a6137b7ecb6" class="cell" data-execution_count="54">
+<div class="sourceCode cell-code" id="cb23" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> orjson</span>
+<span id="cb23-2"></span>
+<span id="cb23-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> read_orjson(p: Path, line_reader: Callable) <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-&gt;</span> Generator[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">dict</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>, <span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">None</span>]:</span>
+<span id="cb23-4">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">for</span> line <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">in</span> line_reader(p):</span>
+<span id="cb23-5">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">yield</span> orjson.loads(line)</span></code></pre></div>
+</div>
+<div id="7df7ecf4-f898-4ca3-8753-f621063c3460" class="cell" data-execution_count="55">
+<div class="sourceCode cell-code" id="cb24" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb24-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>timeit</span>
+<span id="cb24-2">traverse_lines(</span>
+<span id="cb24-3">    read_orjson(</span>
+<span id="cb24-4">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>,</span>
+<span id="cb24-5">        line_reader<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_lines_bytes_stream</span>
+<span id="cb24-6">    )</span>
+<span id="cb24-7">)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>863 ms ± 5.01 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>We keep stacking improvements: ~13% faster than the previous solution.</p>
+<p>To sum up, we managed to push down the parsing time from ~2.64 seconds (or 1.82 seconds if we exclude the “naive” case reading text) to ~0.85 seconds. <strong>All in all that means more than 3 times faster!</strong> (or more than 2 if we just read bytes).<br>
+A quick back-of-the-envelope calculation for my concrete, full use case results in reducing the running time by almost 10 hours, which can definitely mean some money depending on the hardware being used (for example GPUs).</p>
+<p><strong>Bonus Tip: Use <code>polars</code></strong></p>
+<p>We only considered the case reading and parsing the lines into a dictionary.<br>
+But if you don’t mind having the data in a <a href="https://github.com/pola-rs/polars">polars</a> dataframe you can try it out:</p>
+<div id="edc8a4a8-8989-469e-87b5-414848273a01" class="cell">
+<div class="sourceCode cell-code" id="cb26" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> polars <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> pl</span></code></pre></div>
+</div>
+<div id="bcf145a5-7c1d-4e8f-b965-42f816e9c3d7" class="cell" data-execution_count="69">
+<div class="sourceCode cell-code" id="cb27" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb27-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>time</span>
+<span id="cb27-2">_ <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pl.scan_ndjson(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>).collect(streaming<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>CPU times: user 4.56 s, sys: 729 ms, total: 5.29 s
+Wall time: 900 ms</code></pre>
+</div>
+</div>
+<p>Here are the links to the third-party libraries.<br>
+Go show them some gratitude for their contributions to the community! ❤️</p>
+<ul>
+<li><a href="https://github.com/pydantic/pydantic-core">pydantic-core</a></li>
+<li><a href="https://github.com/jcrist/msgspec">msgspec</a></li>
+<li><a href="https://github.com/ijl/orjson">orjson</a></li>
+<li><a href="https://github.com/pola-rs/polars">polars</a></li>
+</ul>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <category>json</category>
+  <guid>https://fabridamicelli.github.io/posts/2024-07-24-parse-jsonl.html</guid>
+  <pubDate>Fri, 26 Jul 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Fast(er)API: Optimizing Processing Time</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -3900,7 +4541,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
 </div>
 <p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
-<p></p><div id="tweet-29619"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-29619").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-57236"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-57236").innerHTML = tweet["html"];</script><p></p>
 <p>References:<br>
 - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
 - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
@@ -4781,7 +5422,7 @@ Share this article on your favourite platform:</p>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-29619"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-29619").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-34148"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-34148").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>

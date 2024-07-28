@@ -10,7 +10,7 @@ PLATFORMS = (
 )
 
 
-POSTS_PATH = Path(__file__).parent.parent / "posts"
+POSTS_PATH = Path(__file__).resolve().parent.parent/"posts"
 SHARE_BLOCK_PATH = Path(__file__).parent / "share.txt"
 share_block_lines = SHARE_BLOCK_PATH.read_text().splitlines()
 

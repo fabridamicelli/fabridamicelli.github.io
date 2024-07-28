@@ -14,7 +14,7 @@
 <item>
   <title>Use .bigqueryrc to set BigQuery global configuration</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
-  <link>https://fabridamicelli.github.io/til/2024-05-19-bigqueryrc.html</link>
+  <link>https://fabridamicelli.github.io/til/bigqueryrc.html</link>
   <description><![CDATA[ 
 
 
@@ -102,13 +102,13 @@ font-style: inherit;">)</span></span>
 
  ]]></description>
   <category>python</category>
-  <guid>https://fabridamicelli.github.io/til/2024-05-19-bigqueryrc.html</guid>
+  <guid>https://fabridamicelli.github.io/til/bigqueryrc.html</guid>
   <pubDate>Sun, 19 May 2024 00:00:00 GMT</pubDate>
 </item>
 <item>
   <title>Force Python’s print function to flush the stream</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
-  <link>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</link>
+  <link>https://fabridamicelli.github.io/til/python-print-flush.html</link>
   <description><![CDATA[ 
 
 
@@ -255,7 +255,7 @@ flush: whether to forcibly flush the stream.
 
  ]]></description>
   <category>python</category>
-  <guid>https://fabridamicelli.github.io/til/2024-02-26-python-print-flush.html</guid>
+  <guid>https://fabridamicelli.github.io/til/python-print-flush.html</guid>
   <pubDate>Mon, 26 Feb 2024 00:00:00 GMT</pubDate>
 </item>
 </channel>

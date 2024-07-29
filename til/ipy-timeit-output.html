@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Fabrizio Damicelli">
-<meta name="dcterms.date" content="2024-05-19">
+<meta name="dcterms.date" content="2024-07-29">
 
-<title>Use .bigqueryrc to set BigQuery global configuration – Fabrizio Damicelli</title>
+<title>Catch output of IPython magic %timeit – Fabrizio Damicelli</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -196,9 +196,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Use .bigqueryrc to set BigQuery global configuration</h1>
+<h1 class="title">Catch output of IPython magic <code>%timeit</code></h1>
   <div class="quarto-categories">
     <div class="quarto-category">python</div>
+    <div class="quarto-category">IPython</div>
   </div>
   </div>
 
@@ -216,7 +217,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">May 19, 2024</p>
+      <p class="date">July 29, 2024</p>
     </div>
   </div>
   
@@ -228,23 +229,84 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>I started using the nice vim plugin <a href="https://github.com/tpope/vim-dadbod">vim-dadbod</a> which allows to fire database queries and see the output <em>inside</em> vim/neovim.</p>
-<p>While setting it up to work with <a href="https://cloud.google.com/bigquery?hl=en">BigQuery</a> I ran into the error coming from the fact that BigQuery’s format to name a table has changed in time and <code>bq</code> uses the old one (legacy) as default. The legacy format reads: <code>project:dataset.table</code> (notice <code>:</code>) while the newer format goes by: <code>project.dataset.table</code> (with <code>.</code> instead).</p>
-<p>It turns out there is a file called <code>.bigqueryrc</code> where you can set a global configuration and tell <code>bq</code> (the command line tool to interact with BigQuery in the terminal) to use the newer format by setting the flag <code>use_legacy_sql=false</code>:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">credential_file</span> <span class="op">=</span> <span class="er">/</span><span class="dt">path</span><span class="er">/</span><span class="dt">to</span><span class="er">/</span><span class="dt">some</span><span class="er">/</span><span class="dt">file.json</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">project_id</span> <span class="op">=</span> <span class="dt">name-of-your-default-project</span></span>
+<p><a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#built-in-magic-commands">IPython “magic” commands</a> are pretty handy in general.<br>
+In particular, I often use <code>%time</code> and <code>%timeit</code> for rapid profiling of little code snippets, for example:</p>
+<div id="cell-2" class="cell" data-execution_count="37">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> random</span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">[query]</span></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">use_legacy_sql</span> <span class="op">=</span> <span class="cn">false</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>The CLI-tool <code>bq</code> also accepts the file as optional argument so you can pass custom config for a query. If you run <code>bq --help</code> you’ll see:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>  <span class="ex">--bigqueryrc:</span> Path to configuration file. The configuration file specifies new</span>
-<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="ex">defaults</span> for any flags, and can be overrridden by specifying the flag on the</span>
-<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="bu">command</span> line. If the <span class="at">--bigqueryrc</span> flag is not specified, the BIGQUERYRC</span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="ex">environment</span> variable is used. If that is not specified, the path</span>
-<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"~/.bigqueryrc"</span> is used.</span>
-<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">(</span><span class="ex">default:</span> <span class="st">'~/.bigqueryrc'</span><span class="kw">)</span></span>
-<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>    </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>Read more about that in the <a href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference?hl=en">official documetation</a>.</p>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sns.<span class="bu">set</span>(style<span class="op">=</span><span class="st">"whitegrid"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</details>
+</div>
+<div id="cell-3" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">%</span>timeit time.sleep(random.random())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The slowest run took 67.00 times longer than the fastest. This could mean that an intermediate result is being cached.
+400 ms ± 347 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>As the output shows, we get <code>mean ± std</code> across several runs (IPython will try to guesstimate how many runs are actually necessary, but you can change those parameters too).<br>
+That does the job almost always. But what if we want to get all run values?<br>
+You can pass the parameter <code>-o</code> and that’ll do!</p>
+<div id="cell-5" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>r <span class="dv">100</span> time.sleep(random.random())  <span class="co"># -r -&gt; repeat R times the measurement</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The slowest run took 111.58 times longer than the fastest. This could mean that an intermediate result is being cached.
+497 ms ± 292 ms per loop (mean ± std. dev. of 100 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>So we can do stuff with the output:</p>
+<div id="cell-7" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>times.timings[:<span class="dv">5</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>[0.22056039492599666,
+ 0.23466998199000955,
+ 0.26134258206002414,
+ 0.8024904718622565,
+ 0.9086503440048546]</code></pre>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>np.percentile(times.timings, <span class="fl">.99</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>0.014373812611727044</code></pre>
+</div>
+</div>
+<p>Or plotting them:</p>
+<div id="cell-10" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>sns.histplot(times.timings)<span class="op">;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="2024-07-29-ipy-timeit-output_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s run the same thing, 10 loops each time (<code>-n</code>):</p>
+<div id="cell-12" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>times <span class="op">=</span> <span class="op">%</span>timeit <span class="op">-</span>o <span class="op">-</span>n <span class="dv">10</span> time.sleep(random.random())</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>The output is in fact a proper object with some potentially useful attributes as well:</p>
+<div id="cell-14" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>times</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>&lt;TimeitResult : 486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)&gt;</code></pre>
+</div>
+</div>
+<div id="cell-15" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>times.loops, times.worst, times.best, times.compile_time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>(10, 0.6338168126065284, 0.37239220049232247, 0.00032199999999993345)</code></pre>
+</div>
+</div>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
 <p>/Fin</p>
 </div>
@@ -679,7 +741,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 });
 </script>
 </div> <!-- /content -->
-<div class="page-columns page-rows-contents page-layout-article"><div class="social-share"><a href="https://twitter.com/share?url=“https://fabridamicelli.github.io/posts/bigqueryrc.html”&amp;text=“Use .bigqueryrc to set BigQuery global configuration.”" target="_blank" class="twitter"><i class="fab fa-twitter fa-fw fa-lg"></i></a><a href="https://www.linkedin.com/shareArticle?url=“https://fabridamicelli.github.io/posts/bigqueryrc.html”&amp;title=“Use .bigqueryrc to set BigQuery global configuration.”" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin-in fa-fw fa-lg"></i></a><a href="https://reddit.com/submit?url=“https://fabridamicelli.github.io/posts/bigqueryrc.html”&amp;title=“Use .bigqueryrc to set BigQuery global configuration.”" target="_blank" class="reddit">   <i class="fa-brands fa-reddit-alien fa-fw fa-lg"></i></a><a href="javascript:void(0);" onclick="var mastodon_instance=prompt('Mastodon Instance / Server Name?'); if(typeof mastodon_instance==='string' &amp;&amp; mastodon_instance.length){this.href='https://'+mastodon_instance+'/share?text=“Use .bigqueryrc to set BigQuery global configuration.” “https://fabridamicelli.github.io/posts/bigqueryrc.html”'}else{return false;}" target="_blank" class="mastodon"><i class="fa-brands fa-mastodon fa-fw fa-lg"></i></a></div></div>
+<div class="page-columns page-rows-contents page-layout-article"><div class="social-share"><a href="https://twitter.com/share?url=“https://fabridamicelli.github.io/posts/ipy-timeit-output.html”&amp;text=“Catch output of IPython magic %timeit.”" target="_blank" class="twitter"><i class="fab fa-twitter fa-fw fa-lg"></i></a><a href="https://www.linkedin.com/shareArticle?url=“https://fabridamicelli.github.io/posts/ipy-timeit-output.html”&amp;title=“Catch output of IPython magic %timeit.”" target="_blank" class="linkedin"><i class="fa-brands fa-linkedin-in fa-fw fa-lg"></i></a><a href="https://reddit.com/submit?url=“https://fabridamicelli.github.io/posts/ipy-timeit-output.html”&amp;title=“Catch output of IPython magic %timeit.”" target="_blank" class="reddit">   <i class="fa-brands fa-reddit-alien fa-fw fa-lg"></i></a><a href="javascript:void(0);" onclick="var mastodon_instance=prompt('Mastodon Instance / Server Name?'); if(typeof mastodon_instance==='string' &amp;&amp; mastodon_instance.length){this.href='https://'+mastodon_instance+'/share?text=“Catch output of IPython magic %timeit.” “https://fabridamicelli.github.io/posts/ipy-timeit-output.html”'}else{return false;}" target="_blank" class="mastodon"><i class="fa-brands fa-mastodon fa-fw fa-lg"></i></a></div></div>
 
 
 

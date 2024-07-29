@@ -10,7 +10,158 @@
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.5.55</generator>
-<lastBuildDate>Sun, 19 May 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Mon, 29 Jul 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Catch output of IPython magic %timeit</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/til/ipy-timeit-output.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p><a href="https://ipython.readthedocs.io/en/stable/interactive/magics.html#built-in-magic-commands">IPython “magic” commands</a> are pretty handy in general.<br>
+In particular, I often use <code>%time</code> and <code>%timeit</code> for rapid profiling of little code snippets, for example:</p>
+<div id="cell-2" class="cell" data-execution_count="37">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> time</span>
+<span id="cb1-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> random</span>
+<span id="cb1-3"></span>
+<span id="cb1-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> numpy <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> np</span>
+<span id="cb1-5"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> seaborn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> sns</span>
+<span id="cb1-6">sns.<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">set</span>(style<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"whitegrid"</span>)</span></code></pre></div>
+</details>
+</div>
+<div id="cell-3" class="cell" data-execution_count="5">
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span>timeit time.sleep(random.random())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The slowest run took 67.00 times longer than the fastest. This could mean that an intermediate result is being cached.
+400 ms ± 347 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>As the output shows, we get <code>mean ± std</code> across several runs (IPython will try to guesstimate how many runs are actually necessary, but you can change those parameters too).<br>
+That does the job almost always. But what if we want to get all run values?<br>
+You can pass the parameter <code>-o</code> and that’ll do!</p>
+<div id="cell-5" class="cell" data-execution_count="27">
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">times <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span>timeit <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>o <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>r <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">100</span> time.sleep(random.random())  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># -r -&gt; repeat R times the measurement</span></span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>The slowest run took 111.58 times longer than the fastest. This could mean that an intermediate result is being cached.
+497 ms ± 292 ms per loop (mean ± std. dev. of 100 runs, 1 loop each)</code></pre>
+</div>
+</div>
+<p>So we can do stuff with the output:</p>
+<div id="cell-7" class="cell" data-execution_count="30">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">times.timings[:<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>]</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="30">
+<pre><code>[0.22056039492599666,
+ 0.23466998199000955,
+ 0.26134258206002414,
+ 0.8024904718622565,
+ 0.9086503440048546]</code></pre>
+</div>
+</div>
+<div id="cell-8" class="cell" data-execution_count="38">
+<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">np.percentile(times.timings, <span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">.99</span>)</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="38">
+<pre><code>0.014373812611727044</code></pre>
+</div>
+</div>
+<p>Or plotting them:</p>
+<div id="cell-10" class="cell" data-execution_count="36">
+<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">sns.histplot(times.timings)<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">;</span></span></code></pre></div>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="https://fabridamicelli.github.io/til/2024-07-29-ipy-timeit-output_files/figure-html/cell-7-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Let’s run the same thing, 10 loops each time (<code>-n</code>):</p>
+<div id="cell-12" class="cell" data-execution_count="13">
+<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">times <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%</span>timeit <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>o <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>n <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span> time.sleep(random.random())</span></code></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
+</div>
+</div>
+<p>The output is in fact a proper object with some potentially useful attributes as well:</p>
+<div id="cell-14" class="cell" data-execution_count="22">
+<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">times</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="22">
+<pre><code>&lt;TimeitResult : 486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)&gt;</code></pre>
+</div>
+</div>
+<div id="cell-15" class="cell" data-execution_count="25">
+<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">times.loops, times.worst, times.best, times.compile_time</span></code></pre></div>
+<div class="cell-output cell-output-display" data-execution_count="25">
+<pre><code>(10, 0.6338168126065284, 0.37239220049232247, 0.00032199999999993345)</code></pre>
+</div>
+</div>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
+
+
+
+ ]]></description>
+  <category>python</category>
+  <category>IPython</category>
+  <guid>https://fabridamicelli.github.io/til/ipy-timeit-output.html</guid>
+  <pubDate>Mon, 29 Jul 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Use .bigqueryrc to set BigQuery global configuration</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -94,9 +245,13 @@ font-weight: bold;
 font-style: inherit;">)</span></span>
 <span id="cb2-7">    </span></code></pre></div>
 <p>Read more about that in the <a href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference?hl=en">official documetation</a>.</p>
-<p><strong>FIN</strong></p>
-<hr>
-<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
 
 
 
@@ -247,9 +402,13 @@ flush: whether to forcibly flush the stream.
 </div>
 </div>
 </div>
-<p><strong>FIN</strong></p>
-<hr>
-<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
 
 
 

@@ -11,11 +11,15 @@ PLATFORMS = (
 
 
 POSTS_PATH = Path(__file__).resolve().parent.parent/"posts"
+TILS_PATH = Path(__file__).resolve().parent.parent/"til"
 SHARE_BLOCK_PATH = Path(__file__).parent / "share.txt"
 share_block_lines = SHARE_BLOCK_PATH.read_text().splitlines()
 
-nb_paths = [p for p in POSTS_PATH.iterdir() if p.name.endswith(".ipynb")]
-
+nb_paths = [
+    p
+    for p in list(POSTS_PATH.iterdir()) + list(TILS_PATH.iterdir())
+    if p.name.endswith(".ipynb")
+]
 
 def get_config(nb: dict):
     yml = "".join(

@@ -13,12 +13,13 @@ Always growing list of cool, free learning/fun/useful resources out there that w
   - [Anatomy of Matplotlib - Root & Aizenman - SciPy 2018](https://www.youtube.com/watch?v=6gdNUDs6QPc)
   - [Docker](https://www.youtube.com/watch?v=fqMOX6JJhGo): Nail down the basics with this tutorial from freeCodeCamp.
   - [SQL](https://selectstarsql.com/): Interactive book, aims to be "the best place on the internet for learning SQL" - you decide.
-  - [Git](https://missing.csail.mit.edu/2020/version-control/): Go beyond typing commmands blindly - understand git's data model.
+  - [Git](https://missing.csail.mit.edu/2020/version-control/): Go beyond typing commands blindly - understand git's data model.
   - [Git-Advanced](https://www.youtube.com/watch?v=qsTthZi23VE): Be more productive with these few more advanced concepts, e.g., rebase, cherry-picking, etc.
   - [fast.ai](https://www.fast.ai/): A myriad of learning resources – ML, python, developer tools, etc.
   - [Setosa: visual explanations](https://setosa.io/)
   - [Transformers & Attention](https://www.youtube.com/watch?v=yGTUuEx3GkA): A great explanation by V. Warmerdam at Rasa Whiteboard series.
   - [The math behind Attention: Keys, Queries, and Values matrices](https://www.youtube.com/watch?v=UPtG_38Oq8o): Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano.
+  - [Load balancing with great visuals](https://samwho.dev/load-balancing/)
 
 ## Talks
   - [Choose Boring Technology – Dan McKinley](https://boringtechnology.club/)

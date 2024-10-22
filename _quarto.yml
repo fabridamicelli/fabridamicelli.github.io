@@ -21,6 +21,8 @@ website:
       - file: research.qmd
         text: Research
           # icon: puzzle-fill
+      - text: Teaching
+        href: https://fabridamicelli.github.io/python-course
       - href: https://www.youtube.com/@fabridamicelli
         text: Videos
       - file: links.qmd

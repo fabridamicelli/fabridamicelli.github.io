@@ -37,4 +37,3 @@ I work on fraud detection 🕵🏽 using neural networks and large datasets at [
 As an open source advocate, I have contributed to a [few projects and created a couple of Python packages](/code.html) that I maintain 🤓.
 Beyond that, I am generally interested in topics around 🐍 Python, 🤖 Machine Learning, 📊 Data Science, Computational modeling, 🚀 Scientific computing and the application of data-driven solutions to make people's life better.
 
-I prefer simple words and solid intuitions to unnecessary sophistication and fancy jargon – check out 📝 [my blog](/blog.html) and 🎥 [videos](https://www.youtube.com/@fabridamicelli) covering Python/ML/Data Science topics.

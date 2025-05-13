@@ -9,7 +9,7 @@
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.5.57</generator>
+<generator>quarto-1.7.31</generator>
 <lastBuildDate>Mon, 29 Jul 2024 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Catch output of IPython magic %timeit</title>
@@ -312,7 +312,7 @@ font-style: inherit;">%%</span>bash</span>
 background-color: null;
 font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+font-style: inherit;">'</span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb4-3"><span class="st" style="color: #20794D;
@@ -328,7 +328,7 @@ font-style: inherit;">\n</span><span class="st" style="color: #20794D;
 background-color: null;
 font-style: inherit;">as always"</span>)<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+font-style: inherit;">' </span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb4-5"><span class="st" style="color: #20794D;
@@ -347,7 +347,7 @@ font-style: inherit;">%%</span>bash</span>
 background-color: null;
 font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">'</span><span class="ch" style="color: #20794D;
+font-style: inherit;">'</span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb5-3"><span class="st" style="color: #20794D;
@@ -375,7 +375,7 @@ font-style: inherit;"># &lt;----- HERE</span></span>
 background-color: null;
 font-style: inherit;">2</span>)<span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">' </span><span class="ch" style="color: #20794D;
+font-style: inherit;">' </span><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb5-7"><span class="st" style="color: #20794D;

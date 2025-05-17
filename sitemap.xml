@@ -1,95 +1,95 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://fabridamicelli.github.io/blog.html</loc>
-    <lastmod>2025-05-14T09:12:17.413Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/til/python-print-flush.html</loc>
-    <lastmod>2025-05-14T09:12:17.436Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/index.html</loc>
-    <lastmod>2025-05-14T09:12:17.428Z</lastmod>
-  </url>
-  <url>
     <loc>https://fabridamicelli.github.io/links.html</loc>
-    <lastmod>2025-05-14T09:12:17.428Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/research.html</loc>
-    <lastmod>2025-05-14T09:12:17.435Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/starmap.html</loc>
-    <lastmod>2025-05-14T09:12:17.432Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/chainmap.html</loc>
-    <lastmod>2025-05-14T09:12:17.433Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/np-array-tobytes.html</loc>
-    <lastmod>2025-05-14T09:12:17.434Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/merge-dicts.html</loc>
-    <lastmod>2025-05-14T09:12:17.432Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/seaborn-tensors.html</loc>
-    <lastmod>2025-05-14T09:12:17.434Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/achtung-german-csv-reader.html</loc>
-    <lastmod>2025-05-14T09:12:17.432Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/til.html</loc>
-    <lastmod>2025-05-14T09:12:17.435Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.611Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/interactive-embedding.html</loc>
-    <lastmod>2025-05-14T09:12:17.432Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.615Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/pytorch-dataloader-collate.html</loc>
-    <lastmod>2025-05-14T09:12:17.434Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/divide-and-conquer.html</loc>
-    <lastmod>2025-05-14T09:12:17.430Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/posts/optimize-fastapi.html</loc>
-    <lastmod>2025-05-14T09:12:17.435Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.617Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/lr-add-constant.html</loc>
-    <lastmod>2025-05-14T09:12:17.433Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.616Z</lastmod>
   </url>
   <url>
-    <loc>https://fabridamicelli.github.io/posts/parse-jsonl.html</loc>
-    <lastmod>2025-05-14T09:12:17.435Z</lastmod>
+    <loc>https://fabridamicelli.github.io/posts/chainmap.html</loc>
+    <lastmod>2025-05-17T09:31:46.616Z</lastmod>
   </url>
   <url>
-    <loc>https://fabridamicelli.github.io/posts/numpy-array-in-place.html</loc>
-    <lastmod>2025-05-14T09:12:17.432Z</lastmod>
+    <loc>https://fabridamicelli.github.io/posts/seaborn-tensors.html</loc>
+    <lastmod>2025-05-17T09:31:46.616Z</lastmod>
   </url>
   <url>
-    <loc>https://fabridamicelli.github.io/TODO.html</loc>
-    <lastmod>2025-05-14T09:12:17.428Z</lastmod>
-  </url>
-  <url>
-    <loc>https://fabridamicelli.github.io/code.html</loc>
-    <lastmod>2025-05-14T09:12:17.413Z</lastmod>
+    <loc>https://fabridamicelli.github.io/posts/achtung-german-csv-reader.html</loc>
+    <lastmod>2025-05-17T09:31:46.615Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til/ipy-timeit-output.html</loc>
-    <lastmod>2025-05-14T09:12:17.436Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.619Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til/bigqueryrc.html</loc>
-    <lastmod>2025-05-14T09:12:17.436Z</lastmod>
+    <lastmod>2025-05-17T09:31:46.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/blog.html</loc>
+    <lastmod>2025-05-17T09:31:46.596Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/TODO.html</loc>
+    <lastmod>2025-05-17T09:31:46.611Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/code.html</loc>
+    <lastmod>2025-05-17T09:31:46.596Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/index.html</loc>
+    <lastmod>2025-05-17T09:31:46.611Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/research.html</loc>
+    <lastmod>2025-05-17T09:31:46.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/til.html</loc>
+    <lastmod>2025-05-17T09:31:46.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/til/python-print-flush.html</loc>
+    <lastmod>2025-05-17T09:31:46.618Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/optimize-fastapi.html</loc>
+    <lastmod>2025-05-17T09:31:46.617Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/parse-jsonl.html</loc>
+    <lastmod>2025-05-17T09:31:46.617Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/numpy-array-in-place.html</loc>
+    <lastmod>2025-05-17T09:31:46.615Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/divide-and-conquer.html</loc>
+    <lastmod>2025-05-17T09:31:46.613Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/np-array-tobytes.html</loc>
+    <lastmod>2025-05-17T09:31:46.617Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/merge-dicts.html</loc>
+    <lastmod>2025-05-17T09:31:46.615Z</lastmod>
+  </url>
+  <url>
+    <loc>https://fabridamicelli.github.io/posts/starmap.html</loc>
+    <lastmod>2025-05-17T09:31:46.615Z</lastmod>
   </url>
 </urlset>

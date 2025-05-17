@@ -10,7 +10,42 @@
 <atom:link href="https://fabridamicelli.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.7.31</generator>
-<lastBuildDate>Fri, 26 Jul 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 08 Dec 2024 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>NumHack 2024: We got 1st place!</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/posts/numhack.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>NumFocus organized a hackathon, the <a href="https://pydata.org/numhack">NumHack 2024</a>, and together with <a href="https://www.linkedin.com/in/jurij-wollert-2985a2207/">Jurij Wollert</a> and <a href="https://www.linkedin.com/in/francesco-bruzzesi/">Francesco Bruzzesi</a> I participated.</p>
+<p>We put in a few days on intense work and it paid off: We got 1st place in the “Build” category!🥳</p>
+<p>The project we built is a prototype of an app that aims at empowering communities to build better cities. The app facilitates how citizens can report issues to the local authorities, and keep track of the status of the issue.</p>
+<p>If you want to see the app in action, watch this short demo video:</p>
+<div style="display: flex; justify-content: center; align-items: center; width:100%">
+<iframe src="https://drive.google.com/file/d/1LdL8C3gbD0zsMX4-NNfKo68huBDYRFSP/preview" allow="autoplay" style="width: 70%; height:300px">
+</iframe>
+</div>
+<p>I think Francesco did a great job explaining in more detail how the competition and our work went on those days, so I wont repeat that, check out his blogpost <a href="https://fbruzzesi.github.io/blog/2024/12/08/we-won-a-hackaton-/">here</a>.</p>
+<p>The repository with all the code is <a href="https://github.com/FBruzzesi/moin-moin">here</a>.</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
+
+
+
+ ]]></description>
+  <category>hackathon</category>
+  <category>numfocus</category>
+  <guid>https://fabridamicelli.github.io/posts/numhack.html</guid>
+  <pubDate>Sun, 08 Dec 2024 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Parsing JSON takes time – time is money</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -4541,7 +4576,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
 </div>
 <p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
-<p></p><div id="tweet-19643"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-19643").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-62459"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-62459").innerHTML = tweet["html"];</script><p></p>
 <p>References:<br>
 - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
 - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
@@ -5421,7 +5456,7 @@ Share this article on your favourite platform:</p>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-23353"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-23353").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-72770"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-72770").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>

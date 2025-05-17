@@ -1,7 +1,16 @@
 [
   {
+    "listing": "/til.html",
+    "items": [
+      "/til/ipy-timeit-output.html",
+      "/til/bigqueryrc.html",
+      "/til/python-print-flush.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
+      "/posts/numhack.html",
       "/posts/parse-jsonl.html",
       "/posts/optimize-fastapi.html",
       "/posts/np-array-tobytes.html",
@@ -15,14 +24,6 @@
       "/posts/numpy-array-in-place.html",
       "/posts/interactive-embedding.html",
       "/posts/divide-and-conquer.html"
-    ]
-  },
-  {
-    "listing": "/til.html",
-    "items": [
-      "/til/ipy-timeit-output.html",
-      "/til/bigqueryrc.html",
-      "/til/python-print-flush.html"
     ]
   }
 ]

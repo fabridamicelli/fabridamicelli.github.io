@@ -77,7 +77,7 @@ Cronex is kind of a "client" that allows the Neovim user to integrate and custom
 ### Other Community Contributions
 - Translation English → German of the [HuggingFace Course](https://github.com/huggingface/course/pulls?q=is%3Apr+author%3Afabridamicelli)
 - Translation English → Spanish of the [Python 3.9 Official Documentation](https://github.com/python/python-docs-es/pulls?q=is%3Apr+author%3Afabridamicelli+)
-- Improving [Website of PyCampES](https://github.com/PyCampES/pycampes/pulls?q=is%3Apr+author%3Afabridamicelli+), an event where people meet to code, learn and share for fun
+- Improving [Website of PyCampES](https://pycamp.es), an event where people meet to code, learn for fun. See my contributions [here](https://github.com/PyCampES/pycampes/pulls?q=is%3Apr+author%3Afabridamicelli+)
 
 ---
 For more details, check out my [GitHub Profile](https://github.com/fabridamicelli).

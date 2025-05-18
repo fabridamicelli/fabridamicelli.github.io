@@ -16,6 +16,12 @@ listing:
   image-placeholder: /images/preview-placeholder.png
   date-format: YYYY-MM-DD
   grid-item-align: center
-page-layout: full
+format:
+  html:
+    grid:
+      sidebar-width: 300px
+      body-width: 1500px
+      margin-width: 10px
+      gutter-width: 50px
 title-block-banner: true
 ---

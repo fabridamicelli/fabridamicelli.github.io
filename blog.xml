@@ -9,8 +9,908 @@
 <link>https://fabridamicelli.github.io/blog.html</link>
 <atom:link href="https://fabridamicelli.github.io/blog.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.7.32</generator>
-<lastBuildDate>Sun, 08 Dec 2024 00:00:00 GMT</lastBuildDate>
+<generator>quarto-1.7.33</generator>
+<lastBuildDate>Mon, 25 Aug 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Dependency Management with uv in Kubeflow Pipelines</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/posts/kubeflow-uv.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<div class="callout callout-style-default callout-note callout-titled" title="TL;DR">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+TL;DR
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>When defining a Python-based Kubeflow Pipeline component, you typically list dependencies using the <code>packages_to_install</code> argument in <code>kfp.dsl.component</code> or by baking them into a custom Docker image.</p>
+<p>I present here a <code>custom_component</code> wrapper that leverages <a href="https://docs.astral.sh/uv/"><code>uv</code></a> to automate this process by inferring dependencies from <a href="https://packaging.python.org/en/latest/specifications/dependency-groups/">dependency-group</a> in the <code>pyproject.toml</code> file.</p>
+<p>See <a href="https://github.com/fabridamicelli/kubeflow-pipeline-uv">code repo here</a></p>
+</div>
+</div>
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<p><a href="https://www.kubeflow.org/">Kubeflow</a> is an open-source project including a number of sub-projects like <a href="https://www.kubeflow.org/docs/components/pipelines/">Kubeflow Pipelines</a> that I will talk about here.</p>
+<blockquote class="blockquote">
+<p>Kubeflow is a platform for building and deploying portable and scalable machine learning (ML) workflows using containers on Kubernetes-based systems. A pipeline is a definition of a workflow that composes one or more components together to form a computational directed acyclic graph (DAG).</p>
+</blockquote>
+<p>In other words, Kubeflow is an orchestration tool for data/machine learning workflows.<br>
+This is the example pipeline we’ll be working on:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="https://fabridamicelli.github.io/images/kubeflow-uv-diagram.png" class="img-fluid quarto-figure quarto-figure-center figure-img" width="200"></p>
+</figure>
+</div>
+<p>Simple enough, a pipeline with 3 components:</p>
+<ol type="1">
+<li><code>download-dataset</code>:Fetch and prepare data</li>
+<li><code>train</code>: Train a machine learning model</li>
+<li><code>plot-confusion-matrix</code>: Plot model performance</li>
+</ol>
+<p>Kubeflow offers several alternatives to define pipeline components and the easiest way is to use a so-called “Python-based” component that look like this:</p>
+<div id="5a955b03-2854-4fd4-b385-526d624bba2f" class="cell" data-execution_count="15">
+<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> kfp <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dsl</span>
+<span id="cb1-2"></span>
+<span id="cb1-3">base_image <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"python:3.12"</span></span>
+<span id="cb1-4"></span>
+<span id="cb1-5"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.component</span>(</span>
+<span id="cb1-6">    base_image<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>base_image,</span>
+<span id="cb1-7">    packages_to_install<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span>]  <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;--- Specify dependencies</span></span>
+<span id="cb1-8">)</span>
+<span id="cb1-9"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> download_dataset(dataset: dsl.Output[dsl.Dataset]):</span>
+<span id="cb1-10">    ...</span>
+<span id="cb1-11">    </span>
+<span id="cb1-12"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.component</span>(</span>
+<span id="cb1-13">    base_image<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>base_image,</span>
+<span id="cb1-14">    packages_to_install<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span>]</span>
+<span id="cb1-15">)</span>
+<span id="cb1-16"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> train(</span>
+<span id="cb1-17">    dataset: dsl.Input[dsl.Dataset],</span>
+<span id="cb1-18">    predictions: dsl.Output[dsl.Artifact]</span>
+<span id="cb1-19">):</span>
+<span id="cb1-20">    ...</span>
+<span id="cb1-21">    </span>
+<span id="cb1-22"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.component</span>(</span>
+<span id="cb1-23">    base_image<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>base_image,</span>
+<span id="cb1-24">    packages_to_install<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>[</span>
+<span id="cb1-25">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matplotlib&gt;=3.10.5"</span>,</span>
+<span id="cb1-26">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span>,</span>
+<span id="cb1-27">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"seaborn&gt;=0.13.2"</span>,</span>
+<span id="cb1-28">)</span>
+<span id="cb1-29"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> plot_confusion_matrix(predictions: dsl.Input[dsl.Artifact]):</span>
+<span id="cb1-30">    ...</span>
+<span id="cb1-31"></span>
+<span id="cb1-32"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.pipeline</span></span>
+<span id="cb1-33"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> pipeline():</span>
+<span id="cb1-34">    dataset_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> download_dataset()</span>
+<span id="cb1-35">    train_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> train(dataset<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dataset_task.outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dataset"</span>])</span>
+<span id="cb1-36">    plot_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plot_confusion_matrix(predictions<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>train_task.outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"predictions"</span>])</span></code></pre></div>
+</div>
+<p>That is the skeleton of the pipeline. If you are interested in the actual implementation of the components you can expand the code section below or check out <a href="https://github.com/fabridamicelli/kubeflow-pipeline-uv">this repo</a> (but for now is not really necessary to understand the problem).</p>
+<div id="2a3a51ce-6710-438b-97e5-644255367fc0" class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.component</span></span>
+<span id="cb2-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> download_dataset(dataset: dsl.Output[dsl.Dataset]):</span>
+<span id="cb2-3">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pickle</span>
+<span id="cb2-4"></span>
+<span id="cb2-5">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.datasets <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> fetch_20newsgroups</span>
+<span id="cb2-6">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.feature_extraction.text <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> TfidfVectorizer</span>
+<span id="cb2-7"></span>
+<span id="cb2-8">    <span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> fetch_data(subset: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb2-9">        categories <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> [<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"alt.atheism"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"talk.religion.misc"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"comp.graphics"</span>, <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sci.space"</span>]</span>
+<span id="cb2-10">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> fetch_20newsgroups(</span>
+<span id="cb2-11">            subset<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>subset,</span>
+<span id="cb2-12">            categories<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>categories,</span>
+<span id="cb2-13">            shuffle<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>,</span>
+<span id="cb2-14">            random_state<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">42</span>,</span>
+<span id="cb2-15">        )</span>
+<span id="cb2-16"></span>
+<span id="cb2-17">    data_train, data_test <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> fetch_data(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"train"</span>), fetch_data(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"test"</span>)</span>
+<span id="cb2-18">    y_train, y_test <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> data_train.target, data_test.target</span>
+<span id="cb2-19">    vectorizer <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> TfidfVectorizer(</span>
+<span id="cb2-20">        sublinear_tf<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>, max_df<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">0.5</span>, min_df<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>, stop_words<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"english"</span></span>
+<span id="cb2-21">    )</span>
+<span id="cb2-22">    X_train <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vectorizer.fit_transform(data_train.data)</span>
+<span id="cb2-23">    X_test <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> vectorizer.transform(data_test.data)</span>
+<span id="cb2-24"></span>
+<span id="cb2-25">    out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb2-26">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X_train"</span>: X_train,</span>
+<span id="cb2-27">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_train"</span>: y_train,</span>
+<span id="cb2-28">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X_test"</span>: X_test,</span>
+<span id="cb2-29">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_test"</span>: y_test,</span>
+<span id="cb2-30">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"target_names"</span>: data_train.target_names,</span>
+<span id="cb2-31">    }</span>
+<span id="cb2-32">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(dataset.path, mode<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"wb"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb2-33">        pickle.dump(out, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>)</span>
+<span id="cb2-34"></span>
+<span id="cb2-35"></span>
+<span id="cb2-36"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@component</span></span>
+<span id="cb2-37"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> train(</span>
+<span id="cb2-38">    dataset: dsl.Input[dsl.Dataset],</span>
+<span id="cb2-39">    predictions: dsl.Output[dsl.Artifact],</span>
+<span id="cb2-40">):</span>
+<span id="cb2-41"></span>
+<span id="cb2-42">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pickle</span>
+<span id="cb2-43">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.linear_model <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> RidgeClassifier</span>
+<span id="cb2-44"></span>
+<span id="cb2-45">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(dataset.path, mode<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rb"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb2-46">        data <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pickle.load(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>)</span>
+<span id="cb2-47"></span>
+<span id="cb2-48">    clf <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> RidgeClassifier(tol<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1e-2</span>, solver<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"sparse_cg"</span>)</span>
+<span id="cb2-49">    clf.fit(data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X_train"</span>], data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_train"</span>])</span>
+<span id="cb2-50">    pred <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> clf.predict(data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"X_test"</span>])</span>
+<span id="cb2-51"></span>
+<span id="cb2-52">    out <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> {</span>
+<span id="cb2-53">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_test"</span>: data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_test"</span>],</span>
+<span id="cb2-54">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_pred"</span>: pred,</span>
+<span id="cb2-55">        <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"target_names"</span>: data[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"target_names"</span>],</span>
+<span id="cb2-56">    }</span>
+<span id="cb2-57">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(predictions.path, mode<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"wb"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb2-58">        pickle.dump(out, <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>)</span>
+<span id="cb2-59"></span>
+<span id="cb2-60"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.component</span></span>
+<span id="cb2-61"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> plot_confusion_matrix(</span>
+<span id="cb2-62">    predictions: dsl.Input[dsl.Artifact],</span>
+<span id="cb2-63">    confusion_plot: dsl.OutputPath(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>),</span>
+<span id="cb2-64">):</span>
+<span id="cb2-65">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> pickle</span>
+<span id="cb2-66"></span>
+<span id="cb2-67">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> matplotlib.pyplot <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> plt</span>
+<span id="cb2-68">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> sklearn.metrics <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> ConfusionMatrixDisplay</span>
+<span id="cb2-69">    <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> seaborn <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> sns</span>
+<span id="cb2-70"></span>
+<span id="cb2-71">    sns.set_theme(style<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"white"</span>, font_scale<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="fl" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">1.2</span>)</span>
+<span id="cb2-72"></span>
+<span id="cb2-73">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">open</span>(predictions.path, mode<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"rb"</span>) <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb2-74">        preds <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> pickle.load(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>)</span>
+<span id="cb2-75"></span>
+<span id="cb2-76">    fig, ax <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plt.subplots(figsize<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">10</span>, <span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">5</span>))</span>
+<span id="cb2-77">    ConfusionMatrixDisplay.from_predictions(preds[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_test"</span>], preds[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"y_pred"</span>], ax<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>ax)</span>
+<span id="cb2-78">    ax.xaxis.set_ticklabels(preds[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"target_names"</span>])</span>
+<span id="cb2-79">    ax.yaxis.set_ticklabels(preds[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"target_names"</span>])</span>
+<span id="cb2-80">    ax.set_title(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"Confusion Matrix"</span>)</span>
+<span id="cb2-81">    fig.savefig(confusion_plot)</span>
+<span id="cb2-82">    plt.close()</span></code></pre></div>
+</details>
+</div>
+</section>
+<section id="executing-the-pipeline" class="level1">
+<h1>Executing the pipeline</h1>
+<p>So far we have our pipeline expressed as a DAG (directed acyclic graph) with all the relationships between components.<br>
+Think of each component as a box that can take inputs, does computation and can produce output, where inputs/outputs mean any kind of artifact (data, machine learning model, etc.).</p>
+<p><img src="https://fabridamicelli.github.io/images/pipeline-components.png" class="img-fluid"></p>
+<p>Here’s the point where the “magic” from the <code>kpf</code> library comes in: <code>kpf</code> will prepare docker images specifications and each <code>component</code> will run in a separate, isolated docker container on whatever execution engine we choose (local laptop, cloud machine, etc.) and we can pass data between components by defining inputs/outputs. You can think of it as the body of the function being a script that runs inside the container.<br>
+One last thing, kubeflow will “compile” the pipeline definition into a serializable format (e.g., json, yaml), so that we can use that recipe to let the compute engine run our job or to log and/or reproduce the experiments. Here’s what that looks like:</p>
+<div class="sourceCode" id="cb3" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> kfp <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> compiler</span>
+<span id="cb3-2"></span>
+<span id="cb3-3">compiler.Compiler().<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">compile</span>(pipeline, package_path<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'pipeline.yaml'</span>)</span></code></pre></div>
+</section>
+<section id="component-dependencies" class="level1">
+<h1>Component dependencies</h1>
+<p>Each container image is built from a base image (for example, <code>python:3.12</code>) on top of which we install the particular dependencies, such as <code>scikit-learn</code>, <code>pandas</code>, etc., necessary to compute the step. And each component has specific python dependencies that in kubeflow get passed as the list of strings <code>packages_to_install</code> (see example above).</p>
+<p><strong><em>Here’s where things get tricky.</em></strong></p>
+<p>Managing the dependencies of all the pipeline components is challenging because even if we pin the dependencies of the necessary libraries (e.g., “pandas==2.3.1”), transitive dependencies (libraries that those libraries depend on) can break things in unpredictable ways (ever heard of the numpy 2.0 release? 🙃).<br>
+Beyond that, adjusting the dependencies of each component by hand definitely does not scale and we want to be able to profit from tooling such as <a href="https://github.com/dependabot">dependabot</a>, which does not understand the list “packages_to_install”, for security fixes that allow us to adjust the whole dependency graph as needed (let machines do machine-work!). That is, we need a proper lockfile.</p>
+<p>So here’s my solution to this problem such that we are still able to write light-weight python-based components while taking care of dependencies as you would like in the typical software development flow.</p>
+<p>One more thing: Apart from the python dependencies, we also want to ideally have the python version itself to be consistent across components – we’ll take care of that as well.</p>
+</section>
+<section id="kubeflow-meets-uv" class="level1">
+<h1>Kubeflow meets UV</h1>
+<p>I will use <a href="https://docs.astral.sh/uv/">uv</a> here but originally implemented this using <a href="https://python-poetry.org/">poetry</a> and that also works.</p>
+<p>As we saw above the decorator <code>dsl.component</code> takes apart our python function and generates the specification for building a docker image.<br>
+We will basically write a new decorator to replace that wrapper with a fixed parameter (the python version) and with a dynamically adjusting parameter (the packages to install).</p>
+<p>Let’s write a function that based on the <code>pyproject.toml</code> (and <code>uv.lock</code>) file exports the dependencies as a list of strings:</p>
+<div id="05d86354-9f99-4a0c-85fe-688ddb3baf14" class="cell" data-execution_count="17">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> tempfile</span>
+<span id="cb4-2"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> functools</span>
+<span id="cb4-3"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> subprocess</span>
+<span id="cb4-4"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> pathlib <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> Path</span>
+<span id="cb4-5"></span>
+<span id="cb4-6"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> kfp <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> dsl</span>
+<span id="cb4-7"></span>
+<span id="cb4-8"></span>
+<span id="cb4-9"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> run(cmd: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">list</span>[<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>]):</span>
+<span id="cb4-10">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">try</span>:</span>
+<span id="cb4-11">        subprocess.check_output(cmd, text<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">True</span>)</span>
+<span id="cb4-12">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">except</span> subprocess.CalledProcessError <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> e:</span>
+<span id="cb4-13">        <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(e.output)</span>
+<span id="cb4-14">        <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">raise</span> e</span></code></pre></div>
+</details>
+</div>
+<div id="effc29fa-b2b4-456e-8752-0dd37a0f6c63" class="cell">
+<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_packages_to_install(group: <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">str</span>):</span>
+<span id="cb5-2">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""group: name of the dependency group, i.e, the component name"""</span></span>
+<span id="cb5-3">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">with</span> tempfile.NamedTemporaryFile() <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">as</span> <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>:</span>
+<span id="cb5-4">        run(</span>
+<span id="cb5-5">            [</span>
+<span id="cb5-6">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"uv"</span>,</span>
+<span id="cb5-7">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"export"</span>,</span>
+<span id="cb5-8">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--group"</span>,</span>
+<span id="cb5-9">                group,</span>
+<span id="cb5-10">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--no-hashes"</span>,</span>
+<span id="cb5-11">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--no-annotate"</span>,</span>
+<span id="cb5-12">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--no-header"</span>,</span>
+<span id="cb5-13">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"--format"</span>,</span>
+<span id="cb5-14">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"requirements.txt"</span>,</span>
+<span id="cb5-15">                <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"-o"</span>,</span>
+<span id="cb5-16">                <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.name,</span>
+<span id="cb5-17">            ]</span>
+<span id="cb5-18">        )</span>
+<span id="cb5-19">        packages <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> Path(<span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">file</span>.name).read_text(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"utf-8"</span>).splitlines()</span>
+<span id="cb5-20">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> packages</span></code></pre></div>
+</div>
+<p>In a nutshell, the function calls the external program <code>uv</code> in a subprocess to export the dependencies (the whole graph!) into a list of strings that we can pass as <code>packages_to_install</code>.</p>
+<p>Now we’re ready to write our component decorator:</p>
+<div id="e1a05e03-5be8-457e-b53b-17ebe3aa1a48" class="cell">
+<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@functools.wraps</span>(dsl.component)</span>
+<span id="cb6-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> custom_component(func, <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kwargs):</span>
+<span id="cb6-3">    <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">"""</span></span>
+<span id="cb6-4"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    A wrapper around kfp.dsl component that infers the dependencies </span></span>
+<span id="cb6-5"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    based on the name the pipeline component.</span></span>
+<span id="cb6-6"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    IMPORTANT: The dependencies group must have the exact same name </span></span>
+<span id="cb6-7"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    as the component for it to work!</span></span>
+<span id="cb6-8"><span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">    """</span></span>
+<span id="cb6-9">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> dsl.component(</span>
+<span id="cb6-10">        func,</span>
+<span id="cb6-11">        base_image<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"python:3.12-slim"</span>,</span>
+<span id="cb6-12">        packages_to_install<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>get_packages_to_install(</span>
+<span id="cb6-13">            func.<span class="va" style="color: #111111;
+background-color: null;
+font-style: inherit;">__name__</span>, pyproject<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>pyproject),</span>
+<span id="cb6-14">            <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">**</span>kwargs,</span>
+<span id="cb6-15">    )</span></code></pre></div>
+</div>
+<p>Notice thatt we only touch the parameters <code>base_image</code> and <code>packages_to_install</code> while passing through the rest of the <code>kwargs</code>, which allows us to preserve functionality of the original decorator.</p>
+<p>After that we can use the <code>custom_component</code> decorator to define our pipeline components in a rather ergonomic fashion:</p>
+<div id="a83d185a-dc31-4b41-82a5-2ea1ad364074" class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@custom_component</span></span>
+<span id="cb7-2"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> download_dataset(dataset: dsl.Output[dsl.Dataset]): ...</span>
+<span id="cb7-3">    </span>
+<span id="cb7-4"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@custom_component</span></span>
+<span id="cb7-5"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> train(dataset: dsl.Input[dsl.Dataset], predictions: dsl.Output[dsl.Artifact]): ...</span>
+<span id="cb7-6"></span>
+<span id="cb7-7"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@custom_component</span></span>
+<span id="cb7-8"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> plot_confusion_matrix(predictions: dsl.Input[dsl.Artifact]): ...</span>
+<span id="cb7-9"></span>
+<span id="cb7-10"><span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">@dsl.pipeline</span></span>
+<span id="cb7-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> pipeline():</span>
+<span id="cb7-12">    dataset_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> download_dataset()</span>
+<span id="cb7-13">    train_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> train(dataset<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>dataset_task.outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"dataset"</span>])</span>
+<span id="cb7-14">    plot_task <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> plot_confusion_matrix(predictions<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>train_task.outputs[<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"predictions"</span>])</span></code></pre></div>
+</div>
+<p>How neat is that?! 🚀</p>
+</section>
+<section id="adding-a-new-component" class="level1">
+<h1>Adding a new component</h1>
+<p>To add a new pipeline component we just need to add the dependency group block to the <code>pyproject.toml</code> (or simply run <code>uv add --group &lt;component-name&gt; &lt;dependencies&gt;</code> which will do that for us).</p>
+<p>The file could like this:</p>
+<div class="sourceCode" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb8-1"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">[project]</span></span>
+<span id="cb8-2"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">name</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"pipeline"</span></span>
+<span id="cb8-3"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">version</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"0.1.0"</span></span>
+<span id="cb8-4"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">description</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"An ML pipeline"</span></span>
+<span id="cb8-5"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">readme</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"README.md"</span></span>
+<span id="cb8-6"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">requires-python</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"&gt;=3.13"</span></span>
+<span id="cb8-7"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">dependencies</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span></span>
+<span id="cb8-8">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"kfp &gt;= 2.13.0"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-9"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span>
+<span id="cb8-10"></span>
+<span id="cb8-11"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">[dependency-groups]</span></span>
+<span id="cb8-12"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">download_dataset</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span></span>
+<span id="cb8-13">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-14"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span>
+<span id="cb8-15"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">train</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span></span>
+<span id="cb8-16">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-17">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"numpy&lt;2.0"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-18"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span>
+<span id="cb8-19"><span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">plot_confusion_matrix</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">[</span></span>
+<span id="cb8-20">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"matplotlib&gt;=3.10.5"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-21">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"scikit-learn&gt;=1.7.1"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-22">    <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"seaborn&gt;=0.13.2"</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">,</span></span>
+<span id="cb8-23"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">]</span></span></code></pre></div>
+<p>The good thing is that <code>uv</code> will automatically generate the lockfile ensuring reproducibility.</p>
+</section>
+<section id="wrapping-up" class="level1">
+<h1>Wrapping up</h1>
+<p>I showed you a workflow that</p>
+<ul>
+<li>Use standard pyproject.toml format</li>
+<li>Keep consistent python version and dependencies across components</li>
+<li>Manage dependencies of all components at once, including lockfile</li>
+<li>Improve maintainability (eg. automatic security fixes) of the pipeline</li>
+<li>Facilitate integration of new components</li>
+<li>Preserve functionality of the native <code>kfp.dsl.component</code></li>
+</ul>
+<p>You can find all the code in <a href="https://github.com/fabridamicelli/kubeflow-pipeline-uv">this repo</a> with a fully working example of a pipeline that runs locally.</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
+
+
+</section>
+
+ ]]></description>
+  <category>Python</category>
+  <category>uv</category>
+  <category>MLOps</category>
+  <category>Kubeflow</category>
+  <category>Pipelines</category>
+  <guid>https://fabridamicelli.github.io/posts/kubeflow-uv.html</guid>
+  <pubDate>Mon, 25 Aug 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>NumHack 2024: We got 1st place!</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>
@@ -4576,7 +5476,7 @@ font-style: inherit;">return</span> ret</span></code></pre></div>
 </div>
 </div>
 <p>Both were pointed out by Anthony Sottile in this tweet - thanks!:</p>
-<p></p><div id="tweet-56220"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-56220").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-21656"></div><script>tweet={"url":"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888","author_name":"Anthony Sottile","author_url":"https:\/\/twitter.com\/codewithanthony","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003Eat that point might as well use `reduce(operator.__or__, dcts)` -- though I think FP tends to hurt readability over the relatively straightforward loop:\u003Cbr\u003E\u003Cbr\u003Edef combine_dicts(*dcts):\u003Cbr\u003E    ret = \u007B\u007D\u003Cbr\u003E    for dct in dcts:\u003Cbr\u003E        ret |= dct\u003Cbr\u003E    return ret\u003C\/p\u003E&mdash; Anthony Sottile (@codewithanthony) \u003Ca href=\"https:\/\/twitter.com\/codewithanthony\/status\/1447598310466981888?ref_src=twsrc%5Etfw\"\u003EOctober 11, 2021\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-21656").innerHTML = tweet["html"];</script><p></p>
 <p>References:<br>
 - <a href="https://docs.python.org/3/library/functools.html#functools.reduce">Python <code>functools</code> documentation</a><br>
 - <a href="https://www.youtube.com/watch?v=ZMkUoHj5GU0&amp;t=272s">Michael Kennedy’s tutorial</a><br>
@@ -5456,7 +6356,7 @@ Share this article on your favourite platform:</p>
 
 <p>It’s not about the projections for the rest of 2020, I promise. Nor 2021.</p>
 <p>TL;DR:</p>
-<p></p><div id="tweet-30815"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-30815").innerHTML = tweet["html"];</script><p></p>
+<p></p><div id="tweet-55343"></div><script>tweet={"url":"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920","author_name":"Fabrizio Damicelli","author_url":"https:\/\/twitter.com\/fabridamicelli","html":"\u003Cblockquote class=\"twitter-tweet\" align=\"center\"\u003E\u003Cp lang=\"en\" dir=\"ltr\"\u003EDoes your embedding make any (human) sense? Take a *quick, interactive look* at its labels (if you have) &amp; compare it w\/clusters.\u003Cbr\u003EThanks to great, idiomatic Altair! \u003Ca href=\"https:\/\/twitter.com\/jakevdp?ref_src=twsrc%5Etfw\"\u003E@jakevdp\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/vega_vis?ref_src=twsrc%5Etfw\"\u003E@vega_vis\u003C\/a\u003E\u003Cbr\u003E \u003Cbr\u003E-Code: \u003Ca href=\"https:\/\/t.co\/vpWRU6fs6H\"\u003Ehttps:\/\/t.co\/vpWRU6fs6H\u003C\/a\u003E\u003Cbr\u003E-Example: \u003Ca href=\"https:\/\/t.co\/67F7AuDoNr\"\u003Ehttps:\/\/t.co\/67F7AuDoNr\u003C\/a\u003E\u003Ca href=\"https:\/\/twitter.com\/PyData?ref_src=twsrc%5Etfw\"\u003E@PyData\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/hashtag\/Python?src=hash&amp;ref_src=twsrc%5Etfw\"\u003E#Python\u003C\/a\u003E \u003Ca href=\"https:\/\/twitter.com\/python_tip?ref_src=twsrc%5Etfw\"\u003E@python_tip\u003C\/a\u003E \u003Ca href=\"https:\/\/t.co\/PIeDuNZ2gf\"\u003Epic.twitter.com\/PIeDuNZ2gf\u003C\/a\u003E\u003C\/p\u003E&mdash; Fabrizio Damicelli (@fabridamicelli) \u003Ca href=\"https:\/\/twitter.com\/fabridamicelli\/status\/1205136026987089920?ref_src=twsrc%5Etfw\"\u003EDecember 12, 2019\u003C\/a\u003E\u003C\/blockquote\u003E\n\u003Cscript async src=\"https:\/\/platform.twitter.com\/widgets.js\" charset=\"utf-8\"\u003E\u003C\/script\u003E\n\n","width":550,"height":null,"type":"rich","cache_age":"3153600000","provider_name":"Twitter","provider_url":"https:\/\/twitter.com","version":"1.0"};document.getElementById("tweet-55343").innerHTML = tweet["html"];</script><p></p>
 <p>Imagine you are working with high-dimensional data, that is, the position of each data point in that multidimensional space can be represented by a large number of other features/coordinates. For example, you measure a bunch of properties of a product where each item has some values associated, say, size, cost of production, price, CO2 footprint, etc. It could also be the case that your features are more abstract quantities. Instead of price or size, you could just have a bunch of numbers representing each item that don’t necessarily have a human meaning, for instance a vector like this [0.11, 0.34, 0.15, 0.9]. Hopefully, those number actually mean something (whatever we understand by “meaning something”). Hopefully. Things start to get trickier. A beautiful example of that are <a href="https://en.wikipedia.org/wiki/Word_embedding">word-embeddings</a>, which is the thing I was originally playing with when I needed the visualization that I will show you. These embeddings represent each word with a vector, typically having between 300 and 1000 dimensions. That’s what I mean by high-dimensional. What the coordinates actually mean in that case is highly non-trivial and you can find out about it in the above-mentioned article. Other datasets are even more massive in terms of the number of features though, e.g., <a href="https://en.wikipedia.org/wiki/DNA_microarray">gene expression data</a> are usually orders of magnitude larger.</p>
 <p>I’d be saying nothing new if I pointed out that humans (we typically don’t talk about that with other animals) have a hard time visualizing space with more than three dimensions. Even with <a href="https://en.wikipedia.org/wiki/List_of_animals_by_number_of_neurons">86 billion of neurons</a> between their ears. At this point, several of you will be saying: “but! Carl Sagan… bla, bla”.. In case you’re too young, too old or simple had something else better to do and didn’t watch that episode, just watch this short video and then get back – you won’t regreat:</p>
 <div class="quarto-video"><video id="video_shortcode_videojs_video1" class="video-js vjs-default-skin vjs-fluid" controls="" preload="auto" data-setup="{}" title=""><source src="https://www.youtu.be/N0WjV6MmCyM"></video></div>

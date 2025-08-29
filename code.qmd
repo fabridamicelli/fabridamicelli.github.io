@@ -51,7 +51,7 @@ Susceptible-Excited-Refractory, a dynamical model of spreading excitations
 
 ---
 
-### [**torchserve-docker**](https://github.com/fabridamicelli/torchserve-docker)
+### [torchserve-docker](https://github.com/fabridamicelli/torchserve-docker)
 Container images with specific TorchServe **and Python** version working out-of-the-box.
 This is a [GitHub-Action-based cron job](https://github.com/fabridamicelli/torchserve-docker) that watches for TorchServe releases and automatically generates and pushed the images to [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).  
 <a href="https://hub.docker.com/r/fabridamicelli/torchserve"><img src="https://img.shields.io/docker/pulls/fabridamicelli/torchserve.svg" height="16">
@@ -66,7 +66,7 @@ I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamice
 
 ---
 
-### [**cronex.nvim**](https://github.com/fabridamicelli/cronex.nvim)
+### [cronex.nvim](https://github.com/fabridamicelli/cronex.nvim)
 [A Neovim Plugin](https://github.com/fabridamicelli/cronex.nvim) to render in-line, human-readable cron expressions.
 Cronex is kind of a "client" that allows the Neovim user to integrate and customize "servers" that actually parse the expressions ("explainers") in a flexible fashion.  
 
@@ -74,7 +74,7 @@ Cronex is kind of a "client" that allows the Neovim user to integrate and custom
 
 ---
 
-### [**kubeflow-pipeline-uv**](https://github.com/fabridamicelli/kubeflow-pipeline-uv)
+### [kubeflow-pipeline-uv](https://github.com/fabridamicelli/kubeflow-pipeline-uv)
 A simple implementation of a custom component that helps to manage dependencies of Kubeflow components with uv.  
 Check [blog post here](https://fabridamicelli.github.io/posts/kubeflow-uv.html)
 

@@ -101,6 +101,7 @@ repos = [
     "https://github.com/fastai/fastbook",
     "https://github.com/minodisk/bigquery-runner",
     "https://github.com/ms-jpq/markdown-live-preview",
+    "https://github.com/tobi-wan-kenobi/bumblebee-status",
 ]
 
 USERNAME = "fabridamicelli"

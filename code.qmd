@@ -9,7 +9,7 @@ I created and maintain the following Python packages:
 ---
 
 ::: {layout="[[0.4, 0.6]]"}
-### [**echoes**](https://github.com/fabridamicelli/echoes)
+### [echoes](https://github.com/fabridamicelli/echoes)
 A scikit-learn compatible package for Machine Learning with Echo State Networks  
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes" width="80">
 <a href="https://pepy.tech/project/echoes"><img src="https://pepy.tech/badge/echoes/month" height="16">
@@ -24,7 +24,7 @@ A scikit-learn compatible package for Machine Learning with Echo State Networks
 ---
 
 ::: {layout="[[0.4, 0.6]]"}
-### [**kuramoto**](https://github.com/fabridamicelli/kuramoto)
+### [kuramoto](https://github.com/fabridamicelli/kuramoto)
 Classical model to study synchronization phenomena  
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto" width="80">
 <a href="https://pepy.tech/project/kuramoto"><img src="https://pepy.tech/badge/kuramoto/month" height="16">
@@ -37,7 +37,7 @@ Classical model to study synchronization phenomena
 ---
 
 ::: {layout="[[0.4, 0.6]]"}
-### [**ser**](https://github.com/fabridamicelli/ser)
+### [ser](https://github.com/fabridamicelli/ser)
 Susceptible-Excited-Refractory, a dynamical model of spreading excitations  
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser" width="80">
 <a href="https://pepy.tech/project/ser"><img src="https://pepy.tech/badge/ser/month" height="16">

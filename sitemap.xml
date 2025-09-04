@@ -2,102 +2,102 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://fabridamicelli.github.io/blog.html</loc>
-    <lastmod>2025-08-29T19:41:18.653Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.874Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til/python-print-flush.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.895Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til/ipy-timeit-output.html</loc>
-    <lastmod>2025-08-29T19:41:18.674Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.895Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.895Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/research.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.894Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/achtung-german-csv-reader.html</loc>
-    <lastmod>2025-08-29T19:41:18.671Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.892Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/pytorch-dataloader-collate.html</loc>
-    <lastmod>2025-08-29T19:41:18.672Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.893Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/parse-jsonl.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.894Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/lr-add-constant.html</loc>
-    <lastmod>2025-08-29T19:41:18.672Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.893Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/np-array-tobytes.html</loc>
-    <lastmod>2025-08-29T19:41:18.672Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.893Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/starmap.html</loc>
-    <lastmod>2025-08-29T19:41:18.671Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.892Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/interactive-embedding.html</loc>
-    <lastmod>2025-08-29T19:41:18.671Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.892Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/links.html</loc>
-    <lastmod>2025-08-29T19:41:18.667Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.889Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/seaborn-tensors.html</loc>
-    <lastmod>2025-08-29T19:41:18.672Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.893Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/divide-and-conquer.html</loc>
-    <lastmod>2025-08-29T19:41:18.669Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.890Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/numhack.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.894Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/optimize-fastapi.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.894Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/chainmap.html</loc>
-    <lastmod>2025-08-29T19:41:18.672Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.893Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/merge-dicts.html</loc>
-    <lastmod>2025-08-29T19:41:18.671Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.892Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/kubeflow-uv.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.894Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/posts/numpy-array-in-place.html</loc>
-    <lastmod>2025-08-29T19:41:18.671Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.892Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/index.html</loc>
-    <lastmod>2025-08-29T19:41:18.667Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.889Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/code.html</loc>
-    <lastmod>2025-08-29T19:41:18.653Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.874Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/til/bigqueryrc.html</loc>
-    <lastmod>2025-08-29T19:41:18.673Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.895Z</lastmod>
   </url>
   <url>
     <loc>https://fabridamicelli.github.io/TODO.html</loc>
-    <lastmod>2025-08-29T19:41:18.668Z</lastmod>
+    <lastmod>2025-09-04T15:19:39.889Z</lastmod>
   </url>
 </urlset>

@@ -75,8 +75,10 @@ Cronex is kind of a "client" that allows the Neovim user to integrate and custom
 ---
 
 ### [kubeflow-pipeline-uv](https://github.com/fabridamicelli/kubeflow-pipeline-uv)
-A simple implementation of a custom component that helps to manage dependencies of Kubeflow components with uv.  
-Check [blog post here](https://fabridamicelli.github.io/posts/kubeflow-uv.html)
+A simple implementation of a custom component that helps to manage dependencies of Kubeflow components with uv.
+Check the [blog post here](https://fabridamicelli.github.io/posts/kubeflow-uv.html) or watch my presentation at PyData Berlin 2025 here:
+
+{{< video https://vimeo.com/1115528220/7073eb4ffb >}}
 
 ---
 

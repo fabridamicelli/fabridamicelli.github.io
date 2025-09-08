@@ -10,7 +10,74 @@
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
 <generator>quarto-1.7.34</generator>
-<lastBuildDate>Mon, 29 Jul 2024 00:00:00 GMT</lastBuildDate>
+<lastBuildDate>Sun, 26 Jan 2025 00:00:00 GMT</lastBuildDate>
+<item>
+  <title>Impersonate Google Cloud Service Account</title>
+  <dc:creator>Fabrizio Damicelli</dc:creator>
+  <link>https://fabridamicelli.github.io/til/impersonate-gcp-service-account.html</link>
+  <description><![CDATA[ 
+
+
+
+
+<p>Google Cloud Platform (GCP) uses so-called <a href="https://cloud.google.com/iam/docs/service-account-overview">“Service accounts”</a> to manage granular permissions: &gt; A service account is a special kind of account typically used by an application or compute workload, such as a Compute Engine instance, rather than a person.</p>
+<p>For example, you might have a service account dedicated to trigger a particular workload on GCP from <a href="https://github.com/features/actions">Github actions</a>. This allows us to have very granular permissions that we can give/revoke. So far so good, but sometimes we want to run the workflow from our local machine, for example to test it.</p>
+<p>In such case we can <em>impersonate</em> the service account that we want to test and trigger the workload on its behalf like this:</p>
+<ol type="1">
+<li>Create short-lived credentials and store them locally:</li>
+</ol>
+<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+background-color: null;
+font-style: inherit;">gcloud</span> iam service-accounts keys create /local/path/to/credentials.json <span class="dt" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb1-2">  <span class="at" style="color: #657422;
+background-color: null;
+font-style: inherit;">--iam-account</span> <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"name-of-service-account@name-of-gcp-project.iam.gserviceaccount.com"</span></span></code></pre></div>
+<ol start="2" type="1">
+<li>Pass the credentials when runnning the workload (example with bigquery client):</li>
+</ol>
+<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">from</span> google.oauth2 <span class="im" style="color: #00769E;
+background-color: null;
+font-style: inherit;">import</span> service_account</span>
+<span id="cb2-2"></span>
+<span id="cb2-3"><span class="kw" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">def</span> get_impersonated_client(project):</span>
+<span id="cb2-4">    credentials <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span> service_account.Credentials.from_service_account_file(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"/local/path/to/credentials.json"</span>)</span>
+<span id="cb2-5">    <span class="cf" style="color: #003B4F;
+background-color: null;
+font-weight: bold;
+font-style: inherit;">return</span> bigquery.Client(credentials<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>credentials, project<span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">=</span>project)</span></code></pre></div>
+<p>The returned client will act as if it was our target service account (and not using the credentials from the user logged-in authenticated in the local machine)</p>
+<div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
+<p>/Fin</p>
+</div>
+<div style="font-family: 'Inconsolata', monospace;">
+<p>Any bugs, questions, comments, suggestions? Ping me on <a href="https://www.twitter.com/fabridamicelli">twitter</a> or drop me an e-mail (fabridamicelli at gmail).<br>
+Share this article on your favourite platform:</p>
+</div>
+
+
+
+ ]]></description>
+  <category>Google Cloud Platform</category>
+  <guid>https://fabridamicelli.github.io/til/impersonate-gcp-service-account.html</guid>
+  <pubDate>Sun, 26 Jan 2025 00:00:00 GMT</pubDate>
+</item>
 <item>
   <title>Catch output of IPython magic %timeit</title>
   <dc:creator>Fabrizio Damicelli</dc:creator>

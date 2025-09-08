@@ -22,6 +22,7 @@
   {
     "listing": "/til.html",
     "items": [
+      "/til/impersonate-gcp-service-account.html",
       "/til/ipy-timeit-output.html",
       "/til/bigqueryrc.html",
       "/til/python-print-flush.html"

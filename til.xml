@@ -402,6 +402,51 @@ flush: whether to forcibly flush the stream.
 </div>
 </div>
 </div>
+<section id="update-an-alternative" class="level1">
+<h1>Update: An alternative</h1>
+<p>It turns out that Python has a parameter we can pass in the command line to make it unbuffered and thus achieving the same results. The parameter is <code>-u</code>, as per official documentation: &gt; Force the stdout and stderr streams to be unbuffered. This option has no effect on the stdin stream.</p>
+<p>This is how the code would look like:</p>
+<div id="cell-12" class="cell">
+<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">%%</span>bash</span>
+<span id="cb7-2">python <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>u <span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">-</span>c <span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">'</span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb7-3"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">import time</span></span>
+<span id="cb7-4"><span class="er" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">while True:</span></span>
+<span id="cb7-5">    <span class="bu" style="color: null;
+background-color: null;
+font-style: inherit;">print</span>(<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">"great output</span><span class="ch" style="color: #20794D;
+background-color: null;
+font-style: inherit;">\n</span><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">as always"</span>) <span class="co" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;"># &lt;-- No need for flush=True here anymore</span></span>
+<span id="cb7-6">    time.sleep(<span class="dv" style="color: #AD0000;
+background-color: null;
+font-style: inherit;">2</span>)<span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">' </span><span class="op" style="color: #5E5E5E;
+background-color: null;
+font-style: inherit;">\</span></span>
+<span id="cb7-7"><span class="st" style="color: #20794D;
+background-color: null;
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+</div>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
 <p>/Fin</p>
 </div>
@@ -411,6 +456,7 @@ Share this article on your favourite platform:</p>
 </div>
 
 
+</section>
 
  ]]></description>
   <category>python</category>

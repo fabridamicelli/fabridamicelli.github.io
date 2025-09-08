@@ -20,7 +20,10 @@
 
 
 
-<p>Google Cloud Platform (GCP) uses so-called <a href="https://cloud.google.com/iam/docs/service-account-overview">“Service accounts”</a> to manage granular permissions: &gt; A service account is a special kind of account typically used by an application or compute workload, such as a Compute Engine instance, rather than a person.</p>
+<p>Google Cloud Platform (GCP) uses so-called <a href="https://cloud.google.com/iam/docs/service-account-overview">“Service accounts”</a> to manage granular permissions:</p>
+<blockquote class="blockquote">
+<p>A service account is a special kind of account typically used by an application or compute workload, such as a Compute Engine instance, rather than a person.</p>
+</blockquote>
 <p>For example, you might have a service account dedicated to trigger a particular workload on GCP from <a href="https://github.com/features/actions">Github actions</a>. This allows us to have very granular permissions that we can give/revoke. So far so good, but sometimes we want to run the workflow from our local machine, for example to test it.</p>
 <p>In such case we can <em>impersonate</em> the service account that we want to test and trigger the workload on its behalf like this:</p>
 <ol type="1">
@@ -62,7 +65,7 @@ background-color: null;
 font-style: inherit;">=</span>credentials, project<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span>project)</span></code></pre></div>
-<p>The returned client will act as if it was our target service account (and not using the credentials from the user logged-in authenticated in the local machine)</p>
+<p>The returned client will act as if it was our target service account (and not using the credentials from the authenticated user on the local machine)</p>
 <p>Read more about impersonation on GCP <a href="https://cloud.google.com/docs/authentication/use-service-account-impersonation">here</a>.</p>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
 <p>/Fin</p>

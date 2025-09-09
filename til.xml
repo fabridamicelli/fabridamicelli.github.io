@@ -473,8 +473,8 @@ flush: whether to forcibly flush the stream.
 </div>
 </div>
 </div>
-<section id="update-an-alternative" class="level1">
-<h1>Update: An alternative</h1>
+<section id="an-alternative" class="level1">
+<h1>An alternative</h1>
 <p>It turns out that Python has a parameter we can pass in the command line to make it unbuffered and thus achieving the same results. The parameter is <code>-u</code>, as per official documentation: &gt; Force the stdout and stderr streams to be unbuffered. This option has no effect on the stdin stream.</p>
 <p>This is how the code would look like:</p>
 <div id="cell-12" class="cell">

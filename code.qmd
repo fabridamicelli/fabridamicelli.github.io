@@ -96,6 +96,7 @@ Check the [blog post here](https://fabridamicelli.github.io/posts/kubeflow-uv.ht
 repos = [
     "https://github.com/scikit-learn/scikit-learn",
     "https://github.com/astral-sh/ty",
+    "https://github.com/canonical/rockcraft",
     "https://github.com/mainmatter/rust-workshop-runner",
     "https://github.com/basecamp/omakub",
     "https://github.com/carderne/postmodern-mono",

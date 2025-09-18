@@ -9,7 +9,7 @@
 <link>https://fabridamicelli.github.io/til.html</link>
 <atom:link href="https://fabridamicelli.github.io/til.xml" rel="self" type="application/rss+xml"/>
 <description></description>
-<generator>quarto-1.7.34</generator>
+<generator>quarto-1.8.24</generator>
 <lastBuildDate>Sun, 26 Jan 2025 00:00:00 GMT</lastBuildDate>
 <item>
   <title>Impersonate Google Cloud Service Account</title>
@@ -29,7 +29,7 @@
 <ol type="1">
 <li>Create short-lived credentials and store them locally:</li>
 </ol>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">gcloud</span> iam service-accounts keys create /local/path/to/credentials.json <span class="dt" style="color: #AD0000;
 background-color: null;
@@ -38,11 +38,11 @@ font-style: inherit;">\</span></span>
 background-color: null;
 font-style: inherit;">--iam-account</span> <span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"name-of-service-account@name-of-gcp-project.iam.gserviceaccount.com"</span></span></code></pre></div>
+font-style: inherit;">"name-of-service-account@name-of-gcp-project.iam.gserviceaccount.com"</span></span></code></pre></div></div>
 <ol start="2" type="1">
 <li>Pass the credentials when runnning the workload (example with bigquery client):</li>
 </ol>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">from</span> google.oauth2 <span class="im" style="color: #00769E;
 background-color: null;
@@ -64,7 +64,7 @@ font-style: inherit;">return</span> bigquery.Client(credentials<span class="op" 
 background-color: null;
 font-style: inherit;">=</span>credentials, project<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">=</span>project)</span></code></pre></div>
+font-style: inherit;">=</span>project)</span></code></pre></div></div>
 <p>The returned client will act as if it was our target service account (and not using the credentials from the authenticated user on the local machine)</p>
 <p>Read more about impersonation on GCP <a href="https://cloud.google.com/docs/authentication/use-service-account-impersonation">here</a>.</p>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
@@ -96,7 +96,7 @@ In particular, I often use <code>%time</code> and <code>%timeit</code> for rapid
 <div id="cell-2" class="cell" data-execution_count="37">
 <details class="code-fold">
 <summary>Code</summary>
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="im" style="color: #00769E;
 background-color: null;
 font-style: inherit;">import</span> time</span>
 <span id="cb1-2"><span class="im" style="color: #00769E;
@@ -119,13 +119,13 @@ font-style: inherit;">set</span>(style<span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">"whitegrid"</span>)</span></code></pre></div>
+font-style: inherit;">"whitegrid"</span>)</span></code></pre></div></div>
 </details>
 </div>
 <div id="cell-3" class="cell" data-execution_count="5">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">%</span>timeit time.sleep(random.random())</span></code></pre></div>
+font-style: inherit;">%</span>timeit time.sleep(random.random())</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The slowest run took 67.00 times longer than the fastest. This could mean that an intermediate result is being cached.
 400 ms ± 347 ms per loop (mean ± std. dev. of 7 runs, 1 loop each)</code></pre>
@@ -135,7 +135,7 @@ font-style: inherit;">%</span>timeit time.sleep(random.random())</span></code></
 That does the job almost always. But what if we want to get all run values?<br>
 You can pass the parameter <code>-o</code> and that’ll do!</p>
 <div id="cell-5" class="cell" data-execution_count="27">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">times <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1">times <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -147,7 +147,7 @@ font-style: inherit;">-</span>r <span class="dv" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">100</span> time.sleep(random.random())  <span class="co" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;"># -r -&gt; repeat R times the measurement</span></span></code></pre></div>
+font-style: inherit;"># -r -&gt; repeat R times the measurement</span></span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>The slowest run took 111.58 times longer than the fastest. This could mean that an intermediate result is being cached.
 497 ms ± 292 ms per loop (mean ± std. dev. of 100 runs, 1 loop each)</code></pre>
@@ -155,9 +155,9 @@ font-style: inherit;"># -r -&gt; repeat R times the measurement</span></span></c
 </div>
 <p>So we can do stuff with the output:</p>
 <div id="cell-7" class="cell" data-execution_count="30">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">times.timings[:<span class="dv" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1">times.timings[:<span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">5</span>]</span></code></pre></div>
+font-style: inherit;">5</span>]</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="30">
 <pre><code>[0.22056039492599666,
  0.23466998199000955,
@@ -167,18 +167,18 @@ font-style: inherit;">5</span>]</span></code></pre></div>
 </div>
 </div>
 <div id="cell-8" class="cell" data-execution_count="38">
-<div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">np.percentile(times.timings, <span class="fl" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1">np.percentile(times.timings, <span class="fl" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">.99</span>)</span></code></pre></div>
+font-style: inherit;">.99</span>)</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="38">
 <pre><code>0.014373812611727044</code></pre>
 </div>
 </div>
 <p>Or plotting them:</p>
 <div id="cell-10" class="cell" data-execution_count="36">
-<div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">sns.histplot(times.timings)<span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb10-1">sns.histplot(times.timings)<span class="op" style="color: #5E5E5E;
 background-color: null;
-font-style: inherit;">;</span></span></code></pre></div>
+font-style: inherit;">;</span></span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div>
 <figure class="figure">
@@ -189,7 +189,7 @@ font-style: inherit;">;</span></span></code></pre></div>
 </div>
 <p>Let’s run the same thing, 10 loops each time (<code>-n</code>):</p>
 <div id="cell-12" class="cell" data-execution_count="13">
-<div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">times <span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1">times <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">=</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -199,20 +199,20 @@ font-style: inherit;">-</span>o <span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">-</span>n <span class="dv" style="color: #AD0000;
 background-color: null;
-font-style: inherit;">10</span> time.sleep(random.random())</span></code></pre></div>
+font-style: inherit;">10</span> time.sleep(random.random())</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)</code></pre>
 </div>
 </div>
 <p>The output is in fact a proper object with some potentially useful attributes as well:</p>
 <div id="cell-14" class="cell" data-execution_count="22">
-<div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">times</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1">times</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="22">
 <pre><code>&lt;TimeitResult : 486 ms ± 85.2 ms per loop (mean ± std. dev. of 7 runs, 10 loops each)&gt;</code></pre>
 </div>
 </div>
 <div id="cell-15" class="cell" data-execution_count="25">
-<div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">times.loops, times.worst, times.best, times.compile_time</span></code></pre></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb15" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb15-1">times.loops, times.worst, times.best, times.compile_time</span></code></pre></div></div>
 <div class="cell-output cell-output-display" data-execution_count="25">
 <pre><code>(10, 0.6338168126065284, 0.37239220049232247, 0.00032199999999993345)</code></pre>
 </div>
@@ -245,7 +245,7 @@ Share this article on your favourite platform:</p>
 <p>I started using the nice vim plugin <a href="https://github.com/tpope/vim-dadbod">vim-dadbod</a> which allows to fire database queries and see the output <em>inside</em> vim/neovim.</p>
 <p>While setting it up to work with <a href="https://cloud.google.com/bigquery?hl=en">BigQuery</a> I ran into the error coming from the fact that BigQuery’s format to name a table has changed in time and <code>bq</code> uses the old one (legacy) as default. The legacy format reads: <code>project:dataset.table</code> (notice <code>:</code>) while the newer format goes by: <code>project.dataset.table</code> (with <code>.</code> instead).</p>
 <p>It turns out there is a file called <code>.bigqueryrc</code> where you can set a global configuration and tell <code>bq</code> (the command line tool to interact with BigQuery in the terminal) to use the newer format by setting the flag <code>use_legacy_sql=false</code>:</p>
-<div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb1-1"><span class="dt" style="color: #AD0000;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb1-1"><span class="dt" style="color: #AD0000;
 background-color: null;
 font-style: inherit;">credential_file</span> <span class="op" style="color: #5E5E5E;
 background-color: null;
@@ -284,9 +284,9 @@ font-style: inherit;">use_legacy_sql</span> <span class="op" style="color: #5E5E
 background-color: null;
 font-style: inherit;">=</span> <span class="cn" style="color: #8f5902;
 background-color: null;
-font-style: inherit;">false</span></span></code></pre></div>
+font-style: inherit;">false</span></span></code></pre></div></div>
 <p>The CLI-tool <code>bq</code> also accepts the file as optional argument so you can pass custom config for a query. If you run <code>bq --help</code> you’ll see:</p>
-<div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1">  <span class="ex" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode bash code-with-copy"><code class="sourceCode bash"><span id="cb2-1">  <span class="ex" style="color: null;
 background-color: null;
 font-style: inherit;">--bigqueryrc:</span> Path to configuration file. The configuration file specifies new</span>
 <span id="cb2-2">    <span class="ex" style="color: null;
@@ -314,7 +314,7 @@ font-style: inherit;">'~/.bigqueryrc'</span><span class="kw" style="color: #003B
 background-color: null;
 font-weight: bold;
 font-style: inherit;">)</span></span>
-<span id="cb2-7">    </span></code></pre></div>
+<span id="cb2-7">    </span></code></pre></div></div>
 <p>Read more about that in the <a href="https://cloud.google.com/bigquery/docs/reference/bq-cli-reference?hl=en">official documetation</a>.</p>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
 <p>/Fin</p>
@@ -343,7 +343,7 @@ Share this article on your favourite platform:</p>
 <p>Say we have a python program that prints to <code>stdout</code> and we want to write that output into a file.<br>
 We can achieve that like this:</p>
 <div id="cell-2" class="cell">
-<div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>bash</span>
 <span id="cb1-2">python <span class="op" style="color: #5E5E5E;
@@ -358,16 +358,16 @@ font-style: inherit;">as always")'</span> <span class="op" style="color: #5E5E5E
 background-color: null;
 font-style: inherit;">&gt;</span> <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">file</span>.txt</span></code></pre></div>
+font-style: inherit;">file</span>.txt</span></code></pre></div></div>
 </div>
 <p>Which works fine:</p>
 <div id="cell-4" class="cell">
-<div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>bash</span>
 <span id="cb2-2">cat <span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">file</span>.txt</span></code></pre></div>
+font-style: inherit;">file</span>.txt</span></code></pre></div></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>great output
 as always</code></pre>
@@ -376,7 +376,7 @@ as always</code></pre>
 <p>Now, if we want to do the same <strong>while</strong> the program is still running, things are a bit different.<br>
 For example, this program will not write to file until we interrumpt it:</p>
 <div id="cell-6" class="cell">
-<div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>bash</span>
 <span id="cb4-2">python <span class="op" style="color: #5E5E5E;
@@ -404,14 +404,14 @@ background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb4-5"><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div></div>
 </div>
 <p>That is, the command on the left side of <code>&gt;</code> will be run until it’s done and only then the file will be written.<br>
 We want to fix that.<br>
 In other words, stream the program output directly into the file while it’s being generated.</p>
 <p>I found this solution to work, passing <code>flush=True</code> to the <code>print</code> function:</p>
 <div id="cell-8" class="cell">
-<div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>bash</span>
 <span id="cb5-2">python <span class="op" style="color: #5E5E5E;
@@ -451,13 +451,13 @@ background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb5-7"><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div></div>
 </div>
 <p>As the docstrings say, that forces the stream to be flushed:</p>
 <div id="cell-10" class="cell">
-<div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="bu" style="color: null;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><span class="bu" style="color: null;
 background-color: null;
-font-style: inherit;">print</span>?</span></code></pre></div>
+font-style: inherit;">print</span>?</span></code></pre></div></div>
 <div class="cell-output cell-output-display">
 <div class="ansi-escaped-output">
 <pre><span class="ansi-red-fg">Docstring:</span>
@@ -478,7 +478,7 @@ flush: whether to forcibly flush the stream.
 <p>It turns out that Python has a parameter we can pass in the command line to make it unbuffered and thus achieving the same results. The parameter is <code>-u</code>, as per official documentation: &gt; Force the stdout and stderr streams to be unbuffered. This option has no effect on the stdin stream.</p>
 <p>This is how the code would look like:</p>
 <div id="cell-12" class="cell">
-<div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="op" style="color: #5E5E5E;
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb7" style="background: #f1f3f5;"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><span class="op" style="color: #5E5E5E;
 background-color: null;
 font-style: inherit;">%%</span>bash</span>
 <span id="cb7-2">python <span class="op" style="color: #5E5E5E;
@@ -516,7 +516,7 @@ background-color: null;
 font-style: inherit;">\</span></span>
 <span id="cb7-7"><span class="st" style="color: #20794D;
 background-color: null;
-font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div>
+font-style: inherit;">&gt; newfile.txt</span></span></code></pre></div></div>
 </div>
 <div style="text-align: right; font-size: 40px; font-family: 'Inconsolata', monospace;">
 <p>/Fin</p>

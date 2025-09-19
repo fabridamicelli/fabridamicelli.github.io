@@ -110,7 +110,10 @@ repos = [
 USERNAME = "fabridamicelli"
 for repo in repos:
     name = repo.removeprefix("https://github.com/")
-    print(f"- [{name}]({repo}/pulls?q=is%3Amerged+author%3A{USERNAME})")
+    if "rockcraft" in repo:
+        print(f"- [{name}]({repo}/pulls/{USERNAME})")
+    else:
+        print(f"- [{name}]({repo}/pulls?q=is%3Amerged+author%3A{USERNAME})")
 
 ```
 

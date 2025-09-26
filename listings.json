@@ -1,5 +1,14 @@
 [
   {
+    "listing": "/til.html",
+    "items": [
+      "/til/impersonate-gcp-service-account.html",
+      "/til/ipy-timeit-output.html",
+      "/til/bigqueryrc.html",
+      "/til/python-print-flush.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
       "/posts/kubeflow-uv.html",
@@ -17,15 +26,6 @@
       "/posts/numpy-array-in-place.html",
       "/posts/interactive-embedding.html",
       "/posts/divide-and-conquer.html"
-    ]
-  },
-  {
-    "listing": "/til.html",
-    "items": [
-      "/til/impersonate-gcp-service-account.html",
-      "/til/ipy-timeit-output.html",
-      "/til/bigqueryrc.html",
-      "/til/python-print-flush.html"
     ]
   }
 ]

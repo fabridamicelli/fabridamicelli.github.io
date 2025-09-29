@@ -19,7 +19,9 @@ Always growing list of cool, free learning/fun/useful resources out there that w
   - [Setosa: visual explanations](https://setosa.io/)
   - [Transformers & Attention](https://www.youtube.com/watch?v=yGTUuEx3GkA): A great explanation by V. Warmerdam at Rasa Whiteboard series.
   - [The math behind Attention: Keys, Queries, and Values matrices](https://www.youtube.com/watch?v=UPtG_38Oq8o): Geometric intuitions behind attention mechanism, a beautiful piece by L. Serrano.
-  - [Load balancing with great visuals](https://samwho.dev/load-balancing/)
+  - [Load balancing with great visualizations](https://samwho.dev/load-balancing/)
+  - [A half-hour lo learn Rust](https://fasterthanli.me/articles/a-half-hour-to-learn-rust): An entertaining masterpiece to quickly get your eyes reading the most beloved programming language.
+  - [The missing semester in your CS education](https://www.youtube.com/watch?v=5WyOlYCrjUs&list=PLrZy_FnT2vQ30DPqr8LnZaMpkWzTbQTg_): Learn about the shell, vim, git, command-line tools, etc.
 
 ## Talks
   - [Choose Boring Technology – Dan McKinley](https://boringtechnology.club/)

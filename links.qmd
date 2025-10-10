@@ -22,6 +22,7 @@ Always growing list of cool, free learning/fun/useful resources out there that w
   - [Load balancing with great visualizations](https://samwho.dev/load-balancing/)
   - [A half-hour lo learn Rust](https://fasterthanli.me/articles/a-half-hour-to-learn-rust): An entertaining masterpiece to quickly get your eyes reading the most beloved programming language.
   - [The missing semester in your CS education](https://www.youtube.com/watch?v=5WyOlYCrjUs&list=PLrZy_FnT2vQ30DPqr8LnZaMpkWzTbQTg_): Learn about the shell, vim, git, command-line tools, etc.
+  - [(German) Setup Traefik with Docker Compose and Let's Encrypt](https://www.youtube.com/watch?v=PgICQblfWeY)
 
 ## Talks
   - [Choose Boring Technology – Dan McKinley](https://boringtechnology.club/)

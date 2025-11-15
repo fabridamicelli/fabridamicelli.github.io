@@ -29,6 +29,9 @@ website:
         text: Links
       - file: til.qmd
         text: TIL
+      - href: https://buymeacoffee.com/fabdam
+        text: Support
+        #icon: coin
 
     right:
       - href: https://github.com/fabridamicelli

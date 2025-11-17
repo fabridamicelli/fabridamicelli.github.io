@@ -51,18 +51,9 @@ Susceptible-Excited-Refractory, a dynamical model of spreading excitations
 
 ---
 
-### [torchserve-docker](https://github.com/fabridamicelli/torchserve-docker)
-Container images with specific TorchServe **and Python** version working out-of-the-box.
-This is a [GitHub-Action-based cron job](https://github.com/fabridamicelli/torchserve-docker) that watches for TorchServe releases and automatically generates and pushed the images to [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).  
-<a href="https://hub.docker.com/r/fabridamicelli/torchserve"><img src="https://img.shields.io/docker/pulls/fabridamicelli/torchserve.svg" height="16">
-
-![](/images/torchserve-docker.gif){width=18cm fig-align="center"}
-
----
-
-### TorchServe
-[TorchServe](https://pytorch.org/serve) is a popular framework to deploy PyTorch-based neural networks.
-I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli) in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.
+### [Python Course](https://fabridamicelli.com/python-course)
+A friendly, hands-on introduction to Python.  
+This is a free, short introduction to the Python programming language, emphasizing practical over theoretical aspects and with a focus on data-related tasks.
 
 ---
 
@@ -70,7 +61,22 @@ I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamice
 [A Neovim Plugin](https://github.com/fabridamicelli/cronex.nvim) to render in-line, human-readable cron expressions.
 Cronex is kind of a "client" that allows the Neovim user to integrate and customize "servers" that actually parse the expressions ("explainers") in a flexible fashion.  
 
-![](/images/screencast-cronex.gif){width=18cm fig-align="center"}
+![](/images/screencast-cronex.gif){width=16cm fig-align="center"}
+
+---
+
+### [pypkg.guru](https://pypkg.guru)
+Python Package Guru is a search engine for Python Packages that offers a minimalistic and fast exploration of the official Package Index (`PyPI`).
+
+![](/images/screencast-pypkg.guru.gif){width=16cm fig-align="center"}
+
+---
+
+### [crates.guru](https://crates.guru)
+Semantic Search of Rust Crates. 
+Explore the  official `crates.io` site but using Natural Language.
+
+![](/images/screencast-crates.guru.gif){width=16cm fig-align="center"}
 
 ---
 
@@ -80,7 +86,19 @@ Check the [blog post here](https://fabridamicelli.github.io/posts/kubeflow-uv.ht
 
 {{< video https://vimeo.com/1115528220/7073eb4ffb >}}
 
+### TorchServe
+[TorchServe](https://pytorch.org/serve) is a popular framework to deploy PyTorch-based neural networks.
+I have [fixed bugs](https://github.com/pytorch/serve/pulls?q=is%3Apr+fabridamicelli+author%3Afabridamicelli) in Dockerfile and build scripts. I have also implemented CI (GitHub) workflows for continuous testing of docker images and containers.
+
 ---
+
+### [torchserve-docker](https://github.com/fabridamicelli/torchserve-docker)
+Container images with specific TorchServe **and Python** version working out-of-the-box.
+This is a [GitHub-Action-based cron job](https://github.com/fabridamicelli/torchserve-docker) that watches for TorchServe releases and automatically generates and pushed the images to [Dockerhub](https://hub.docker.com/r/fabridamicelli/torchserve).  
+<a href="https://hub.docker.com/r/fabridamicelli/torchserve"><img src="https://img.shields.io/docker/pulls/fabridamicelli/torchserve.svg" height="16">
+
+![](/images/torchserve-docker.gif){width=16cm fig-align="center"}
+
 
 ### Other Contributions
 - Translation English → German of the [HuggingFace Course](https://github.com/huggingface/course/pulls?q=author%3Afabridamicelli)

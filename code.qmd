@@ -6,8 +6,6 @@ title: ""
 
 I created and maintain the following Python packages:
 
----
-
 ::: {layout="[[0.4, 0.6]]"}
 ### [echoes](https://github.com/fabridamicelli/echoes)
 A scikit-learn compatible package for Machine Learning with Echo State Networks  
@@ -21,8 +19,6 @@ A scikit-learn compatible package for Machine Learning with Echo State Networks
   - 🐍 `pip install echoes`  
 :::
 
----
-
 ::: {layout="[[0.4, 0.6]]"}
 ### [kuramoto](https://github.com/fabridamicelli/kuramoto)
 Classical model to study synchronization phenomena  
@@ -34,7 +30,6 @@ Classical model to study synchronization phenomena
   - 🐍 `pip install kuramoto`  
 ::: 
 
----
 
 ::: {layout="[[0.4, 0.6]]"}
 ### [ser](https://github.com/fabridamicelli/ser)

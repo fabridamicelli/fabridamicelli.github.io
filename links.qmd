@@ -55,7 +55,7 @@ Always growing list of cool, free learning/fun/useful resources out there that w
   - [MLU-EXPLAIN](https://mlu-explain.github.io/): Visual explanations of core machine learning concepts.
 
 ## Podcasts
-### Python & co.
+### Python & Co.
   - [Podcast.__init__](https://www.pythonpodcast.com/episodes/)
   - [Talk python to me](https://talkpython.fm/)
   - [Python Bytes](https://pythonbytes.fm/episodes/all)
@@ -80,14 +80,12 @@ Always growing list of cool, free learning/fun/useful resources out there that w
   - [Linear Digressions](http://lineardigressions.com/)
   - [Gradient dissent: Weights and biases](https://open.spotify.com/show/7o9r3fFig3MhTJwehXDbXm?si=d7Ncp7nXQ7C1O7wu0Oxvqg)
   - [Dataframed](https://www.datacamp.com/community/podcast)
-  - [Partially derivative](http://partiallyderivative.com/)
   
   
 ### Discussion, interviews, philosophy
   - [Sean Carrol's Mindscape](https://www.preposterousuniverse.com/podcast/)
   - [The knowledge project](https://fs.blog/knowledge-project/)
   - [Not so standard deviations](http://nssdeviations.com/)
-  - [Lex Fridman Podcast](https://lexfridman.com/ai/)
   - [Adversarial Learning](https://adversariallearning.com/)
   - [Brain inspired](https://braininspired.co/)
   - [Stephen Wolfram podcast](https://soundcloud.com/stephenwolfram)

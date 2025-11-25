@@ -5,8 +5,6 @@ import re
 
 
 POSTS_PATH = Path(__file__).parent.parent / "posts"
-SHARE_BLOCK_PATH = Path(__file__).parent / "share.txt"
-share_block_lines = SHARE_BLOCK_PATH.read_text().splitlines()
 
 nb_paths = [p for p in POSTS_PATH.iterdir() if p.name.endswith(".ipynb")]
 
@@ -39,9 +37,7 @@ def update_config(config):
 
     # Keep old out_file as alias to let old links still work
     old_aliases = config.get("aliases", [])
-    aliases = {
-        "aliases": old_aliases + [f"/posts/{old_out_file}"]
-    }
+    aliases = {"aliases": old_aliases + [f"/posts/{old_out_file}"]}
     out_file = {"output-file": new_out_file}
     print("old name:", old_out_file)
     print("new name:", new_out_file)

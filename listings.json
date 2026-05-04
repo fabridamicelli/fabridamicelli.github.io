@@ -11,6 +11,7 @@
   {
     "listing": "/blog.html",
     "items": [
+      "/posts/pycamp-2026.html",
       "/posts/kubeflow-uv.html",
       "/posts/numhack.html",
       "/posts/parse-jsonl.html",

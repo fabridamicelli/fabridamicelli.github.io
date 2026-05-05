@@ -96,3 +96,8 @@ Always growing list of cool, free learning/fun/useful resources out there that w
 
 ## Tools
   - [ezgif: Create, edit and convert GIFs](https://ezgif.com/)
+  - [Find out which AI models your machine can actually run](https://www.canirun.ai/)
+  - [ttl.sh: Ephemeral container registry](https://ttl.sh/)
+  - [sli.dev: Presentation Slides for Developers](https://sli.dev/)
+
+

@@ -94,6 +94,37 @@ This is a [GitHub-Action-based cron job](https://github.com/fabridamicelli/torch
 
 ![](/images/torchserve-docker.gif){width=16cm fig-align="center"}
 
+---
+
+### [logger-bot](https://github.com/PyCampES/logger-bot)
+`logger-bot` is a lean Telegram workout assistant that turns voice notes into database training logs.  
+It's a small composed system: chat interface in front, ML extraction in the middle, and a queryable data store behind it.
+Here's an architecture diagram:
+
+```{mermaid}
+flowchart LR
+    user([User])
+    telegram(Telegram Bot)
+    server([Server])
+    extractor([Speech2Text])
+    logger([Logger])
+    db([Database])
+
+    user -- voice --> telegram
+    telegram -- webhook --> server
+    server -- audio --> extractor
+    extractor -- text --> server
+    server -- text --> logger
+    logger --entry--> db
+```
+
+
+On top of logging, it exposes lightweight command handlers for health checks, last-set lookup, and read-only SQL queries over your workout history.
+For example you can run a query with a command like this:
+
+![](/images/screenshot-sql.png){width=10cm fig-align="center"}
+
+---
 
 ### Other Contributions
 - Translation English → German of the [HuggingFace Course](https://github.com/huggingface/course/pulls?q=author%3Afabridamicelli)

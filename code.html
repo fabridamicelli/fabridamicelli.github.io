@@ -71,6 +71,9 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
 
 
 <link rel="stylesheet" href="styles.css">
@@ -176,6 +179,7 @@ ul.task-list li input[type="checkbox"] {
   <li><a href="#kubeflow-pipeline-uv" id="toc-kubeflow-pipeline-uv" class="nav-link" data-scroll-target="#kubeflow-pipeline-uv">kubeflow-pipeline-uv</a></li>
   <li><a href="#torchserve" id="toc-torchserve" class="nav-link" data-scroll-target="#torchserve">TorchServe</a></li>
   <li><a href="#torchserve-docker" id="toc-torchserve-docker" class="nav-link" data-scroll-target="#torchserve-docker">torchserve-docker</a></li>
+  <li><a href="#logger-bot" id="toc-logger-bot" class="nav-link" data-scroll-target="#logger-bot">logger-bot</a></li>
   <li><a href="#other-contributions" id="toc-other-contributions" class="nav-link" data-scroll-target="#other-contributions">Other Contributions</a></li>
   </ul>
 </nav>
@@ -297,11 +301,49 @@ This is a free, short introduction to the Python programming language, emphasizi
 <p><img src="./images/torchserve-docker.gif" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:16cm"></p>
 </figure>
 </div>
+<hr>
 </a></section><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
-</a><section id="other-contributions" class="level3"><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+</a><section id="logger-bot" class="level3"><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
+</a><h3 class="anchored" data-anchor-id="logger-bot"><a href="https://hub.docker.com/r/fabridamicelli/torchserve"></a><a href="https://github.com/PyCampES/logger-bot">logger-bot</a></h3>
+<p><code>logger-bot</code> is a lean Telegram workout assistant that turns voice notes into database training logs.<br>
+It’s a small composed system: chat interface in front, ML extraction in the middle, and a queryable data store behind it. Here’s an architecture diagram:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div>
+<p></p><figure class="figure"><p></p>
+<div>
+<pre class="mermaid mermaid-js">flowchart LR
+    user([User])
+    telegram(Telegram Bot)
+    server([Server])
+    extractor([Speech2Text])
+    logger([Logger])
+    db([Database])
+
+    user -- voice --&gt; telegram
+    telegram -- webhook --&gt; server
+    server -- audio --&gt; extractor
+    extractor -- text --&gt; server
+    server -- text --&gt; logger
+    logger --entry--&gt; db
+</pre>
+</div>
+<p></p></figure><p></p>
+</div>
+</div>
+</div>
+<p>On top of logging, it exposes lightweight command handlers for health checks, last-set lookup, and read-only SQL queries over your workout history. For example you can run a query with a command like this:</p>
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="./images/screenshot-sql.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:10cm"></p>
+</figure>
+</div>
+<hr>
+</section>
+<section id="other-contributions" class="level3">
 <h3 class="anchored" data-anchor-id="other-contributions">Other Contributions</h3>
-</a><ul><a href="https://hub.docker.com/r/fabridamicelli/torchserve">
-</a><li><a href="https://hub.docker.com/r/fabridamicelli/torchserve">Translation English → German of the </a><a href="https://github.com/huggingface/course/pulls?q=author%3Afabridamicelli">HuggingFace Course</a></li>
+<ul>
+<li>Translation English → German of the <a href="https://github.com/huggingface/course/pulls?q=author%3Afabridamicelli">HuggingFace Course</a></li>
 <li>Translation English → Spanish of the <a href="https://github.com/python/python-docs-es/pulls?q=author%3Afabridamicelli+">Python 3.9 Official Documentation</a></li>
 <li>Improving <a href="https://pycamp.es">Website of PyCampES</a>, an event where people meet to code, learn for fun. See my contributions <a href="https://github.com/PyCampES/pycampes/pulls?q=author%3Afabridamicelli+">here</a></li>
 </ul>

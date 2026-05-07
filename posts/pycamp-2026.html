@@ -277,7 +277,7 @@ Just to give you a taste, these are some of the activities that kept me busy thi
     db([Database])
 
     user -- voice --&gt; telegram
-    telegram -- webhook --&gt; server
+    telegram &lt;-- polling -- server
     server -- audio --&gt; extractor
     extractor -- text --&gt; server
     server -- text --&gt; logger

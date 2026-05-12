@@ -321,7 +321,7 @@ It’s a small composed system: chat interface in front, ML extraction in the mi
     db([Database])
 
     user -- voice --&gt; telegram
-    telegram &lt;-- webhook -- server
+    telegram -- polling --&gt; server
     server -- audio --&gt; extractor
     extractor -- text --&gt; server
     server -- text --&gt; logger

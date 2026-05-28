@@ -1,5 +1,15 @@
 [
   {
+    "listing": "/til.html",
+    "items": [
+      "/til/watchfiles.html",
+      "/til/impersonate-gcp-service-account.html",
+      "/til/ipy-timeit-output.html",
+      "/til/bigqueryrc.html",
+      "/til/python-print-flush.html"
+    ]
+  },
+  {
     "listing": "/blog.html",
     "items": [
       "/posts/pycamp-2026.html",
@@ -18,16 +28,6 @@
       "/posts/numpy-array-in-place.html",
       "/posts/interactive-embedding.html",
       "/posts/divide-and-conquer.html"
-    ]
-  },
-  {
-    "listing": "/til.html",
-    "items": [
-      "/til/watchfiles.html",
-      "/til/impersonate-gcp-service-account.html",
-      "/til/ipy-timeit-output.html",
-      "/til/bigqueryrc.html",
-      "/til/python-print-flush.html"
     ]
   }
 ]

@@ -1,5 +1,7 @@
 project:
   type: website
+  resources:
+    - health
 
 website:
   title: "Fabrizio Damicelli"
